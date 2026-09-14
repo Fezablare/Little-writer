@@ -258,245 +258,329 @@ const SCRAMBLE_LESSON = {
   ],
 };
 
+const MATH_LESSON = {
+  idea: "Multiplication is equal groups. The × sign is a short way to say that.",
+  why: "If you only memorise numbers, a forgotten fact has nothing to stand on. A picture of groups always helps you rebuild it.",
+  rule: "a × b means a groups of b. The answer is how many altogether.",
+  steps: [
+    "See it: make equal groups or fill an array.",
+    "Count it: skip-count by 2, 5, or 10 — that is the table pattern.",
+    "Know it: tap the fact once the picture feels easy.",
+    "No racing yet. Steady and clear beats fast and wobbly.",
+  ],
+  examples: [
+    {
+      wrong: "3 × 4 means any numbers that look hard.",
+      right: "3 × 4 means 3 groups of 4. That is 12.",
+      why: "Groups first. The symbol comes after the picture.",
+    },
+    {
+      wrong: "Skip-count 2, 3, 4, 5…",
+      right: "Skip-count by 2: 2, 4, 6, 8…",
+      why: "Each jump is the same size. That jump is the table you are learning.",
+    },
+  ],
+};
+
 const WRITE_EXAMPLES = {
   "Write one sentence about something you like.": {
     example: "I like riding my bike to the park with Mum.",
     why: "It starts with a capital I. It tells one clear idea. It finishes with a full stop.",
+    tip: "Start with I like or My favourite thing is. End with a full stop.",
   },
   "Write one sentence about an animal.": {
     example: "The cat slept on the warm mat.",
     why: "The is a capital first word. We know who (the cat) and what they did (slept).",
+    tip: "The is a capital first word. We know who (the cat) and what they did (slept).",
   },
   "Write one sentence about your family.": {
     example: "Dad cooked fish for dinner.",
     why: "Dad is a name so it has a capital. The sentence says who did what.",
+    tip: "Dad is a name so it has a capital. The sentence says who did what.",
   },
   "Write one sentence about outside.": {
     example: "The sun felt hot on my face.",
     why: "It starts with The. It paints one picture and then stops.",
+    tip: "It starts with The. It paints one picture and then stops.",
   },
   "Write one sentence about food.": {
     example: "I eat apples after school.",
     why: "One thought, a capital at the start, and a full stop at the end.",
+    tip: "One thought, a capital at the start, and a full stop at the end.",
   },
   "Write two short sentences about lunch.": {
     example: "I ate a cheese sandwich. Then I drank some water.",
     why: "Two thoughts. Each one starts with a capital and ends with a full stop.",
+    tip: "Two thoughts. Each one starts with a capital and ends with a full stop.",
   },
   "Write two short sentences about school.": {
     example: "I went into class. My teacher read a story.",
     why: "Two finished sentences, not one long run-on line.",
+    tip: "Two finished sentences, not one long run-on line.",
   },
   "Write two short sentences about play.": {
     example: "I played soccer with Sam. My friend passed the ball.",
     why: "Each sentence is a complete thought with its own stop.",
+    tip: "Each sentence is a complete thought with its own stop.",
   },
   "Write two short sentences about home.": {
     example: "At home I unpacked my bag. Mum asked about my day.",
     why: "Two sentences. Two capitals. Two full stops.",
+    tip: "Two sentences. Two capitals. Two full stops.",
   },
   "Write two short sentences about a pet.": {
     example: "My pet is a small dog. It likes to run in the yard.",
     why: "Both sentences stay on the pet. Each one ends cleanly.",
+    tip: "Both sentences stay on the pet. Each one ends cleanly.",
   },
   "Write a sentence about a friend or family member doing something.": {
     example: "My sister kicked the red ball.",
     why: "Who (my sister) comes first, then the action (kicked), then what.",
+    tip: "Who (my sister) comes first, then the action (kicked), then what.",
   },
   "Write a sentence about an animal doing something.": {
     example: "The dog jumped over the log.",
     why: "The animal is first. Then the action. Then the rest.",
+    tip: "The animal is first. Then the action. Then the rest.",
   },
   "Write a sentence about you doing something at school.": {
     example: "I read a book on the mat.",
     why: "I is who. Read is the action. The rest tells where.",
+    tip: "I is who. Read is the action. The rest tells where.",
   },
   "Write a sentence about someone cooking or eating.": {
     example: "Mum cooked rice in a big pan.",
     why: "Mum did the cooking. The sentence says who, did, and what.",
+    tip: "Mum did the cooking. The sentence says who, did, and what.",
   },
   "Write a sentence about someone playing a game.": {
     example: "Sam kicked the ball into the net.",
     why: "Sam is who. Kicked is the action. The rest tells what happened.",
+    tip: "Sam is who. Kicked is the action. The rest tells what happened.",
   },
   "Write two questions you could ask a friend at school.": {
     example: "What are you playing at lunch? Do you want to sit with me?",
     why: "Both lines ask. Both start with a capital and end with a question mark.",
+    tip: "Both lines ask. Both start with a capital and end with a question mark.",
   },
   "Write two questions you could ask at home.": {
     example: "When is dinner? Can I help set the table?",
     why: "Question words first. Question marks last.",
+    tip: "Question words first. Question marks last.",
   },
   "Write two questions about a lost thing.": {
     example: "Where is my blue bag? Have you seen my hat?",
     why: "These ask for an answer, so they cannot end with a full stop.",
+    tip: "These ask for an answer, so they cannot end with a full stop.",
   },
   "Write two questions about food.": {
     example: "What is for lunch? Can we have fruit?",
     why: "Two asks. Two question marks.",
+    tip: "Two asks. Two question marks.",
   },
   "Write two questions about a game.": {
     example: "How do we start? Who has the ball?",
     why: "How and who open questions. The ? shows we want an answer.",
+    tip: "How and who open questions. The ? shows we want an answer.",
   },
   "Write a sentence that uses because.": {
     example: "I like this book because the ending is funny.",
     why: "because joins the idea to the reason. The sentence still needs a capital and a stop.",
+    tip: "because joins the idea to the reason. The sentence still needs a capital and a stop.",
   },
   "Write a sentence about the weather using because.": {
     example: "I wore a coat because it was cold.",
     why: "The first part is what happened. because tells why.",
+    tip: "The first part is what happened. because tells why.",
   },
   "Write a sentence about a friend using because.": {
     example: "I like my friend because she is kind.",
     why: "because gives the reason. That is what makes the sentence feel finished.",
+    tip: "because gives the reason. That is what makes the sentence feel finished.",
   },
   "Write a sentence about school using because.": {
     example: "I was late because the bus was full.",
     why: "Two ideas, joined by because, in one sentence.",
+    tip: "Two ideas, joined by because, in one sentence.",
   },
   "Write a sentence about food using because.": {
     example: "I ate the apple because I was hungry.",
     why: "because answers why. The spelling is because, not becos.",
+    tip: "because answers why. The spelling is because, not becos.",
   },
   "Write one sentence that uses and or but.": {
     example: "I wanted to play but I had to pack my bag.",
     why: "but shows a change. The two ideas sit in one sentence.",
+    tip: "but shows a change. The two ideas sit in one sentence.",
   },
   "Write one sentence that uses so.": {
     example: "It was late so we went home.",
     why: "so shows a result. Going home happened because it was late.",
+    tip: "so shows a result. Going home happened because it was late.",
   },
   "Write one sentence that uses but.": {
     example: "I like swimming but the water was cold.",
     why: "but tells us the second idea is different or surprising.",
+    tip: "but tells us the second idea is different or surprising.",
   },
   "Write one sentence that uses and.": {
     example: "We packed fruit and we packed water.",
     why: "and adds a second idea of the same kind.",
+    tip: "and adds a second idea of the same kind.",
   },
   "Write one sentence that joins two things you did today.": {
     example: "Today I read a book and I drew a picture.",
     why: "and sticks two things you did into one line.",
+    tip: "and sticks two things you did into one line.",
   },
   "Write two sentences about a park, beach, or backyard.": {
     example: "The park was green and quiet. I saw a tiny bird in the tree.",
     why: "tiny and green are describing words. Two sentences, two stops.",
+    tip: "tiny and green are describing words. Two sentences, two stops.",
   },
   "Write two sentences about your room.": {
     example: "My room is small and bright. I have a soft lamp by the bed.",
     why: "small, bright and soft help the reader see the room.",
+    tip: "small, bright and soft help the reader see the room.",
   },
   "Write two sentences about a meal.": {
     example: "The food was hot and sweet. I tasted the soup first.",
     why: "hot and sweet paint the meal. Each sentence is complete.",
+    tip: "hot and sweet paint the meal. Each sentence is complete.",
   },
   "Write two sentences about an animal.": {
     example: "The animal was huge and grey. It had a long trunk.",
     why: "huge and long are describing words sitting near the thing they describe.",
+    tip: "huge and long are describing words sitting near the thing they describe.",
   },
   "Write two sentences about the weather.": {
     example: "The sky was dark and loud. The wind pushed the trees.",
     why: "dark and loud help us feel the weather, not just name it.",
+    tip: "dark and loud help us feel the weather, not just name it.",
   },
   "Write a topic sentence about your weekend, then one extra sentence with a detail.": {
     example: "On the weekend I visited Grandma. The best part was baking lemon cake.",
     why: "Sentence 1 names the topic (the weekend visit). Sentence 2 adds one detail.",
+    tip: "Sentence 1 names the topic (the weekend visit). Sentence 2 adds one detail.",
   },
   "Write a topic sentence about school, then one detail.": {
     example: "School is busy on Friday. In class we practised a song for assembly.",
     why: "The first sentence tells the topic. The second stays on school.",
+    tip: "The first sentence tells the topic. The second stays on school.",
   },
   "Write a topic sentence about a sport, then one detail.": {
     example: "My favourite sport is soccer. We run up and down the field.",
     why: "Soccer is the topic. Running is a detail about that sport, not a new idea.",
+    tip: "Soccer is the topic. Running is a detail about that sport, not a new idea.",
   },
   "Write a topic sentence about a pet or animal, then one detail.": {
     example: "My pet is a red hen. It likes to peck grain by the fence.",
     why: "The hen is the topic. Pecking grain is a detail about the hen.",
+    tip: "The hen is the topic. Pecking grain is a detail about the hen.",
   },
   "Write a topic sentence about a place you like, then one detail.": {
     example: "I like going to the library. There I look for animal books.",
     why: "The library is named first. The next sentence stays in that place.",
+    tip: "The library is named first. The next sentence stays in that place.",
   },
   "Write three sentences about a trip.": {
     example: "We went to the zoo. First we watched the lions rest. Then the monkeys jumped for bananas.",
     why: "Sentence 1 is the topic. 2 and 3 are details. Nothing about a different day sneaks in.",
+    tip: "Sentence 1 is the topic. 2 and 3 are details. Nothing about a different day sneaks in.",
   },
   "Write three sentences about cooking.": {
     example: "We made pancakes. First we mixed flour, milk and eggs. Then we cooked them in a pan.",
     why: "Topic, then two steps. All about pancakes.",
+    tip: "Topic, then two steps. All about pancakes.",
   },
   "Write three sentences about a game.": {
     example: "We played soccer at lunch. First Sam passed the ball. Then I kicked it in.",
     why: "The game is the topic. The next two lines are what happened in that game.",
+    tip: "The game is the topic. The next two lines are what happened in that game.",
   },
   "Write three sentences about a class job.": {
     example: "In class we packed the book box. First we stacked the readers. After that we carried it to the shelf.",
     why: "One job. Two details about that same job.",
+    tip: "One job. Two details about that same job.",
   },
   "Write three sentences about a visit.": {
     example: "We visited Grandma after school. When we arrived she had cake ready. Then we sat in the warm kitchen.",
     why: "The visit is the topic. The other sentences stay in Grandma's house.",
+    tip: "The visit is the topic. The other sentences stay in Grandma's house.",
   },
   "Write a short paragraph about something you made. End with how you felt.": {
     example: "I made a card for Mum. I used blue paper and gold stars. At the end I felt proud.",
     why: "The last sentence closes the idea with a feeling. It does not start a new topic.",
+    tip: "The last sentence closes the idea with a feeling. It does not start a new topic.",
   },
   "Write a short paragraph about helping at home. End with how you felt.": {
     example: "I helped Dad wash the car. I held the hose and rubbed the doors. I felt useful when it looked new.",
     why: "Same topic all the way. The feeling finishes the thought.",
+    tip: "Same topic all the way. The feeling finishes the thought.",
   },
   "Write a short paragraph about a game you played. End with how you felt.": {
     example: "We played soccer on the oval. Then Sam passed the ball to me. I felt happy when we scored.",
     why: "The close is about the game, not about dinner or something else.",
+    tip: "The close is about the game, not about dinner or something else.",
   },
   "Write a short paragraph about a class project. End with how you felt.": {
     example: "Our class grew beans in cups. We watered them every morning. I felt excited when the shoots came up.",
     why: "Topic, detail, feeling. All about the beans.",
+    tip: "Topic, detail, feeling. All about the beans.",
   },
   "Write a short paragraph about a surprise. End with how you felt.": {
     example: "I was surprised when Mum packed a picnic. Then we ate by the river. I felt lucky all afternoon.",
     why: "The last line wraps up the surprise. It does not jump to a new story.",
+    tip: "The last line wraps up the surprise. It does not jump to a new story.",
   },
   "Write three sentences about one animal. Do not change topic.": {
     example: "The animal I chose is a hen. It lives in our backyard. It likes to peck grain.",
     why: "Every sentence is about the hen. Pizza or soccer would be a stray idea.",
+    tip: "Every sentence is about the hen. Pizza or soccer would be a stray idea.",
   },
   "Write three sentences about one game. Do not change topic.": {
     example: "The game I chose is soccer. You kick a ball into a net. I like it because we run together.",
     why: "All three lines stay on soccer.",
+    tip: "All three lines stay on soccer.",
   },
   "Write three sentences about one place. Do not change topic.": {
     example: "The place I chose is the library. There I look for quiet corners. It feels calm and happy.",
     why: "The library is the only topic.",
+    tip: "The library is the only topic.",
   },
   "Write three sentences about one person. Do not change topic.": {
     example: "The person I chose is Grandma. They bake lemon cake with me. I like them because they listen.",
     why: "Grandma stays the topic from start to finish.",
+    tip: "Grandma stays the topic from start to finish.",
   },
   "Write three sentences about one food. Do not change topic.": {
     example: "The food I chose is pancakes. It tastes sweet with lemon. I eat it when we have a slow Saturday.",
     why: "Pancakes only. No extra idea about a different meal.",
+    tip: "Pancakes only. No extra idea about a different meal.",
   },
   "Write a paragraph of 4 sentences about a day you remember.": {
     example: "I remember a hot day at the beach. First we put down a big towel. Then the waves were huge. I felt brave when I jumped in.",
     why: "Topic, two details, a feeling. Capitals and stops on every sentence.",
+    tip: "Topic, two details, a feeling. Capitals and stops on every sentence.",
   },
   "Write a paragraph of 4 sentences about a place you love.": {
     example: "I love the library. There I look for animal books. I also sit in the quiet corner. I feel calm when I leave with a story.",
     why: "Four sentences. One place. A close that matches the topic.",
+    tip: "Four sentences. One place. A close that matches the topic.",
   },
   "Write a paragraph of 4 sentences about making something.": {
     example: "I made a bird from paper. I used scissors and glue. Then I painted the wings blue. I felt proud when it stood up.",
     why: "The feeling at the end belongs to the making, not to a new topic.",
+    tip: "The feeling at the end belongs to the making, not to a new topic.",
   },
   "Write a paragraph of 4 sentences about a person who helps you.": {
     example: "Someone who helps me is Dad. They pack my lunch in the morning. One day they waited with me for the bus. I feel safe when they are nearby.",
     why: "All four sentences stay on Dad. The last line is a feeling.",
+    tip: "All four sentences stay on Dad. The last line is a feeling.",
   },
   "Write a paragraph of 4 sentences about an animal.": {
     example: "The animal I chose is a hen. It lives by the back fence. It likes warm brown eggs and grain. I think it is a busy, funny pet.",
     why: "One animal for the whole paragraph. Topic, details, a close.",
+    tip: "One animal for the whole paragraph. Topic, details, a close.",
   },
 };

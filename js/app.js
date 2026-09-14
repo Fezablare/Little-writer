@@ -1,14 +1,21 @@
-const STORAGE_KEY = "little-writer-progress-v2";
+const STORAGE_KEY = "little-writer-progress-v3";
 
 const state = {
   view: "home",
+  subject: "writing",
   weekId: null,
   activityId: null,
   scrambleId: null,
+  mathId: null,
   questionIndex: 0,
+  writeTip: null,
+  writeChecked: {},
+  writeAttempt: "",
   name: "",
   completed: {},
   progress: {},
+  mastery: {},
+  drafts: {},
 };
 
 function load() {
@@ -17,11 +24,16 @@ function load() {
     if (!raw) return;
     const saved = JSON.parse(raw);
     state.name = saved.name || "";
+    state.subject = saved.subject === "maths" ? "maths" : "writing";
     state.completed = saved.completed || {};
     state.progress = saved.progress || {};
+    state.mastery = saved.mastery || {};
+    state.drafts = saved.drafts || {};
   } catch (error) {
     state.completed = {};
     state.progress = {};
+    state.mastery = {};
+    state.drafts = {};
   }
 }
 
@@ -30,8 +42,11 @@ function save() {
     STORAGE_KEY,
     JSON.stringify({
       name: state.name,
+      subject: state.subject,
       completed: state.completed,
       progress: state.progress,
+      mastery: state.mastery,
+      drafts: state.drafts,
     })
   );
 }
@@ -44,13 +59,51 @@ function activityById(week, id) {
   return week.activities.find((activity) => activity.id === id);
 }
 
+function layersOf(activity) {
+  if (!activity) return null;
+  if (activity.kind === "write") return null;
+  if (state.mathId || state.scrambleId) return null;
+  if (activity.layers) return activity.layers;
+  const rounds = activity.rounds || (activity.answer || activity.items || activity.sentences ? [activity] : null);
+  if (!rounds) return null;
+  return [{ id: "practice", label: "Practice", needCorrect: Math.min(2, rounds.length), rounds }];
+}
+
 function roundsOf(activity) {
+  const layers = layersOf(activity);
+  if (layers) return layers.flatMap((layer) => layer.rounds);
   return activity.rounds || [activity];
 }
 
+function masteryState(activityId) {
+  if (!state.mastery[activityId]) {
+    state.mastery[activityId] = { layer: 0, streak: 0, round: 0 };
+  }
+  return state.mastery[activityId];
+}
+
+function currentLayer(activity) {
+  const layers = layersOf(activity);
+  if (!layers) return null;
+  const m = masteryState(activity.id);
+  return layers[Math.min(m.layer, layers.length - 1)];
+}
+
 function questionsDone(activity) {
-  if (state.completed[activity.id]) return roundsOf(activity).length;
-  return Math.min(state.progress[activity.id] || 0, roundsOf(activity).length);
+  if (state.completed[activity.id]) return activityQuestionTotal(activity);
+  if (activity.kind === "write") {
+    return Math.min(state.progress[activity.id] || 0, roundsOf(activity).length);
+  }
+  const layers = layersOf(activity);
+  if (!layers) return 0;
+  const m = masteryState(activity.id);
+  return Math.min(m.layer, layers.length);
+}
+
+function activityQuestionTotal(activity) {
+  if (activity.kind === "write") return roundsOf(activity).length;
+  const layers = layersOf(activity);
+  return layers ? layers.length : roundsOf(activity).length;
 }
 
 function weekQuestionsDone(week) {
@@ -58,7 +111,7 @@ function weekQuestionsDone(week) {
 }
 
 function weekQuestionTotal(week) {
-  return week.activities.reduce((sum, activity) => sum + roundsOf(activity).length, 0);
+  return week.activities.reduce((sum, activity) => sum + activityQuestionTotal(activity), 0);
 }
 
 function doneCount(week) {
@@ -81,41 +134,77 @@ function currentWeek() {
 }
 
 function scrambleDone() {
-  return UNSCRAMBLE.reduce((sum, pack) => sum + questionsDone(pack), 0);
+  return UNSCRAMBLE.reduce((sum, pack) => sum + questionsDoneFlat(pack), 0);
 }
 
 function scrambleTotal() {
   return UNSCRAMBLE.reduce((sum, pack) => sum + roundsOf(pack).length, 0);
 }
 
+function questionsDoneFlat(pack) {
+  if (state.completed[pack.id]) return roundsOf(pack).length;
+  return Math.min(state.progress[pack.id] || 0, roundsOf(pack).length);
+}
+
 function currentScramble() {
   return UNSCRAMBLE.find((pack) => pack.id === state.scrambleId);
 }
 
+function currentMath() {
+  return MATH.find((pack) => pack.id === state.mathId);
+}
+
+function isFlatPath() {
+  return Boolean(state.scrambleId || state.mathId);
+}
+
+function mathDone() {
+  return MATH.reduce((sum, pack) => sum + questionsDoneFlat(pack), 0);
+}
+
+function mathTotal() {
+  return MATH.reduce((sum, pack) => sum + roundsOf(pack).length, 0);
+}
+
 function currentActivity() {
-  if (state.scrambleId) return currentScramble();
+  if (state.mathId && state.mathId !== "intro") return currentMath();
+  if (state.scrambleId && state.scrambleId !== "intro") return currentScramble();
   const week = weekById(state.weekId);
   return activityById(week, state.activityId);
 }
 
 function currentRound() {
   const activity = currentActivity();
-  return roundsOf(activity)[state.questionIndex];
+  if (isFlatPath() || activity.kind === "write") {
+    return roundsOf(activity)[state.questionIndex];
+  }
+  const layer = currentLayer(activity);
+  const m = masteryState(activity.id);
+  const rounds = layer.rounds;
+  return rounds[m.round % rounds.length];
 }
 
 function startQuestion(id) {
   const activity = currentActivity();
-  const total = roundsOf(activity).length;
-  if (state.completed[id]) {
-    state.questionIndex = 0;
-  } else {
-    state.questionIndex = Math.min(state.progress[id] || 0, total - 1);
+  if (isFlatPath() || activity.kind === "write") {
+    const total = roundsOf(activity).length;
+    if (state.completed[id]) {
+      state.questionIndex = 0;
+    } else {
+      state.questionIndex = Math.min(state.progress[id] || 0, total - 1);
+    }
+    return;
   }
+  masteryState(id);
 }
 
 function openActivity(id) {
   state.scrambleId = null;
+  state.mathId = null;
   state.activityId = id;
+  state.writeTip = null;
+  state.writeChecked = {};
+  state.writeAttempt = "";
   startQuestion(id);
   state.view = "activity";
   render();
@@ -124,6 +213,8 @@ function openActivity(id) {
 function openScramble(id) {
   state.weekId = null;
   state.activityId = null;
+  state.mathId = null;
+  state.subject = "writing";
   state.scrambleId = id;
   state.view = "activity";
   startQuestion(id);
@@ -133,13 +224,49 @@ function openScramble(id) {
 function openScrambleLesson() {
   state.weekId = null;
   state.activityId = null;
+  state.mathId = null;
+  state.subject = "writing";
   state.scrambleId = "intro";
   state.view = "lesson";
   render();
 }
 
+function openMath(id) {
+  state.weekId = null;
+  state.activityId = null;
+  state.scrambleId = null;
+  state.subject = "maths";
+  state.mathId = id;
+  state.view = "activity";
+  startQuestion(id);
+  render();
+}
+
+function openMathLesson() {
+  state.weekId = null;
+  state.activityId = null;
+  state.scrambleId = null;
+  state.subject = "maths";
+  state.mathId = "intro";
+  state.view = "lesson";
+  render();
+}
+
+function setSubject(subject) {
+  state.subject = subject === "maths" ? "maths" : "writing";
+  state.scrambleId = null;
+  state.mathId = null;
+  state.weekId = null;
+  state.activityId = null;
+  state.view = "home";
+  save();
+  render();
+}
+
 function openWeek(id, showLesson) {
   state.scrambleId = null;
+  state.mathId = null;
+  state.subject = "writing";
   state.weekId = id;
   state.view = showLesson === false ? "week" : "lesson";
   render();
@@ -148,71 +275,6 @@ function openWeek(id, showLesson) {
 function weekLesson() {
   const week = weekById(state.weekId);
   return WEEK_LESSONS[week.id];
-}
-
-function renderExamplePairs(examples) {
-  return `
-    <div class="pairs">
-      ${examples
-        .map(
-          (example) => `
-        <div class="pair">
-          <p class="bad-line">Not yet: ${escapeHtml(example.wrong)}</p>
-          <p class="ok-line">Right: ${escapeHtml(example.right)}</p>
-          <p class="why">${escapeHtml(example.why)}</p>
-        </div>
-      `
-        )
-        .join("")}
-    </div>
-  `;
-}
-
-function renderLessonBody(lesson, heading) {
-  return `
-    <p class="lede">${escapeHtml(lesson.idea)}</p>
-    <p class="hint">${escapeHtml(lesson.why)}</p>
-    <div class="rule-box">${escapeHtml(lesson.rule)}</div>
-    <h3>How to get it right</h3>
-    <ol class="steps">
-      ${lesson.steps.map((step) => `<li>${escapeHtml(step)}</li>`).join("")}
-    </ol>
-    <h3>${escapeHtml(heading || "Look at these")}</h3>
-    ${renderExamplePairs(lesson.examples)}
-  `;
-}
-
-function renderLesson() {
-  if (state.scrambleId === "intro") {
-    return `
-      <header class="topbar">
-        <button class="ghost" data-action="home">All packs</button>
-      </header>
-      <section class="hero">
-        <p class="crumb">Sentence order</p>
-        <h1>Words have to stand in line</h1>
-        ${renderLessonBody(SCRAMBLE_LESSON, "What makes the order right")}
-        <div class="actions">
-          <button class="primary" data-open-scramble="${UNSCRAMBLE[0].id}">Try an easy sentence</button>
-        </div>
-      </section>
-    `;
-  }
-  const week = weekById(state.weekId);
-  const lesson = weekLesson();
-  return `
-    <header class="topbar">
-      <button class="ghost" data-action="home">All weeks</button>
-    </header>
-    <section class="hero">
-      <p class="crumb">Week ${week.week} · lesson</p>
-      <h1>${escapeHtml(week.title)}</h1>
-      ${renderLessonBody(lesson, "Wrong, then right")}
-      <div class="actions">
-        <button class="primary" data-action="start-week">Start the tasks</button>
-      </div>
-    </section>
-  `;
 }
 
 function escapeHtml(value) {
@@ -249,6 +311,8 @@ function resetAllProgress() {
   if (!ok) return;
   state.completed = {};
   state.progress = {};
+  state.mastery = {};
+  state.drafts = {};
   state.questionIndex = 0;
   save();
   render();
@@ -256,14 +320,113 @@ function resetAllProgress() {
 
 function render() {
   const root = document.getElementById("app");
-  if (state.view === "home") root.innerHTML = renderHome();
+  if (state.view === "home") {
+    root.innerHTML = state.subject === "maths" ? renderMathHome() : renderWritingHome();
+  }
   if (state.view === "week") root.innerHTML = renderWeek();
   if (state.view === "lesson") root.innerHTML = renderLesson();
   if (state.view === "activity") root.innerHTML = renderActivity();
   bind();
 }
 
-function renderHome() {
+function subjectTabs() {
+  return `
+    <nav class="subject-tabs" aria-label="Subject">
+      <button type="button" class="subject-tab ${state.subject === "writing" ? "active" : ""}" data-subject="writing">Writing</button>
+      <button type="button" class="subject-tab ${state.subject === "maths" ? "active" : ""}" data-subject="maths">Maths</button>
+    </nav>
+  `;
+}
+
+function renderExamplePairs(examples) {
+  return `
+    <div class="pairs">
+      ${examples
+        .map(
+          (example) => `
+        <div class="pair">
+          <p class="bad-line">Not yet: ${escapeHtml(example.wrong)}</p>
+          <p class="ok-line">Right: ${escapeHtml(example.right)}</p>
+          <p class="why">${escapeHtml(example.why)}</p>
+        </div>
+      `
+        )
+        .join("")}
+    </div>
+  `;
+}
+
+function renderLessonBody(lesson, heading) {
+  return `
+    <p class="lede">${escapeHtml(lesson.idea)}</p>
+    <p class="hint">${escapeHtml(lesson.why)}</p>
+    <div class="rule-box">${escapeHtml(lesson.rule)}</div>
+    <h3>How to get it right</h3>
+    <ol class="steps">
+      ${lesson.steps.map((step) => `<li>${escapeHtml(step)}</li>`).join("")}
+    </ol>
+    <h3>${escapeHtml(heading || "Look at these")}</h3>
+    ${renderExamplePairs(lesson.examples)}
+  `;
+}
+
+function renderLesson() {
+  if (state.mathId === "intro") {
+    return `
+      <header class="topbar">
+        <button class="ghost" data-action="home">All maths packs</button>
+      </header>
+      <section class="hero">
+        <p class="crumb">Times tables · lesson</p>
+        <h1>Equal groups</h1>
+        ${renderLessonBody(MATH_LESSON, "Picture first")}
+        <div class="actions">
+          <button class="primary" data-open-math="${MATH[0].id}">Start with 2s · see it</button>
+        </div>
+      </section>
+    `;
+  }
+  if (state.scrambleId === "intro") {
+    return `
+      <header class="topbar">
+        <button class="ghost" data-action="home">All sentence packs</button>
+      </header>
+      <section class="hero">
+        <p class="crumb">Sentence order</p>
+        <h1>Words have to stand in line</h1>
+        ${renderLessonBody(SCRAMBLE_LESSON, "What makes the order right")}
+        <div class="actions">
+          <button class="primary" data-open-scramble="${UNSCRAMBLE[0].id}">Try an easy sentence</button>
+        </div>
+      </section>
+    `;
+  }
+  const week = weekById(state.weekId);
+  const lesson = weekLesson();
+  const story = week.story
+    ? `<div class="story-card">
+        <div class="story-label">This week's story</div>
+        <h2>${escapeHtml(week.story.theme)}</h2>
+        <p>You will read a short story, fill the spelling gaps, then practise and write your own bit about the same idea.</p>
+      </div>`
+    : "";
+  return `
+    <header class="topbar">
+      <button class="ghost" data-action="home">All weeks</button>
+    </header>
+    <section class="hero">
+      <p class="crumb">Week ${week.week} · lesson</p>
+      <h1>${escapeHtml(week.title)}</h1>
+      ${story}
+      ${renderLessonBody(lesson, "Wrong, then right")}
+      <div class="actions">
+        <button class="primary" data-action="start-week">Start the tasks</button>
+      </div>
+    </section>
+  `;
+}
+
+function renderWritingHome() {
   const percent = Math.round((totalDone() / totalActivities()) * 100) || 0;
   const next = currentWeek();
   const allDone = totalDone() === totalActivities();
@@ -285,12 +448,13 @@ function renderHome() {
       </div>
       <button class="ghost" data-action="reset-all">Reset progress</button>
     </header>
+    ${subjectTabs()}
     <section class="hero">
       <p class="crumb">12-week programme</p>
       <h1>${greeting}</h1>
       <p class="lede">
-        Short tasks in the 12-week path, plus a big sentence-order game.
-        Tap mixed-up words until they make a real sentence. Progress stays on this device.
+        Each week has a short story to read with spelling gaps, then practise, then write.
+        Progress stays on this device.
       </p>
       <div class="name-row">
         <input id="name-input" type="text" maxlength="24" placeholder="Writer's name" value="${escapeHtml(state.name)}" />
@@ -298,7 +462,7 @@ function renderHome() {
       </div>
       ${cta}
       <div class="progress-line"><span style="width:${percent}%"></span></div>
-      <p class="hint">${totalDone()} of ${totalActivities()} questions done</p>
+      <p class="hint">${totalDone()} of ${totalActivities()} steps done</p>
     </section>
     <div class="week-grid">
       ${CURRICULUM.map((week) => {
@@ -309,7 +473,7 @@ function renderHome() {
           <button class="week-card ${isNext ? "current" : ""}" data-open-week="${week.id}">
             <div class="num">Week ${week.week}${isNext ? " · next" : ""}</div>
             <h3>${escapeHtml(week.title)}</h3>
-            <p>${escapeHtml(week.focus)}</p>
+            <p>${escapeHtml(week.story ? week.story.theme : week.focus)}</p>
             <div class="pills">
               ${week.activities
                 .map(
@@ -318,7 +482,7 @@ function renderHome() {
                 )
                 .join("")}
             </div>
-            <p class="hint">${done}/${total} questions</p>
+            <p class="hint">${done}/${total} steps</p>
           </button>
         `;
       }).join("")}
@@ -327,10 +491,68 @@ function renderHome() {
   `;
 }
 
+function renderMathHome() {
+  const done = mathDone();
+  const total = mathTotal();
+  const next = MATH.find((pack) => questionsDoneFlat(pack) < roundsOf(pack).length) || MATH[0];
+  const greeting = state.name ? `Hi ${escapeHtml(state.name)}.` : "Times tables path.";
+  const percent = Math.round((done / total) * 100) || 0;
+  return `
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark">×</div>
+        <div>
+          <strong>Little Writer</strong>
+          <small>Times tables</small>
+        </div>
+      </div>
+      <button class="ghost" data-action="reset-all">Reset progress</button>
+    </header>
+    ${subjectTabs()}
+    <section class="hero">
+      <p class="crumb">Maths · multiplication</p>
+      <h1>${greeting}</h1>
+      <p class="lede">
+        See equal groups, skip-count the pattern, then know the fact.
+        No timers — clear first, fast later.
+      </p>
+      <div class="name-row">
+        <button class="primary" data-action="math-lesson">How multiplication works</button>
+        <button class="secondary" data-open-math="${next.id}">Continue ${escapeHtml(next.title)}</button>
+      </div>
+      <div class="progress-line"><span style="width:${percent}%"></span></div>
+      <p class="hint">${done} of ${total} questions done</p>
+    </section>
+    <div class="block-title">
+      <h2>Times tables packs</h2>
+      <p>Start with 2s, 5s and 10s. Build the picture before you race the answers.</p>
+    </div>
+    <div class="week-grid">
+      ${MATH.map((pack) => {
+        const packDone = questionsDoneFlat(pack);
+        const packTotal = roundsOf(pack).length;
+        const isNext = pack.id === next.id && done < total;
+        return `
+          <button class="week-card ${isNext ? "current" : ""}" data-open-math="${pack.id}">
+            <div class="num">${escapeHtml(pack.level)}${isNext ? " · next" : ""}</div>
+            <h3>${escapeHtml(pack.title)}</h3>
+            <p>${packTotal} questions</p>
+            <div class="pills">
+              ${Array.from({ length: packTotal }, (_, index) => `<span class="pill ${index < packDone ? "done" : ""}"></span>`).join("")}
+            </div>
+            <p class="hint">${packDone}/${packTotal} done</p>
+          </button>
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+
 function renderScrambleHome() {
   const done = scrambleDone();
   const total = scrambleTotal();
-  const next = UNSCRAMBLE.find((pack) => questionsDone(pack) < roundsOf(pack).length) || UNSCRAMBLE[0];
+  const next =
+    UNSCRAMBLE.find((pack) => questionsDoneFlat(pack) < roundsOf(pack).length) || UNSCRAMBLE[0];
   return `
     <div class="block-title">
       <h2>Sentence order</h2>
@@ -344,7 +566,7 @@ function renderScrambleHome() {
     </div>
     <div class="week-grid">
       ${UNSCRAMBLE.map((pack) => {
-        const packDone = questionsDone(pack);
+        const packDone = questionsDoneFlat(pack);
         const packTotal = roundsOf(pack).length;
         const isNext = pack.id === next.id && done < total;
         return `
@@ -366,6 +588,8 @@ function renderScrambleHome() {
 function renderWeek() {
   const week = weekById(state.weekId);
   const finished = doneCount(week) === week.activities.length;
+  const draftRaw = state.drafts[week.id];
+  const draft = Array.isArray(draftRaw) ? draftRaw.filter(Boolean).join("\n\n") : draftRaw;
   return `
     <header class="topbar">
       <button class="ghost" data-action="home">All weeks</button>
@@ -374,20 +598,41 @@ function renderWeek() {
       <p class="crumb">Week ${week.week}</p>
       <h1>${escapeHtml(week.title)}</h1>
       <p class="lede">${escapeHtml(week.focus)}</p>
+      ${
+        week.story
+          ? `<div class="story-card">
+              <div class="story-label">This week's story</div>
+              <h2>${escapeHtml(week.story.theme)}</h2>
+              <p>Read the story, spell the missing words, then write your own ending ideas in the last task.</p>
+            </div>`
+          : ""
+      }
       ${finished ? `<p class="done-tag">This week is complete</p>` : ""}
       <div class="name-row">
         <button class="secondary" data-action="show-lesson">Show the lesson again</button>
       </div>
     </div>
+    ${
+      draft
+        ? `<section class="draft-strip">
+            <strong>Your writing this week</strong>
+            <p>${escapeHtml(draft)}</p>
+          </section>`
+        : ""
+    }
     <div class="activity-list">
       ${week.activities
         .map((activity, index) => {
-          const total = roundsOf(activity).length;
+          const total = activityQuestionTotal(activity);
           const done = questionsDone(activity);
+          const layers = layersOf(activity);
+          const label = layers
+            ? `${done}/${total} layers`
+            : `${done}/${total}`;
           return `
         <button class="activity-card" data-open-activity="${activity.id}">
           <div>
-            <div class="kind">Task ${index + 1} · ${activity.kind} · ${done}/${total}</div>
+            <div class="kind">Task ${index + 1} · ${activity.kind} · ${label}</div>
             <h3>${escapeHtml(activity.title)}</h3>
             <p class="hint">${escapeHtml(activity.prompt)}</p>
           </div>
@@ -400,31 +645,79 @@ function renderWeek() {
   `;
 }
 
+function layerChip(activity) {
+  const layers = layersOf(activity);
+  if (!layers || isFlatPath()) return "";
+  const m = masteryState(activity.id);
+  const layer = layers[Math.min(m.layer, layers.length - 1)];
+  return `
+    <div class="layer-chip">
+      <span>${escapeHtml(layer.label)}</span>
+      <span>${m.streak}/${layer.needCorrect} correct</span>
+    </div>
+  `;
+}
+
 function renderActivity() {
   const week = state.weekId ? weekById(state.weekId) : null;
   const activity = currentActivity();
   const round = currentRound();
-  const total = roundsOf(activity).length;
-  const n = state.questionIndex + 1;
   const body = {
     spell: renderSpell,
+    story: renderStory,
     build: renderBuild,
     fix: renderFix,
     write: renderWrite,
     arrange: renderArrange,
+    choose: renderChoose,
+    spot: renderSpot,
+    expand: renderExpand,
+    groups: renderGroups,
+    array: renderArray,
+    skip: renderSkip,
   }[activity.kind](round);
-  const back = state.scrambleId
-    ? `<button class="ghost" data-action="home">All sentence packs</button>`
-    : `<button class="ghost" data-action="week">Back to week ${week.week}</button>`;
+
+  let crumb;
+  if (state.mathId) {
+    const total = roundsOf(activity).length;
+    crumb = `${activity.level} · ${state.questionIndex + 1} of ${total}`;
+  } else if (state.scrambleId) {
+    const total = roundsOf(activity).length;
+    crumb = `${activity.level} · sentence ${state.questionIndex + 1} of ${total}`;
+  } else if (activity.kind === "write") {
+    const total = roundsOf(activity).length;
+    crumb = `write · ${state.questionIndex + 1} of ${total}`;
+  } else {
+    const layers = layersOf(activity);
+    const m = masteryState(activity.id);
+    const layer = layers[Math.min(m.layer, layers.length - 1)];
+    crumb = `${activity.kind} · ${layer.label}`;
+  }
+
+  let back;
+  if (state.mathId) {
+    back = `<button class="ghost" data-action="home">All maths packs</button>`;
+  } else if (state.scrambleId) {
+    back = `<button class="ghost" data-action="home">All sentence packs</button>`;
+  } else {
+    back = `<button class="ghost" data-action="week">Back to week ${week.week}</button>`;
+  }
+
+  const tip =
+    activity.kind === "write" && state.writeTip
+      ? `<div class="tip-box"><strong>Tip</strong> ${escapeHtml(state.writeTip)}</div>`
+      : "";
 
   return `
     <header class="topbar">
       ${back}
     </header>
     <section class="hero">
-      <p class="crumb">${state.scrambleId ? `${activity.level} · sentence` : `${activity.kind} · question`} ${n} of ${total}</p>
+      <p class="crumb">${crumb}</p>
       <h1>${escapeHtml(activity.title)}</h1>
+      ${layerChip(activity)}
       <p class="prompt">${escapeHtml(round.prompt || activity.prompt)}</p>
+      ${tip}
       ${body}
       <div id="feedback"></div>
       <div class="actions">
@@ -452,6 +745,32 @@ function renderSpell(round) {
   `;
 }
 
+function storyBlanks(passage) {
+  const blanks = [];
+  const html = escapeHtml(passage).replace(/\{\{([^}]+)\}\}/g, (_, word) => {
+    const index = blanks.length;
+    blanks.push(word);
+    const width = Math.max(3, Math.min(14, word.length + 1));
+    return `<input class="story-blank" data-blank="${index}" size="${width}" autocomplete="off" spellcheck="false" aria-label="missing word ${index + 1}" />`;
+  });
+  return { blanks, html };
+}
+
+function renderStory(round) {
+  const { blanks, html } = storyBlanks(round.passage);
+  const bank = [...blanks].sort(() => Math.random() - 0.5);
+  return `
+    <p class="hint">Read the whole story first. Then fill each gap. The word box has the words you need.</p>
+    <div class="story-bank">
+      <strong>Word box</strong>
+      <div class="story-bank-words">
+        ${bank.map((word) => `<span class="story-chip">${escapeHtml(word)}</span>`).join("")}
+      </div>
+    </div>
+    <div class="story-passage">${html}</div>
+  `;
+}
+
 function renderBuild(round) {
   let shuffled = [...round.tiles].sort(() => Math.random() - 0.5);
   if (shuffled.join(" ") === round.tiles.join(" ")) {
@@ -475,6 +794,111 @@ function renderFix(round) {
   `;
 }
 
+function renderChoose(round) {
+  return `
+    <p class="hint">${escapeHtml(round.question || "Tap the best answer.")}</p>
+    <div class="choice-list">
+      ${round.choices
+        .map(
+          (choice, index) => `
+        <button type="button" class="choice" data-choice="${index}">${escapeHtml(choice)}</button>
+      `
+        )
+        .join("")}
+    </div>
+  `;
+}
+
+function renderSpot(round) {
+  const parts = round.parts || [];
+  return `
+    <p class="hint">Tap the part that is wrong, then type the fix.</p>
+    <div class="spot-parts">
+      ${parts
+        .map(
+          (part, index) => `
+        <button type="button" class="spot-part" data-spot="${index}">${escapeHtml(part)}</button>
+      `
+        )
+        .join("")}
+    </div>
+    <textarea class="fix-box" id="spot-fix" placeholder="Type the fixed word or sentence"></textarea>
+  `;
+}
+
+function renderExpand(round) {
+  return `
+    <p class="hint">Start: <strong>${escapeHtml(round.seed)}</strong></p>
+    <p class="hint">${escapeHtml(round.hint || "Add one detail to make a fuller sentence.")}</p>
+    <textarea class="write-box" id="expand-input" placeholder="Write the longer sentence">${escapeHtml(round.seed)}</textarea>
+  `;
+}
+
+function renderGroups(round) {
+  const total = round.groups * round.size;
+  return `
+    <p class="hint">Goal: <strong>${escapeHtml(round.label)}</strong> · ${total} dots in all.</p>
+    <p class="hint">Tap a bowl, then tap Add dot. Each bowl needs ${round.size}.</p>
+    <div class="math-groups" id="math-groups" data-groups="${round.groups}" data-size="${round.size}">
+      ${Array.from({ length: round.groups }, (_, index) => `
+        <button type="button" class="math-bowl" data-bowl="${index}" aria-label="Group ${index + 1}">
+          <span class="math-bowl-label">Group ${index + 1}</span>
+          <div class="math-dots" data-dots="${index}"></div>
+          <span class="math-bowl-count"><span data-count="${index}">0</span> / ${round.size}</span>
+        </button>
+      `).join("")}
+    </div>
+    <div class="math-tools">
+      <button type="button" class="secondary" data-action="add-dot">Add dot</button>
+      <button type="button" class="ghost" data-action="clear-bowl">Clear bowl</button>
+    </div>
+    <p class="math-equation" id="math-equation" hidden></p>
+  `;
+}
+
+function renderArray(round) {
+  const cells = round.rows * round.cols;
+  return `
+    <p class="hint">Goal: <strong>${escapeHtml(round.label)}</strong> · fill all ${cells} cells.</p>
+    <p class="hint">Tap empty cells to fill them. Tap a filled cell to empty it.</p>
+    <div class="math-array" id="math-array" style="--cols:${round.cols}" data-rows="${round.rows}" data-cols="${round.cols}">
+      ${Array.from({ length: cells }, (_, index) => `
+        <button type="button" class="math-cell" data-cell="${index}" aria-pressed="false"></button>
+      `).join("")}
+    </div>
+    <p class="hint"><span id="array-filled">0</span> / ${cells} filled</p>
+    <p class="math-equation" id="math-equation" hidden></p>
+  `;
+}
+
+function renderSkip(round) {
+  const values = Array.from({ length: round.sequenceLength }, (_, index) => round.start + index * round.step);
+  const blankSet = new Set(round.blankIndexes);
+  const answers = round.blankIndexes.map((index) => String(values[index]));
+  const bank = [...answers].sort(() => Math.random() - 0.5);
+  let blankOrdinal = 0;
+  const line = values
+    .map((value, index) => {
+      if (!blankSet.has(index)) {
+        return `<span class="skip-num">${value}</span>`;
+      }
+      const ord = blankOrdinal;
+      blankOrdinal += 1;
+      return `<input class="story-blank skip-blank" data-skip="${ord}" size="3" inputmode="numeric" autocomplete="off" spellcheck="false" aria-label="missing number ${ord + 1}" />`;
+    })
+    .join('<span class="skip-sep">,</span>');
+  return `
+    <p class="hint">Count up by ${round.step}. Tap a number chip or type in the gaps.</p>
+    <div class="story-bank">
+      <strong>Number box</strong>
+      <div class="story-bank-words">
+        ${bank.map((word) => `<span class="story-chip">${escapeHtml(word)}</span>`).join("")}
+      </div>
+    </div>
+    <div class="skip-line">${line}</div>
+  `;
+}
+
 function renderWrite(round) {
   const starters = (round.starters || [])
     .map(
@@ -484,7 +908,7 @@ function renderWrite(round) {
     .join("");
   return `
     <div class="starters">${starters}</div>
-    <textarea class="write-box" id="write-input" placeholder="Write here"></textarea>
+    <textarea class="write-box" id="write-input" placeholder="Write here">${escapeHtml(state.writeAttempt || "")}</textarea>
   `;
 }
 
@@ -533,6 +957,22 @@ function checkSpell(round) {
   return true;
 }
 
+function checkStory(round) {
+  const { blanks } = storyBlanks(round.passage);
+  const wrong = [];
+  blanks.forEach((answer, index) => {
+    const input = document.querySelector(`[data-blank="${index}"]`);
+    const value = normalise(input ? input.value : "").toLowerCase();
+    if (value !== answer.toLowerCase()) wrong.push(answer);
+  });
+  if (wrong.length) {
+    setFeedback(false, `Not yet. Look again for: ${wrong.join(", ")}.`);
+    return false;
+  }
+  setFeedback(true, "Yes — you read it and spelled the missing words.");
+  return true;
+}
+
 function checkBuild(round) {
   const built = [...document.querySelectorAll("#build-slots .tile")].map((node) => node.textContent).join(" ");
   if (normalise(built) !== normalise(round.answer)) {
@@ -565,23 +1005,169 @@ function checkFix(round) {
   return false;
 }
 
+function checkChoose(round) {
+  const selected = document.querySelector(".choice.selected");
+  if (!selected) {
+    setFeedback(false, "Tap one answer first.");
+    return false;
+  }
+  const index = Number(selected.dataset.choice);
+  if (index !== round.answerIndex) {
+    setFeedback(false, "Not that one. Look again at the rule from the lesson.");
+    return false;
+  }
+  setFeedback(true, "Yes — that matches the rule.");
+  return true;
+}
+
+function checkSpot(round) {
+  const selected = document.querySelector(".spot-part.selected");
+  if (!selected) {
+    setFeedback(false, "Tap the broken part first.");
+    return false;
+  }
+  const index = Number(selected.dataset.spot);
+  if (index !== round.brokenIndex) {
+    setFeedback(false, "That part is fine. Tap the bit that looks wrong.");
+    return false;
+  }
+  const value = normalise(document.getElementById("spot-fix").value);
+  if (value.toLowerCase() !== normalise(round.fix).toLowerCase()) {
+    setFeedback(false, `Almost. Aim for: ${round.fix}`);
+    return false;
+  }
+  setFeedback(true, "You spotted it and fixed it.");
+  return true;
+}
+
+function checkExpand(round) {
+  const value = normalise(document.getElementById("expand-input").value);
+  const seed = normalise(round.seed);
+  if (wordCount(value) < wordCount(seed) + 1) {
+    setFeedback(false, "Add at least one extra detail word.");
+    return false;
+  }
+  if (round.mustInclude) {
+    const missing = round.mustInclude.filter(
+      (word) => !value.toLowerCase().includes(word.toLowerCase())
+    );
+    if (missing.length) {
+      setFeedback(false, `Try to include: ${missing.join(", ")}.`);
+      return false;
+    }
+  }
+  if (round.needCapital && !/^[A-Z]/.test(value)) {
+    setFeedback(false, "Start with a capital letter.");
+    return false;
+  }
+  setFeedback(true, "Nice — that sentence has more detail now.");
+  return true;
+}
+
+function showMathEquation(a, b, product) {
+  const node = document.getElementById("math-equation");
+  if (!node) return;
+  node.hidden = false;
+  node.textContent = `${a} × ${b} = ${product}`;
+}
+
+function checkGroups(round) {
+  const root = document.getElementById("math-groups");
+  if (!root) return false;
+  const counts = Array.from({ length: round.groups }, (_, index) =>
+    root.querySelector(`[data-dots="${index}"]`).querySelectorAll(".math-dot").length
+  );
+  const uneven = counts.some((count) => count !== round.size);
+  const total = counts.reduce((sum, count) => sum + count, 0);
+  if (uneven || total !== round.product) {
+    setFeedback(false, `Each group needs ${round.size} dots. You want ${round.groups} equal groups.`);
+    return false;
+  }
+  showMathEquation(round.groups, round.size, round.product);
+  setFeedback(true, `${round.label} is ${round.product}. So ${round.groups} × ${round.size} = ${round.product}.`);
+  return true;
+}
+
+function checkArray(round) {
+  const filled = document.querySelectorAll(".math-cell.filled").length;
+  const need = round.rows * round.cols;
+  if (filled !== need) {
+    setFeedback(false, `Fill every cell. You need ${need} in the grid.`);
+    return false;
+  }
+  showMathEquation(round.rows, round.cols, round.product);
+  setFeedback(true, `${round.label} is ${round.product}. So ${round.rows} × ${round.cols} = ${round.product}.`);
+  return true;
+}
+
+function checkSkip(round) {
+  const values = Array.from({ length: round.sequenceLength }, (_, index) => round.start + index * round.step);
+  const wrong = [];
+  round.blankIndexes.forEach((index, ordinal) => {
+    const input = document.querySelector(`[data-skip="${ordinal}"]`);
+    const value = normalise(input ? input.value : "");
+    if (value !== String(values[index])) wrong.push(String(values[index]));
+  });
+  if (wrong.length) {
+    setFeedback(false, `Not yet. Look again for: ${wrong.join(", ")}.`);
+    return false;
+  }
+  setFeedback(true, `Yes — that is counting by ${round.step}.`);
+  return true;
+}
+
+function coachChecks(value) {
+  return [
+    { id: "capital", label: "Starts with a capital letter", ok: /^[A-Z]/.test(value) },
+    { id: "idea", label: "Says one clear idea", ok: wordCount(value) >= 3 },
+    { id: "end", label: "Ends the thought (. ! or ?)", ok: /[.!?]$/.test(value) },
+  ];
+}
+
 function checkWrite(round) {
   const value = normalise(document.getElementById("write-input").value);
+  state.writeAttempt = value;
   if (wordCount(value) < 2) {
     setFeedback(false, "Have a go first. Write a little, then we will look at a strong example together.");
     return false;
   }
+
+  if (state.weekId) {
+    let slots = state.drafts[state.weekId];
+    if (!Array.isArray(slots)) {
+      slots = typeof slots === "string" && slots ? [slots] : [];
+    }
+    slots[state.questionIndex] = value;
+    state.drafts[state.weekId] = slots;
+    save();
+  }
+
   const model = WRITE_EXAMPLES[round.prompt] || {
     example: round.example || "I like reading with Mum at night.",
     why: "A strong sentence starts with a capital, says one clear idea, and finishes the thought.",
+    tip: "Say your sentence out loud. Does it start big and finish cleanly?",
   };
+
+  const checks = coachChecks(value);
+  const checklist = checks
+    .map(
+      (check) => `
+      <label class="coach-check">
+        <input type="checkbox" data-coach="${check.id}" ${state.writeChecked[check.id] ? "checked" : ""} />
+        <span>${escapeHtml(check.label)}${check.ok ? "" : " — look at the example"}</span>
+      </label>`
+    )
+    .join("");
+
   setFeedbackHtml(
     true,
-    `<p>Good try. That is your writing. Look at a strong example and see what is the same, and what you might add next time.</p>
+    `<p>Good try. Compare your writing with a strong example.</p>
      <p class="compare-yours"><strong>Yours</strong> ${escapeHtml(value)}</p>
      <p class="compare-model"><strong>A strong example</strong> ${escapeHtml(model.example)}</p>
-     <p class="why">${escapeHtml(model.why)}</p>`
+     <p class="why">${escapeHtml(model.why)}</p>
+     <div class="coach-list">${checklist}</div>`
   );
+  state.writeTip = model.tip || model.why;
   return true;
 }
 
@@ -600,48 +1186,175 @@ function checkArrange(round) {
   return true;
 }
 
+function advanceMastery(activity) {
+  const layers = layersOf(activity);
+  const m = masteryState(activity.id);
+  const layer = layers[m.layer];
+  m.streak += 1;
+  m.round = (m.round + 1) % layer.rounds.length;
+
+  if (m.streak >= layer.needCorrect) {
+    if (m.layer >= layers.length - 1) {
+      state.completed[activity.id] = true;
+      save();
+      return { done: true, unlocked: false, layerLabel: layer.label };
+    }
+    m.layer += 1;
+    m.streak = 0;
+    m.round = 0;
+    save();
+    return { done: false, unlocked: true, layerLabel: layers[m.layer].label };
+  }
+  save();
+  return { done: false, unlocked: false, layerLabel: layer.label };
+}
+
+function failMastery(activity) {
+  const m = masteryState(activity.id);
+  m.streak = 0;
+  save();
+}
+
 function checkCurrent() {
   const activity = currentActivity();
   const round = currentRound();
   const checkers = {
     spell: checkSpell,
+    story: checkStory,
     build: checkBuild,
     fix: checkFix,
     write: checkWrite,
     arrange: checkArrange,
+    choose: checkChoose,
+    spot: checkSpot,
+    expand: checkExpand,
+    groups: checkGroups,
+    array: checkArray,
+    skip: checkSkip,
   };
   const ok = checkers[activity.kind](round);
-  if (!ok) return;
-
-  const total = roundsOf(activity).length;
-  const last = state.questionIndex >= total - 1;
-  state.progress[activity.id] = Math.max(state.progress[activity.id] || 0, state.questionIndex + 1);
-  if (last) {
-    state.completed[activity.id] = true;
+  if (!ok) {
+    if (!isFlatPath() && activity.kind !== "write" && layersOf(activity)) {
+      failMastery(activity);
+      const chip = document.querySelector(".layer-chip");
+      if (chip) {
+        const layer = currentLayer(activity);
+        const m = masteryState(activity.id);
+        chip.innerHTML = `<span>${escapeHtml(layer.label)}</span><span>${m.streak}/${layer.needCorrect} correct</span>`;
+      }
+    }
+    return;
   }
-  save();
 
   const actions = document.querySelector(".actions");
-  if (!document.querySelector("[data-action='continue']")) {
+  if (document.querySelector("[data-action='continue']")) return;
+
+  if (isFlatPath() || activity.kind === "write") {
+    const total = roundsOf(activity).length;
+    const last = state.questionIndex >= total - 1;
+    state.progress[activity.id] = Math.max(state.progress[activity.id] || 0, state.questionIndex + 1);
+    if (last) state.completed[activity.id] = true;
+    save();
+
+    if (activity.kind === "write") {
+      const tipBtn = document.createElement("button");
+      tipBtn.className = "secondary";
+      tipBtn.dataset.action = "write-tip";
+      tipBtn.textContent = "Try again with a tip";
+      tipBtn.onclick = () => {
+        state.writeChecked = {};
+        if (!document.querySelector(".tip-box") && state.writeTip) {
+          const tipBox = document.createElement("div");
+          tipBox.className = "tip-box";
+          tipBox.innerHTML = `<strong>Tip</strong> ${escapeHtml(state.writeTip)}`;
+          const prompt = document.querySelector(".hero .prompt");
+          if (prompt) prompt.after(tipBox);
+        }
+        const feedback = document.getElementById("feedback");
+        if (feedback) {
+          feedback.className = "feedback";
+          feedback.innerHTML = "";
+        }
+        tipBtn.remove();
+        document.querySelector("[data-action='continue']")?.remove();
+        const box = document.getElementById("write-input");
+        if (box) {
+          box.value = state.writeAttempt || box.value;
+          box.focus();
+        }
+      };
+      actions.appendChild(tipBtn);
+    }
+
     const button = document.createElement("button");
     button.className = "primary";
     button.dataset.action = "continue";
-    button.textContent = last ? "Continue" : state.scrambleId ? "Next sentence" : "Next question";
+    button.textContent = last
+      ? "Continue"
+      : state.mathId
+        ? "Next question"
+        : state.scrambleId
+          ? "Next sentence"
+          : "Next question";
     button.onclick = last ? goNext : goNextQuestion;
     actions.appendChild(button);
+    return;
+  }
+
+  const result = advanceMastery(activity);
+  const button = document.createElement("button");
+  button.className = "primary";
+  button.dataset.action = "continue";
+  if (result.done) {
+    button.textContent = "Continue";
+    button.onclick = goNext;
+  } else if (result.unlocked) {
+    setFeedback(true, `Layer cleared. Next up: ${result.layerLabel}.`);
+    button.textContent = `Start ${result.layerLabel}`;
+    button.onclick = () => render();
+  } else {
+    button.textContent = "Next";
+    button.onclick = () => render();
+  }
+  actions.appendChild(button);
+
+  const chip = document.querySelector(".layer-chip");
+  if (chip && !result.done) {
+    const layer = currentLayer(activity);
+    const m = masteryState(activity.id);
+    chip.innerHTML = `<span>${escapeHtml(layer.label)}</span><span>${m.streak}/${layer.needCorrect} correct</span>`;
   }
 }
 
 function resetCurrent() {
+  state.writeTip = null;
+  state.writeChecked = {};
+  state.writeAttempt = "";
   render();
 }
 
 function goNextQuestion() {
   state.questionIndex += 1;
+  state.writeTip = null;
+  state.writeChecked = {};
+  state.writeAttempt = "";
   render();
 }
 
 function goNext() {
+  if (state.mathId) {
+    const index = MATH.findIndex((pack) => pack.id === state.mathId);
+    const next = MATH[index + 1];
+    if (next) {
+      openMath(next.id);
+      return;
+    }
+    state.mathId = null;
+    state.subject = "maths";
+    state.view = "home";
+    render();
+    return;
+  }
   if (state.scrambleId) {
     const index = UNSCRAMBLE.findIndex((pack) => pack.id === state.scrambleId);
     const next = UNSCRAMBLE[index + 1];
@@ -666,12 +1379,20 @@ function goNext() {
 }
 
 function bind() {
+  document.querySelectorAll("[data-subject]").forEach((button) => {
+    button.onclick = () => setSubject(button.dataset.subject);
+  });
+
   document.querySelectorAll("[data-open-week]").forEach((button) => {
     button.onclick = () => openWeek(button.dataset.openWeek, true);
   });
 
   document.querySelectorAll("[data-open-scramble]").forEach((button) => {
     button.onclick = () => openScramble(button.dataset.openScramble);
+  });
+
+  document.querySelectorAll("[data-open-math]").forEach((button) => {
+    button.onclick = () => openMath(button.dataset.openMath);
   });
 
   document.querySelectorAll("[data-open-activity]").forEach((button) => {
@@ -699,6 +1420,7 @@ function bind() {
   if (home)
     home.onclick = () => {
       state.scrambleId = null;
+      state.mathId = null;
       state.view = "home";
       render();
     };
@@ -727,6 +1449,9 @@ function bind() {
   const scrambleLesson = document.querySelector("[data-action='scramble-lesson']");
   if (scrambleLesson) scrambleLesson.onclick = openScrambleLesson;
 
+  const mathLesson = document.querySelector("[data-action='math-lesson']");
+  if (mathLesson) mathLesson.onclick = openMathLesson;
+
   const check = document.querySelector("[data-action='check']");
   if (check) check.onclick = checkCurrent;
 
@@ -736,14 +1461,101 @@ function bind() {
   const cont = document.querySelector("[data-action='continue']");
   if (cont) {
     const activity = state.view === "activity" ? currentActivity() : null;
-    const last = activity && state.questionIndex >= roundsOf(activity).length - 1;
-    cont.onclick = last ? goNext : goNextQuestion;
+    if (activity && (isFlatPath() || activity.kind === "write")) {
+      const last = state.questionIndex >= roundsOf(activity).length - 1;
+      cont.onclick = last ? goNext : goNextQuestion;
+    }
   }
+
+  document.querySelectorAll("[data-coach]").forEach((box) => {
+    box.onchange = () => {
+      state.writeChecked[box.dataset.coach] = box.checked;
+    };
+  });
+
+  document.querySelectorAll("[data-choice]").forEach((button) => {
+    button.onclick = () => {
+      document.querySelectorAll("[data-choice]").forEach((node) => node.classList.remove("selected"));
+      button.classList.add("selected");
+    };
+  });
+
+  document.querySelectorAll(".story-chip").forEach((chip) => {
+    chip.onclick = () => {
+      const blankSel = document.querySelector(".skip-blank") ? ".skip-blank" : ".story-blank";
+      const empty = [...document.querySelectorAll(blankSel)].find((input) => !input.value.trim());
+      const target = empty || document.activeElement;
+      if (target && target.classList && (target.classList.contains("story-blank") || target.classList.contains("skip-blank"))) {
+        target.value = chip.textContent;
+        target.focus();
+      } else if (empty) {
+        empty.value = chip.textContent;
+        empty.focus();
+      }
+    };
+  });
+
+  document.querySelectorAll("[data-spot]").forEach((button) => {
+    button.onclick = () => {
+      document.querySelectorAll("[data-spot]").forEach((node) => node.classList.remove("selected"));
+      button.classList.add("selected");
+    };
+  });
+
+  let selectedBowl = 0;
+  const bowls = document.querySelectorAll("[data-bowl]");
+  bowls.forEach((bowl) => {
+    bowl.onclick = () => {
+      bowls.forEach((node) => node.classList.remove("selected"));
+      bowl.classList.add("selected");
+      selectedBowl = Number(bowl.dataset.bowl);
+    };
+  });
+  if (bowls[0]) bowls[0].classList.add("selected");
+
+  const addDot = document.querySelector("[data-action='add-dot']");
+  if (addDot) {
+    addDot.onclick = () => {
+      const root = document.getElementById("math-groups");
+      if (!root) return;
+      const size = Number(root.dataset.size);
+      const dots = root.querySelector(`[data-dots="${selectedBowl}"]`);
+      const countNode = root.querySelector(`[data-count="${selectedBowl}"]`);
+      if (dots.querySelectorAll(".math-dot").length >= size) return;
+      const dot = document.createElement("span");
+      dot.className = "math-dot";
+      dots.appendChild(dot);
+      countNode.textContent = String(dots.querySelectorAll(".math-dot").length);
+    };
+  }
+
+  const clearBowl = document.querySelector("[data-action='clear-bowl']");
+  if (clearBowl) {
+    clearBowl.onclick = () => {
+      const root = document.getElementById("math-groups");
+      if (!root) return;
+      const dots = root.querySelector(`[data-dots="${selectedBowl}"]`);
+      const countNode = root.querySelector(`[data-count="${selectedBowl}"]`);
+      dots.innerHTML = "";
+      countNode.textContent = "0";
+    };
+  }
+
+  document.querySelectorAll("[data-cell]").forEach((cell) => {
+    cell.onclick = () => {
+      cell.classList.toggle("filled");
+      cell.setAttribute("aria-pressed", cell.classList.contains("filled") ? "true" : "false");
+      const filled = document.querySelectorAll(".math-cell.filled").length;
+      const counter = document.getElementById("array-filled");
+      if (counter) counter.textContent = String(filled);
+    };
+  });
 
   document.querySelectorAll("[data-tile]").forEach((button) => {
     button.onclick = () => {
       if (button.classList.contains("used")) return;
       const slots = document.getElementById("build-slots");
+      if (!slots) return;
       const tile = document.createElement("button");
       tile.className = "tile";
       tile.textContent = button.dataset.tile;
