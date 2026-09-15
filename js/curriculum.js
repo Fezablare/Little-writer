@@ -14,6 +14,7 @@ const CURRICULUM = [
     focus: "Capital letters at the beginning",
     story: {
       theme: "My favourite thing",
+      text: "I have a cat and a dog. They like to run in the sun. Mum has a hat. Dad sits on the mat. I like my red bike. It is big and fun. Mum and Dad watch me ride. The dog runs with us. My favourite thing is my bike.",
       draftKey: "w1",
       wordBank: ["favourite", "thing", "like", "bike", "cat", "dog", "mum", "dad"],
     },
@@ -22,27 +23,32 @@ const CURRICULUM = [
         id: "w1-story",
         kind: "story",
         title: "Read: My favourite thing",
-        prompt: "Read the story. Type the missing words in the gaps.",
+        prompt: "Read the story. Notice how the words are ordered, then fill the gaps.",
         layers: L(
           [
             {
               passage: "I have a {{cat}}. I also have a {{dog}}. They like to {{run}} in the {{sun}}.",
+              tip: "Each sentence starts with a capital (I, They). Who comes first, then what they do: they like to run.",
             },
             {
               passage: "Mum has a {{hat}}. Dad sits on the {{mat}}. The cat does a little {{hop}}.",
+              tip: "Names like Mum and Dad start with a capital. Who + has/sits/does + the thing.",
             },
           ],
           [
             {
               passage: "I {{like}} my {{red}} {{bike}}. It is {{big}} and fun.",
+              tip: "Who (I) then the action (like). Describing words sit before the noun: red bike, not bike red.",
             },
             {
               passage: "{{Mum}} and {{dad}} watch me. The {{dog}} runs {{with}} us.",
+              tip: "A name at the start needs a capital. Who does the action: the dog runs.",
             },
           ],
           [
             {
               passage: "My {{favourite}} {{thing}} is my bike. I {{like}} to ride it {{with}} Mum and Dad.",
+              tip: "favourite thing: the describing word comes before the noun. Then who (I) + action (like).",
             },
           ]
         ),
@@ -151,6 +157,7 @@ const CURRICULUM = [
     focus: "Full stops",
     story: {
       theme: "Lunch time",
+      text: "Mum packed my lunch. I have a sandwich and an apple. I eat my lunch at school. Then I drink some water. At lunch I sit with Sam. Sam has an apple too. We stop when the bell rings. Then we pack the lunch bag.",
       draftKey: "w2",
       wordBank: ["lunch", "sandwich", "apple", "water", "school", "eat", "drink"],
     },
@@ -159,27 +166,32 @@ const CURRICULUM = [
         id: "w2-story",
         kind: "story",
         title: "Read: Lunch time",
-        prompt: "Read the story. Type the missing words in the gaps.",
+        prompt: "Read the story. Notice how the words are ordered, then fill the gaps.",
         layers: L(
           [
             {
               passage: "Mum packed my {{lunch}}. I have a {{sandwich}} and an {{apple}}.",
+              tip: "Who + action + what: Mum packed lunch. A full stop ends each finished thought.",
             },
             {
               passage: "I {{eat}} my lunch at {{school}}. Then I {{drink}} some {{water}}.",
+              tip: "Who (I) then the action (eat, drink). Then where or what. Two thoughts = two full stops.",
             },
           ],
           [
             {
               passage: "At lunch I sit with Sam. I {{eat}} my {{sandwich}}. Sam has an {{apple}}.",
+              tip: "Action after who: I eat. The thing comes after the action: eat my sandwich.",
             },
             {
               passage: "We {{stop}} when the bell rings. Then we pack the {{lunch}} bag.",
+              tip: "lunch bag: the describing word (lunch) sits before the noun (bag). stop is the action.",
             },
           ],
           [
             {
               passage: "Mum {{packed}} my lunch. I {{eat}} the sandwich. I {{drink}} the water. Then we {{stop}}.",
+              tip: "Who + action in each sentence. Each thought ends with a full stop before the next capital.",
             },
           ]
         ),
@@ -267,6 +279,7 @@ const CURRICULUM = [
     focus: "Word order: who + did + what",
     story: {
       theme: "Someone did something",
+      text: "Sam kicked the ball. Mia jumped up high. Dad cooked the fish. Mum read a book. My sister kicked the red ball. My friend played too. The dog jumped over the log. Then I played with my friend.",
       draftKey: "w3",
       wordBank: ["kicked", "jumped", "cooked", "played", "sister", "friend", "ball"],
     },
@@ -275,27 +288,32 @@ const CURRICULUM = [
         id: "w3-story",
         kind: "story",
         title: "Read: Someone did something",
-        prompt: "Read the story. Type the missing words in the gaps.",
+        prompt: "Read the story. Notice how the words are ordered, then fill the gaps.",
         layers: L(
           [
             {
               passage: "Sam {{kicked}} the {{ball}}. Mia {{jumped}} up high.",
+              tip: "English order: who, then the action, then the thing. Sam kicked the ball ù not the ball kicked Sam.",
             },
             {
               passage: "Dad {{cooked}} the fish. Mum {{read}} a book.",
+              tip: "Who first (Dad, Mum), then what they did (cooked, read), then what they did it to.",
             },
           ],
           [
             {
               passage: "My {{sister}} {{kicked}} the red ball. My {{friend}} {{played}} too.",
+              tip: "Who (sister) then action (kicked). red sits before ball because describing words come before the noun.",
             },
             {
               passage: "The dog {{jumped}} over the log. Then it {{ran}} home.",
+              tip: "Who + action + where. jumped and ran are the doing words, so they come after who.",
             },
           ],
           [
             {
               passage: "My sister {{kicked}} the ball. Dad {{cooked}} dinner. I {{played}} with my friend.",
+              tip: "Keep who before the action in every sentence. The thing or place comes after the action.",
             },
           ]
         ),
@@ -404,6 +422,7 @@ const CURRICULUM = [
     focus: "Question marks and question words",
     story: {
       theme: "Questions I can ask",
+      text: "What is for lunch? Where is my bag? When can we play? Who has the ball? How do we start? Can I help? Have you seen my hat? Where should I sit?",
       draftKey: "w4",
       wordBank: ["what", "where", "when", "who", "how", "can", "have"],
     },
@@ -412,27 +431,32 @@ const CURRICULUM = [
         id: "w4-story",
         kind: "story",
         title: "Read: Questions I can ask",
-        prompt: "Read the story. Type the missing words in the gaps.",
+        prompt: "Read the story. Notice how the words are ordered, then fill the gaps.",
         layers: L(
           [
             {
               passage: "{{What}} is for lunch? {{Where}} is my bag?",
+              tip: "Question words come first (What, Where). The sentence asks, so it ends with ? not a full stop.",
             },
             {
               passage: "{{When}} can we play? {{Who}} has the ball?",
+              tip: "Ask-words first: When, Who. Then the rest of the question. End with ?",
             },
           ],
           [
             {
               passage: "{{How}} do we start? {{Can}} I help? {{Have}} you seen my hat?",
+              tip: "How / Can / Have open the ask. The action sits after the question word.",
             },
             {
               passage: "{{What}} are you playing? {{Where}} should I sit?",
+              tip: "What and Where lead. You are asking, so finish with a question mark.",
             },
           ],
           [
             {
               passage: "{{What}} is for lunch? {{Where}} is my blue bag? {{Can}} I sit with you?",
+              tip: "blue bag: describing word before the noun. Question word still comes first in an ask.",
             },
           ]
         ),
@@ -523,6 +547,7 @@ const CURRICULUM = [
     focus: "Common spelling patterns",
     story: {
       theme: "Because I said so",
+      text: "I wore a coat because it was cold. I ate an apple because I was hungry. I was late because the bus was full. I like my friend because she is kind. I like this book because the ending is funny. People were happy because we won.",
       draftKey: "w5",
       wordBank: ["because", "cold", "hungry", "late", "kind", "funny"],
     },
@@ -531,27 +556,32 @@ const CURRICULUM = [
         id: "w5-story",
         kind: "story",
         title: "Read: Because I said so",
-        prompt: "Read the story. Type the missing words in the gaps.",
+        prompt: "Read the story. Notice how the words are ordered, then fill the gaps.",
         layers: L(
           [
             {
               passage: "I wore a coat {{because}} it was {{cold}}.",
+              tip: "because joins what happened to why. First the action, then because, then the reason.",
             },
             {
               passage: "I ate an apple {{because}} I was {{hungry}}.",
+              tip: "Who + action first. because adds the reason after ù not at the very start here.",
             },
           ],
           [
             {
               passage: "I was {{late}} {{because}} the bus was full.",
+              tip: "The first part is what happened. because unlocks why. Keep that order.",
             },
             {
               passage: "I like my friend {{because}} she is {{kind}}.",
+              tip: "like is the action after who. because explains the feeling with a describing word (kind).",
             },
           ],
           [
             {
               passage: "I like this book {{because}} the ending is {{funny}}. I was late {{because}} the bus was full.",
+              tip: "Same pattern twice: idea, then because, then reason. funny describes the ending.",
             },
           ]
         ),
@@ -646,6 +676,7 @@ const CURRICULUM = [
     focus: "and, but, so",
     story: {
       theme: "Two ideas, one line",
+      text: "I wanted to play but I had to pack. We packed fruit and we packed water. It was late so we went home. I like swimming but the water was cold. Today I read a book and I drew a picture. The bag was heavy but I carried it.",
       draftKey: "w6",
       wordBank: ["and", "but", "so", "wanted", "packed", "home"],
     },
@@ -654,27 +685,32 @@ const CURRICULUM = [
         id: "w6-story",
         kind: "story",
         title: "Read: Two ideas, one line",
-        prompt: "Read the story. Type the missing words in the gaps.",
+        prompt: "Read the story. Notice how the words are ordered, then fill the gaps.",
         layers: L(
           [
             {
               passage: "I {{wanted}} to play {{but}} I had to pack.",
+              tip: "but joins two ideas that pull different ways. Who + wanted, then but, then the second idea.",
             },
             {
               passage: "It was late {{so}} we went {{home}}.",
+              tip: "so shows a result. First what was true, then so, then what we did.",
             },
           ],
           [
             {
               passage: "We {{packed}} fruit {{and}} we packed water.",
+              tip: "and sticks two similar ideas together. Who + action stays the same on both sides.",
             },
             {
               passage: "I like swimming {{but}} the water was cold.",
+              tip: "but flips the idea. Describing word cold comes after was, telling us about the water.",
             },
           ],
           [
             {
               passage: "Today I read a book {{and}} I drew a picture. It was late {{so}} we went home.",
+              tip: "and adds another thing I did. so shows what happened because of that.",
             },
           ]
         ),
@@ -774,6 +810,7 @@ const CURRICULUM = [
     focus: "Describing words",
     story: {
       theme: "A place I can see",
+      text: "The park was green and quiet. I saw a tiny bird in the tree. My room is small and bright. I have a soft lamp. The animal was huge and grey. The sky was dark and loud. The food was hot and sweet. The wind pushed the trees.",
       draftKey: "w7",
       wordBank: ["green", "quiet", "tiny", "soft", "bright", "huge", "loud"],
     },
@@ -782,27 +819,32 @@ const CURRICULUM = [
         id: "w7-story",
         kind: "story",
         title: "Read: A place I can see",
-        prompt: "Read the story. Type the missing words in the gaps.",
+        prompt: "Read the story. Notice how the words are ordered, then fill the gaps.",
         layers: L(
           [
             {
               passage: "The park was {{green}} and {{quiet}}. I saw a {{tiny}} bird.",
+              tip: "Describing words paint the noun: green park, tiny bird. They sit close to what they describe.",
             },
             {
               passage: "My room is {{small}} and {{bright}}. I have a {{soft}} lamp.",
+              tip: "small and bright describe the room. soft comes before lamp ù adjective before noun.",
             },
           ],
           [
             {
               passage: "The animal was {{huge}} and grey. The sky was {{dark}} and {{loud}}.",
+              tip: "huge, dark, loud are describing words after was, telling us what the animal or sky was like.",
             },
             {
               passage: "The food was {{hot}} and sweet. The wind pushed the trees.",
+              tip: "hot describes food. Who/what (wind) then action (pushed) then the thing.",
             },
           ],
           [
             {
               passage: "The park was {{green}} and {{quiet}}. I saw a {{tiny}} bird in the tree.",
+              tip: "Put the describing word before the noun when it names the thing: tiny bird.",
             },
           ]
         ),
@@ -909,6 +951,7 @@ const CURRICULUM = [
     focus: "Topic sentence first",
     story: {
       theme: "My weekend",
+      text: "On the weekend I visited Grandma. The best part was baking. We made a cake together. My favourite sport is soccer. We run on the field. I like the library. There I look for animal books. Then we went to the library again.",
       draftKey: "w8",
       wordBank: ["weekend", "grandma", "visited", "soccer", "library", "detail"],
     },
@@ -917,27 +960,32 @@ const CURRICULUM = [
         id: "w8-story",
         kind: "story",
         title: "Read: My weekend",
-        prompt: "Read the story. Type the missing words in the gaps.",
+        prompt: "Read the story. Notice how the words are ordered, then fill the gaps.",
         layers: L(
           [
             {
               passage: "On the {{weekend}} I {{visited}} Grandma.",
+              tip: "Time can come first (On the weekend). Then who (I) and the action (visited).",
             },
             {
               passage: "The best part was baking. We made a {{cake}} together.",
+              tip: "Who (We) then action (made) then the thing (cake).",
             },
           ],
           [
             {
               passage: "My favourite sport is {{soccer}}. We run on the field.",
+              tip: "Topic sentence names the idea first. Next sentence stays on that topic with who + action.",
             },
             {
               passage: "I like the {{library}}. There I look for animal books.",
+              tip: "Name the place, then add a detail that stays in that place.",
             },
           ],
           [
             {
               passage: "On the {{weekend}} I {{visited}} Grandma. Then we went to the {{library}}.",
+              tip: "Time + who + action. Then adds the next step in order.",
             },
           ]
         ),
@@ -1055,6 +1103,7 @@ const CURRICULUM = [
     focus: "Supporting sentences",
     story: {
       theme: "A trip with details",
+      text: "We went on a trip to the zoo. First we watched the lions. Then we saw the monkeys. First the lions were resting. Then the monkeys jumped for bananas. We packed water. First we ate lunch. Then we walked home.",
       draftKey: "w9",
       wordBank: ["trip", "first", "then", "zoo", "lions", "monkeys"],
     },
@@ -1063,27 +1112,32 @@ const CURRICULUM = [
         id: "w9-story",
         kind: "story",
         title: "Read: A trip with details",
-        prompt: "Read the story. Type the missing words in the gaps.",
+        prompt: "Read the story. Notice how the words are ordered, then fill the gaps.",
         layers: L(
           [
             {
               passage: "We went on a {{trip}} to the {{zoo}}.",
+              tip: "Who (We) + action (went) + where. The topic sentence names the whole trip.",
             },
             {
               passage: "{{First}} we watched the {{lions}}. {{Then}} we saw the {{monkeys}}.",
+              tip: "First and Then line up the order. Who + action + what we watched.",
             },
           ],
           [
             {
               passage: "First the lions were resting. Then the {{monkeys}} jumped for bananas.",
+              tip: "Then moves the story forward. Who (monkeys) then action (jumped).",
             },
             {
               passage: "We packed water. {{First}} we ate lunch. {{Then}} we walked home.",
+              tip: "First / Then keep the steps in time order after the topic.",
             },
           ],
           [
             {
               passage: "We went to the {{zoo}}. {{First}} we watched the {{lions}}. {{Then}} the {{monkeys}} jumped.",
+              tip: "Topic first. Detail sentences keep who before the action.",
             },
           ]
         ),
@@ -1198,6 +1252,7 @@ const CURRICULUM = [
     focus: "Closing sentences",
     story: {
       theme: "Something I made",
+      text: "I made a card for Mum. I used blue paper. I helped Dad wash the car. I felt proud. I made a bird from paper. Then I painted the wings. I felt happy. I felt proud when Mum smiled.",
       draftKey: "w10",
       wordBank: ["made", "card", "paper", "proud", "helped", "felt"],
     },
@@ -1206,27 +1261,32 @@ const CURRICULUM = [
         id: "w10-story",
         kind: "story",
         title: "Read: Something I made",
-        prompt: "Read the story. Type the missing words in the gaps.",
+        prompt: "Read the story. Notice how the words are ordered, then fill the gaps.",
         layers: L(
           [
             {
               passage: "I {{made}} a {{card}} for Mum. I used blue {{paper}}.",
+              tip: "Who (I) then the action (made) then the thing (card). Describing word before the noun: blue paper, not paper blue.",
             },
             {
               passage: "I {{helped}} Dad wash the car. I felt {{proud}}.",
+              tip: "Who + action (helped). The last sentence closes with a feeling word after felt.",
             },
           ],
           [
             {
               passage: "I made a bird from paper. Then I painted the wings. I {{felt}} happy.",
+              tip: "Same who through the paragraph. felt + feeling finishes the idea.",
             },
             {
               passage: "We {{made}} pancakes. I {{helped}} mix the eggs.",
+              tip: "Who + action in both lines. The second sentence stays on the same making topic.",
             },
           ],
           [
             {
               passage: "I {{made}} a {{card}} with gold stars. I {{felt}} {{proud}} when Mum smiled.",
+              tip: "Who + made + card. Feeling words come after felt. gold sits before stars.",
             },
           ]
         ),
@@ -1347,6 +1407,7 @@ const CURRICULUM = [
     focus: "Keeping sentences together",
     story: {
       theme: "One topic only",
+      text: "The animal I chose is a hen. It lives in our backyard by the fence. It likes warm brown eggs and grain. It pecks and hops all day. I think it is a busy, funny pet. That is why I chose the hen.",
       draftKey: "w11",
       wordBank: ["topic", "hen", "soccer", "library", "grandma", "pancakes"],
     },
@@ -1355,27 +1416,32 @@ const CURRICULUM = [
         id: "w11-story",
         kind: "story",
         title: "Read: One topic only",
-        prompt: "Read the story. Type the missing words in the gaps.",
+        prompt: "Read the story. Notice how the words are ordered, then fill the gaps.",
         layers: L(
           [
             {
               passage: "The animal I chose is a {{hen}}. It lives in our backyard.",
+              tip: "Topic first (the hen). Every next sentence must stay about that same animal.",
             },
             {
               passage: "The game I chose is {{soccer}}. You kick a ball into a net.",
+              tip: "Name the topic, then a detail about that game only ù not a new topic.",
             },
           ],
           [
             {
               passage: "The place I chose is the {{library}}. It feels calm and happy.",
+              tip: "library is the topic noun. Details must stay in that place.",
             },
             {
               passage: "The person I chose is {{Grandma}}. They bake lemon cake with me.",
+              tip: "Grandma is the topic. Who does what stays locked on that person.",
             },
           ],
           [
             {
               passage: "I chose {{pancakes}}. They taste sweet with lemon. I eat them on a slow Saturday. No other {{topic}} sneaks in.",
+              tip: "One topic only. sweet describes taste; slow describes Saturday ù describing word before the noun.",
             },
           ]
         ),
@@ -1499,6 +1565,7 @@ const CURRICULUM = [
     focus: "Put it all together",
     story: {
       theme: "A day I remember",
+      text: "I remember a hot day at the beach. First we put down a big towel. Then the waves were huge. I felt brave when I jumped in. Later we ate lunch on the sand. I felt happy on the way home.",
       draftKey: "w12",
       wordBank: ["remember", "beach", "library", "brave", "proud", "calm"],
     },
@@ -1507,27 +1574,32 @@ const CURRICULUM = [
         id: "w12-story",
         kind: "story",
         title: "Read: A day I remember",
-        prompt: "Read the story. Type the missing words in the gaps.",
+        prompt: "Read the story. Notice how the words are ordered, then fill the gaps.",
         layers: L(
           [
             {
               passage: "I {{remember}} a hot day at the {{beach}}.",
+              tip: "Who + action (remember) + what. hot day: describing word before the noun.",
             },
             {
               passage: "First we put down a big towel. Then the waves were huge.",
+              tip: "First / Then order the day. big towel and huge waves: describing words near the nouns.",
             },
           ],
           [
             {
               passage: "I love the {{library}}. I feel {{calm}} when I leave with a story.",
+              tip: "Topic place first. calm is the feeling that closes the idea.",
             },
             {
               passage: "I made a bird from paper. I felt {{proud}} when it stood up.",
+              tip: "Who + made + thing. felt + proud ends with how you felt about that same making.",
             },
           ],
           [
             {
               passage: "I {{remember}} the {{beach}}. The waves were huge. I felt {{brave}} when I jumped in.",
+              tip: "Topic, detail, feeling. Who before each action. brave describes how I felt.",
             },
           ]
         ),

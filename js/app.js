@@ -329,6 +329,18 @@ function render() {
   bind();
 }
 
+function brandBar(subtitle, markText) {
+  return `
+    <div class="brand">
+      <div class="mark" aria-hidden="true">${escapeHtml(markText || "Lw")}</div>
+      <div>
+        <strong>Little Writer</strong>
+        <small>${escapeHtml(subtitle)}</small>
+      </div>
+    </div>
+  `;
+}
+
 function subjectTabs() {
   return `
     <nav class="subject-tabs" aria-label="Subject">
@@ -381,7 +393,7 @@ function renderLesson() {
         <h1>Equal groups</h1>
         ${renderLessonBody(MATH_LESSON, "Picture first")}
         <div class="actions">
-          <button class="primary" data-open-math="${MATH[0].id}">Start with 2s · see it</button>
+          <button class="primary" data-open-math="${MATH[0].id}">Start with bikes</button>
         </div>
       </section>
     `;
@@ -403,13 +415,7 @@ function renderLesson() {
   }
   const week = weekById(state.weekId);
   const lesson = weekLesson();
-  const story = week.story
-    ? `<div class="story-card">
-        <div class="story-label">This week's story</div>
-        <h2>${escapeHtml(week.story.theme)}</h2>
-        <p>You will read a short story, fill the spelling gaps, then practise and write your own bit about the same idea.</p>
-      </div>`
-    : "";
+  const story = week.story ? renderStoryCard(week, "You will read this story, fill the spelling gaps, then practise and write.") : "";
   return `
     <header class="topbar">
       <button class="ghost" data-action="home">All weeks</button>
@@ -430,7 +436,7 @@ function renderWritingHome() {
   const percent = Math.round((totalDone() / totalActivities()) * 100) || 0;
   const next = currentWeek();
   const allDone = totalDone() === totalActivities();
-  const greeting = state.name ? `Hi ${escapeHtml(state.name)}.` : "A 12-week writing path.";
+  const greeting = state.name ? `Hi ${escapeHtml(state.name)}.` : "An 18-week writing path.";
   const cta = allDone
     ? `<p class="lede">Every week is done. Open any week to practise again.</p>`
     : `<div class="name-row">
@@ -439,18 +445,12 @@ function renderWritingHome() {
       <p class="hint">${escapeHtml(next.title)} · ${escapeHtml(next.focus)}</p>`;
   return `
     <header class="topbar">
-      <div class="brand">
-        <div class="mark">Lw</div>
-        <div>
-          <strong>Little Writer</strong>
-          <small>Spelling, sentences, paragraphs</small>
-        </div>
-      </div>
+      ${brandBar("Spelling, sentences, paragraphs")}
       <button class="ghost" data-action="reset-all">Reset progress</button>
     </header>
     ${subjectTabs()}
     <section class="hero">
-      <p class="crumb">12-week programme</p>
+      <p class="crumb">18-week programme</p>
       <h1>${greeting}</h1>
       <p class="lede">
         Each week has a short story to read with spelling gaps, then practise, then write.
@@ -494,41 +494,17 @@ function renderWritingHome() {
 function renderMathHome() {
   const done = mathDone();
   const total = mathTotal();
+  const timesPacks = MATH.filter((pack) => pack.track !== "add");
+  const addPacks = MATH.filter((pack) => pack.track === "add");
   const next = MATH.find((pack) => questionsDoneFlat(pack) < roundsOf(pack).length) || MATH[0];
-  const greeting = state.name ? `Hi ${escapeHtml(state.name)}.` : "Times tables path.";
+  const greeting = state.name ? `Hi ${escapeHtml(state.name)}.` : "Maths practice.";
   const percent = Math.round((done / total) * 100) || 0;
-  return `
-    <header class="topbar">
-      <div class="brand">
-        <div class="mark">×</div>
-        <div>
-          <strong>Little Writer</strong>
-          <small>Times tables</small>
-        </div>
-      </div>
-      <button class="ghost" data-action="reset-all">Reset progress</button>
-    </header>
-    ${subjectTabs()}
-    <section class="hero">
-      <p class="crumb">Maths · multiplication</p>
-      <h1>${greeting}</h1>
-      <p class="lede">
-        See equal groups, skip-count the pattern, then know the fact.
-        No timers — clear first, fast later.
-      </p>
-      <div class="name-row">
-        <button class="primary" data-action="math-lesson">How multiplication works</button>
-        <button class="secondary" data-open-math="${next.id}">Continue ${escapeHtml(next.title)}</button>
-      </div>
-      <div class="progress-line"><span style="width:${percent}%"></span></div>
-      <p class="hint">${done} of ${total} questions done</p>
-    </section>
-    <div class="block-title">
-      <h2>Times tables packs</h2>
-      <p>Start with 2s, 5s and 10s. Build the picture before you race the answers.</p>
-    </div>
-    <div class="week-grid">
-      ${MATH.map((pack) => {
+  const addDone = addPacks.reduce((sum, pack) => sum + questionsDoneFlat(pack), 0);
+  const addTotal = addPacks.reduce((sum, pack) => sum + roundsOf(pack).length, 0);
+
+  function packCards(packs) {
+    return packs
+      .map((pack) => {
         const packDone = questionsDoneFlat(pack);
         const packTotal = roundsOf(pack).length;
         const isNext = pack.id === next.id && done < total;
@@ -543,7 +519,46 @@ function renderMathHome() {
             <p class="hint">${packDone}/${packTotal} done</p>
           </button>
         `;
-      }).join("")}
+      })
+      .join("");
+  }
+
+  return `
+    <header class="topbar">
+      ${brandBar("Times tables & adding", "×")}
+      <button class="ghost" data-action="reset-all">Reset progress</button>
+    </header>
+    ${subjectTabs()}
+    <section class="hero">
+      <p class="crumb">Maths · multiplication & addition</p>
+      <h1>${greeting}</h1>
+      <p class="lede">
+        Short times-tables missions, plus a separate adding practice for 2- and 3-digit sums.
+        No timers — clear first, fast later.
+      </p>
+      <div class="name-row">
+        <button class="primary" data-action="math-lesson">How multiplication works</button>
+        <button class="secondary" data-open-math="${next.id}">Continue ${escapeHtml(next.title)}</button>
+      </div>
+      <div class="progress-line"><span style="width:${percent}%"></span></div>
+      <p class="hint">${done} of ${total} questions done</p>
+    </section>
+    <div class="block-title">
+      <h2>Times tables missions</h2>
+      <p>Bikes, farm, beach, then hopping paths. Build the picture before you race the answers.</p>
+    </div>
+    <div class="week-grid">
+      ${packCards(timesPacks)}
+    </div>
+    <div class="block-title">
+      <h2>Addition practice</h2>
+      <p>
+        Keep addition warm while you learn multiplication. Type the total for each sum.
+        ${addDone} of ${addTotal} done.
+      </p>
+    </div>
+    <div class="week-grid">
+      ${packCards(addPacks)}
     </div>
   `;
 }
@@ -598,15 +613,7 @@ function renderWeek() {
       <p class="crumb">Week ${week.week}</p>
       <h1>${escapeHtml(week.title)}</h1>
       <p class="lede">${escapeHtml(week.focus)}</p>
-      ${
-        week.story
-          ? `<div class="story-card">
-              <div class="story-label">This week's story</div>
-              <h2>${escapeHtml(week.story.theme)}</h2>
-              <p>Read the story, spell the missing words, then write your own ending ideas in the last task.</p>
-            </div>`
-          : ""
-      }
+      ${week.story ? renderStoryCard(week, "Read this story first. Then open Read to fill the gaps.") : ""}
       ${finished ? `<p class="done-tag">This week is complete</p>` : ""}
       <div class="name-row">
         <button class="secondary" data-action="show-lesson">Show the lesson again</button>
@@ -671,10 +678,15 @@ function renderActivity() {
     arrange: renderArrange,
     choose: renderChoose,
     spot: renderSpot,
+    proof: renderProof,
     expand: renderExpand,
     groups: renderGroups,
     array: renderArray,
     skip: renderSkip,
+    scene: renderScene,
+    match: renderMatch,
+    path: renderPath,
+    sum: renderSum,
   }[activity.kind](round);
 
   let crumb;
@@ -745,6 +757,20 @@ function renderSpell(round) {
   `;
 }
 
+function renderStoryCard(week, note) {
+  if (!week.story) return "";
+  const body = week.story.text
+    ? `<div class="story-body">${escapeHtml(week.story.text)}</div>`
+    : "";
+  const footer = note ? `<p class="story-note">${escapeHtml(note)}</p>` : "";
+  return `<div class="story-card">
+      <div class="story-label">This week's story</div>
+      <h2>${escapeHtml(week.story.theme)}</h2>
+      ${body}
+      ${footer}
+    </div>`;
+}
+
 function storyBlanks(passage) {
   const blanks = [];
   const html = escapeHtml(passage).replace(/\{\{([^}]+)\}\}/g, (_, word) => {
@@ -757,10 +783,24 @@ function storyBlanks(passage) {
 }
 
 function renderStory(round) {
+  const week = state.weekId ? weekById(state.weekId) : null;
   const { blanks, html } = storyBlanks(round.passage);
   const bank = [...blanks].sort(() => Math.random() - 0.5);
+  const tip = round.tip
+    ? `<div class="tip-box"><strong>How this sentence is built</strong> ${escapeHtml(round.tip)}</div>`
+    : "";
+  const fullStory =
+    week && week.story && week.story.text
+      ? `<div class="story-read">
+          <div class="story-label">Read first</div>
+          <h2>${escapeHtml(week.story.theme)}</h2>
+          <div class="story-body">${escapeHtml(week.story.text)}</div>
+        </div>`
+      : "";
   return `
-    <p class="hint">Read the whole story first. Then fill each gap. The word box has the words you need.</p>
+    ${fullStory}
+    <p class="hint">Say the story out loud. Then fill each gap from the word box.</p>
+    ${tip}
     <div class="story-bank">
       <strong>Word box</strong>
       <div class="story-bank-words">
@@ -823,6 +863,36 @@ function renderSpot(round) {
         .join("")}
     </div>
     <textarea class="fix-box" id="spot-fix" placeholder="Type the fixed word or sentence"></textarea>
+  `;
+}
+
+function renderProof(round) {
+  const parts = round.parts || [];
+  const errorChoices = (round.errorChoices || [])
+    .map(
+      (choice, index) => `
+      <button type="button" class="choice" data-choice="${index}">${escapeHtml(choice)}</button>
+    `
+    )
+    .join("");
+  return `
+    <p class="hint">Read carefully. First tap what kind of mistake it is. Then tap the broken bit and type the fix.</p>
+    <p class="proof-broken"><strong>Broken:</strong> ${escapeHtml(round.broken)}</p>
+    ${
+      errorChoices
+        ? `<p class="hint">What kind of mistake is this?</p><div class="choice-list proof-errors">${errorChoices}</div>`
+        : ""
+    }
+    <div class="spot-parts">
+      ${parts
+        .map(
+          (part, index) => `
+        <button type="button" class="spot-part" data-spot="${index}">${escapeHtml(part)}</button>
+      `
+        )
+        .join("")}
+    </div>
+    <textarea class="fix-box" id="spot-fix" placeholder="Type the fixed sentence"></textarea>
   `;
 }
 
@@ -896,6 +966,101 @@ function renderSkip(round) {
       </div>
     </div>
     <div class="skip-line">${line}</div>
+  `;
+}
+
+function renderTokenGroup(groups, size, item) {
+  return `
+    <div class="math-groups scene-groups">
+      ${Array.from({ length: groups }, (_, index) => `
+        <div class="math-bowl scene-bowl">
+          <span class="math-bowl-label">Group ${index + 1}</span>
+          <div class="math-dots">
+            ${Array.from({ length: size }, () => `<span class="math-token" title="${escapeHtml(item)}">${escapeHtml(item)}</span>`).join("")}
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+function renderScene(round) {
+  return `
+    <div class="scene-story">${escapeHtml(round.story)}</div>
+    <p class="hint">Count the equal groups of <strong>${escapeHtml(round.item)}s</strong>. How many altogether?</p>
+    ${renderTokenGroup(round.groups, round.size, round.item)}
+    <div class="choice-list scene-choices">
+      ${round.choices
+        .map(
+          (choice, index) => `
+        <button type="button" class="choice" data-choice="${index}">${escapeHtml(choice)}</button>
+      `
+        )
+        .join("")}
+    </div>
+    <p class="math-equation" id="math-equation" hidden></p>
+  `;
+}
+
+function renderMatch(round) {
+  return `
+    <div class="scene-story">${escapeHtml(round.story)}</div>
+    <p class="hint">Look at the picture. Tap the fact that matches these equal groups.</p>
+    ${renderTokenGroup(round.groups, round.size, round.item)}
+    <div class="choice-list match-facts">
+      ${round.facts
+        .map(
+          (fact, index) => `
+        <button type="button" class="choice match-fact" data-fact="${index}">${escapeHtml(fact)}</button>
+      `
+        )
+        .join("")}
+    </div>
+    <p class="math-equation" id="math-equation" hidden></p>
+  `;
+}
+
+function renderPath(round) {
+  const knownIndex = round.pads.findIndex((pad) => pad !== null);
+  const known = round.pads[knownIndex];
+  const expected = round.pads.map((_, index) => known + (index - knownIndex) * round.step);
+  const blankAnswers = round.pads
+    .map((pad, index) => (pad === null ? String(expected[index]) : null))
+    .filter((value) => value !== null);
+  const bank = [...blankAnswers].sort(() => Math.random() - 0.5);
+  let blankOrdinal = 0;
+  const stones = round.pads
+    .map((pad, index) => {
+      if (pad !== null) {
+        return `<div class="path-stone filled"><span>${pad}</span></div>`;
+      }
+      const ord = blankOrdinal;
+      blankOrdinal += 1;
+      return `<div class="path-stone blank"><input class="story-blank skip-blank path-blank" data-skip="${ord}" size="3" inputmode="numeric" autocomplete="off" spellcheck="false" aria-label="stone ${index + 1}" /></div>`;
+    })
+    .join('<span class="path-hop" aria-hidden="true">→</span>');
+  return `
+    <p class="hint">Each hop adds <strong>${round.step}</strong>. Fill the empty stones.</p>
+    <div class="story-bank">
+      <strong>Number box</strong>
+      <div class="story-bank-words">
+        ${bank.map((word) => `<span class="story-chip">${escapeHtml(word)}</span>`).join("")}
+      </div>
+    </div>
+    <div class="path-track" data-step="${round.step}">${stones}</div>
+  `;
+}
+
+function renderSum(round) {
+  return `
+    <p class="hint">Add the numbers. Type the total in the box.</p>
+    <div class="sum-card" aria-label="${round.a} plus ${round.b}">
+      <div class="sum-line">${round.a}</div>
+      <div class="sum-line"><span class="sum-plus">+</span>${round.b}</div>
+      <div class="sum-rule" aria-hidden="true"></div>
+      <label class="sum-label" for="sum-answer">Total</label>
+      <input id="sum-answer" class="sum-answer" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" placeholder="?" aria-label="type the total" />
+    </div>
   `;
 }
 
@@ -1036,7 +1201,50 @@ function checkSpot(round) {
     setFeedback(false, `Almost. Aim for: ${round.fix}`);
     return false;
   }
-  setFeedback(true, "You spotted it and fixed it.");
+  if (round.explain) {
+    setFeedbackHtml(
+      true,
+      `<p>You spotted it and fixed it.</p>
+       <div class="tip-box"><strong>Why it matters</strong> ${escapeHtml(round.explain)}</div>`
+    );
+  } else {
+    setFeedback(true, "You spotted it and fixed it.");
+  }
+  return true;
+}
+
+function checkProof(round) {
+  if (round.errorChoices && round.errorIndex != null) {
+    const errorPick = document.querySelector(".proof-errors .choice.selected");
+    if (!errorPick) {
+      setFeedback(false, "First tap what kind of mistake it is.");
+      return false;
+    }
+    if (Number(errorPick.dataset.choice) !== round.errorIndex) {
+      setFeedback(false, "Not that kind of mistake. Look again at capitals, stops, spelling, or tense.");
+      return false;
+    }
+  }
+  const selected = document.querySelector(".spot-part.selected");
+  if (!selected) {
+    setFeedback(false, "Tap the broken bit in the sentence.");
+    return false;
+  }
+  if (Number(selected.dataset.spot) !== round.brokenIndex) {
+    setFeedback(false, "That bit is fine. Tap the part that needs fixing.");
+    return false;
+  }
+  const value = normalise(document.getElementById("spot-fix").value);
+  if (value.toLowerCase() !== normalise(round.answer || round.fix).toLowerCase()) {
+    setFeedback(false, `Almost. Aim for: ${round.answer || round.fix}`);
+    return false;
+  }
+  setFeedbackHtml(
+    true,
+    `<p>Nice editing. You found the careless bit and fixed it.</p>
+     <p class="compare-model"><strong>Fixed</strong> ${escapeHtml(round.answer || round.fix)}</p>
+     <div class="tip-box"><strong>Remember</strong> ${escapeHtml(round.explain)}</div>`
+  );
   return true;
 }
 
@@ -1113,6 +1321,85 @@ function checkSkip(round) {
     return false;
   }
   setFeedback(true, `Yes — that is counting by ${round.step}.`);
+  return true;
+}
+
+function checkScene(round) {
+  const selected = document.querySelector(".scene-choices .choice.selected");
+  if (!selected) {
+    setFeedback(false, "Tap how many altogether.");
+    return false;
+  }
+  if (selected.textContent.trim() !== String(round.product)) {
+    setFeedback(false, `Count again: ${round.groups} groups of ${round.size}.`);
+    return false;
+  }
+  showMathEquation(round.groups, round.size, round.product);
+  const eq = document.getElementById("math-equation");
+  if (eq) eq.classList.add("reveal");
+  setFeedback(
+    true,
+    `${round.groups} groups of ${round.size} ${round.item}s is ${round.product}. So ${round.groups} × ${round.size} = ${round.product}.`
+  );
+  return true;
+}
+
+function checkMatch(round) {
+  const selected = document.querySelector(".match-fact.selected");
+  if (!selected) {
+    setFeedback(false, "Tap the fact that matches the picture.");
+    return false;
+  }
+  if (selected.textContent.trim() !== round.answerFact) {
+    setFeedback(false, "Count the groups again, then match who × size.");
+    return false;
+  }
+  showMathEquation(round.groups, round.size, round.product);
+  const eq = document.getElementById("math-equation");
+  if (eq) eq.classList.add("reveal");
+  setFeedback(true, `Yes — that picture is ${round.answerFact}.`);
+  return true;
+}
+
+function checkPath(round) {
+  const knownIndex = round.pads.findIndex((pad) => pad !== null);
+  const known = round.pads[knownIndex];
+  const expected = round.pads.map((_, index) => known + (index - knownIndex) * round.step);
+  const wrong = [];
+  let ordinal = 0;
+  round.pads.forEach((pad, index) => {
+    if (pad !== null) return;
+    const input = document.querySelector(`[data-skip="${ordinal}"]`);
+    const value = normalise(input ? input.value : "");
+    if (value !== String(expected[index])) wrong.push(String(expected[index]));
+    else if (input) input.closest(".path-stone")?.classList.add("correct");
+    ordinal += 1;
+  });
+  if (wrong.length) {
+    setFeedback(false, `Hop by ${round.step}. Missing: ${wrong.join(", ")}.`);
+    return false;
+  }
+  setFeedback(true, `Nice hopping — each jump was +${round.step}.`);
+  return true;
+}
+
+function checkSum(round) {
+  const input = document.getElementById("sum-answer");
+  const raw = input ? input.value.trim() : "";
+  if (!raw) {
+    setFeedback(false, "Type the total first.");
+    return false;
+  }
+  if (!/^\d+$/.test(raw)) {
+    setFeedback(false, "Use digits only for the total.");
+    return false;
+  }
+  const value = Number(raw);
+  if (value !== round.answer) {
+    setFeedback(false, `Not yet. Check ones, then tens${round.a >= 100 || round.b >= 100 ? ", then hundreds" : ""}.`);
+    return false;
+  }
+  setFeedback(true, `Yes — ${round.a} + ${round.b} = ${round.answer}.`);
   return true;
 }
 
@@ -1227,10 +1514,15 @@ function checkCurrent() {
     arrange: checkArrange,
     choose: checkChoose,
     spot: checkSpot,
+    proof: checkProof,
     expand: checkExpand,
     groups: checkGroups,
     array: checkArray,
     skip: checkSkip,
+    scene: checkScene,
+    match: checkMatch,
+    path: checkPath,
+    sum: checkSum,
   };
   const ok = checkers[activity.kind](round);
   if (!ok) {
@@ -1479,6 +1771,24 @@ function bind() {
       button.classList.add("selected");
     };
   });
+
+  document.querySelectorAll("[data-fact]").forEach((button) => {
+    button.onclick = () => {
+      document.querySelectorAll("[data-fact]").forEach((node) => node.classList.remove("selected"));
+      button.classList.add("selected");
+    };
+  });
+
+  const sumAnswer = document.getElementById("sum-answer");
+  if (sumAnswer) {
+    sumAnswer.focus();
+    sumAnswer.onkeydown = (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        checkCurrent();
+      }
+    };
+  }
 
   document.querySelectorAll(".story-chip").forEach((chip) => {
     chip.onclick = () => {

@@ -1,19 +1,22 @@
 :root {
-  --paper: #f6efe4;
-  --paper-deep: #efe4d2;
-  --ink: #243028;
-  --ink-soft: #5b6b62;
-  --line: #d8cbb8;
-  --leaf: #2f6f57;
-  --leaf-deep: #245544;
-  --apricot: #e07a5f;
-  --apricot-deep: #c45c42;
-  --gold: #e8b86d;
-  --white: #fffdf8;
-  --ok: #2f6f57;
+  --paper: #fff8c8;
+  --paper-deep: #ffe9a0;
+  --ink: #4a3428;
+  --ink-soft: #7a5a48;
+  --line: #e8c98a;
+  --leaf: #6b3f2a;
+  --leaf-deep: #4a2a1c;
+  --apricot: #f0c94d;
+  --apricot-deep: #d4a017;
+  --gold: #f5d76e;
+  --cream: #fffdf0;
+  --white: #fffdf5;
+  --ok: #6b3f2a;
   --bad: #b5443a;
-  --shadow: 0 10px 30px rgba(36, 48, 40, 0.08);
-  --radius: 22px;
+  --shadow: 0 10px 28px rgba(74, 52, 40, 0.1);
+  --radius: 24px;
+  --accent: #ffe566;
+  --beret: #6b3f2a;
 }
 
 * {
@@ -30,9 +33,11 @@ body {
   font-family: "Nunito", system-ui, sans-serif;
   color: var(--ink);
   background:
-    radial-gradient(circle at 12% 8%, #fbe8c8 0, transparent 32%),
-    radial-gradient(circle at 90% 0%, #d7efe3 0, transparent 28%),
+    radial-gradient(circle at 8% 12%, #fff3a0 0, transparent 34%),
+    radial-gradient(circle at 92% 8%, #ffe08a 0, transparent 30%),
+    radial-gradient(circle at 50% 100%, #fff1c2 0, transparent 40%),
     var(--paper);
+  overflow-x: hidden;
 }
 
 button,
@@ -48,9 +53,10 @@ button {
 h1,
 h2,
 h3 {
-  font-family: "Fraunces", Georgia, serif;
+  font-family: "Fredoka", "Nunito", system-ui, sans-serif;
   margin: 0;
   letter-spacing: -0.02em;
+  color: var(--beret);
 }
 
 p {
@@ -61,6 +67,8 @@ p {
   max-width: 980px;
   margin: 0 auto;
   padding: 28px 20px 64px;
+  position: relative;
+  z-index: 1;
 }
 
 .topbar {
@@ -68,7 +76,7 @@ p {
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  margin-bottom: 28px;
+  margin-bottom: 22px;
 }
 
 .brand {
@@ -78,15 +86,22 @@ p {
 }
 
 .mark {
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
-  background: var(--leaf);
-  color: var(--white);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 3px solid var(--beret);
+  color: var(--beret);
   display: grid;
   place-items: center;
   font-weight: 800;
   font-size: 18px;
+  font-family: "Fredoka", "Nunito", system-ui, sans-serif;
+}
+
+.brand strong {
+  font-family: "Fredoka", "Nunito", system-ui, sans-serif;
+  color: var(--beret);
 }
 
 .brand small {
@@ -110,8 +125,8 @@ p {
 }
 
 .primary {
-  background: var(--leaf);
-  color: var(--white);
+  background: var(--beret);
+  color: var(--cream);
 }
 
 .primary:hover {
@@ -138,6 +153,9 @@ p {
   margin-bottom: 28px;
   display: grid;
   gap: 18px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow);
 }
 
 .hero h1 {
@@ -163,7 +181,7 @@ p {
   border: 2px solid var(--line);
   border-radius: 16px;
   padding: 12px 14px;
-  background: var(--paper);
+  background: var(--cream);
 }
 
 .progress-line {
@@ -176,7 +194,7 @@ p {
 .progress-line span {
   display: block;
   height: 100%;
-  background: var(--leaf);
+  background: linear-gradient(90deg, var(--gold), var(--apricot-deep));
   width: 0;
 }
 
@@ -213,13 +231,14 @@ p {
 }
 
 .week-card.current {
-  border-color: var(--leaf);
-  background: #f3faf6;
+  border-color: var(--beret);
+  background: #fff8dc;
+  box-shadow: 0 0 0 2px rgba(107, 63, 42, 0.12);
 }
 
 .week-card .num {
   font-weight: 800;
-  color: var(--apricot);
+  color: var(--apricot-deep);
   font-size: 13px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -238,6 +257,7 @@ p {
 
 .pills {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
   margin-top: 14px;
 }
@@ -250,7 +270,7 @@ p {
 }
 
 .pill.done {
-  background: var(--leaf);
+  background: var(--beret);
 }
 
 .crumb {
@@ -294,7 +314,7 @@ p {
 }
 
 .done-tag {
-  background: #e7f4ed;
+  background: #fff3c4;
   color: var(--leaf-deep);
   border-radius: 999px;
   padding: 8px 12px;
@@ -322,7 +342,7 @@ p {
 }
 
 .rule-box {
-  background: #e7f4ed;
+  background: #fff3c4;
   color: var(--leaf-deep);
   border-radius: 16px;
   padding: 14px 16px;
@@ -420,7 +440,7 @@ p {
 }
 
 .slot.full {
-  background: #eef7f2;
+  background: #fff8dc;
   border-color: var(--leaf);
 }
 
@@ -466,7 +486,7 @@ p {
 }
 
 .feedback.ok {
-  background: #e7f4ed;
+  background: #fff3c4;
   color: var(--leaf-deep);
 }
 
@@ -484,7 +504,7 @@ p {
   display: inline-flex;
   gap: 12px;
   align-items: center;
-  background: #e7f4ed;
+  background: #fff3c4;
   color: var(--leaf-deep);
   border-radius: 999px;
   padding: 8px 14px;
@@ -519,19 +539,59 @@ p {
 }
 
 .story-card h2 {
-  font-family: "Fraunces", serif;
+  font-family: "Fredoka", "Nunito", system-ui, sans-serif;
   font-size: 1.45rem;
   margin: 0 0 8px;
 }
 
-.story-card p {
+.story-card p,
+.story-note {
   color: var(--ink-soft);
   line-height: 1.5;
   margin: 0;
 }
 
+.story-body {
+  color: var(--ink);
+  font-size: 1.08rem;
+  line-height: 1.65;
+  margin: 0 0 10px;
+}
+
+.story-note {
+  margin-top: 8px;
+  font-size: 0.95rem;
+}
+
+.story-read {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+}
+
+.story-read .story-label {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--leaf-deep);
+  margin-bottom: 6px;
+}
+
+.story-read h2 {
+  font-family: "Fredoka", "Nunito", system-ui, sans-serif;
+  font-size: 1.35rem;
+  margin: 0 0 8px;
+}
+
+.story-read .story-body {
+  margin-bottom: 0;
+}
+
 .story-bank {
-  background: #eef7f2;
+  background: #fff8dc;
   border-radius: 16px;
   padding: 12px 14px;
   margin-bottom: 14px;
@@ -563,7 +623,7 @@ p {
   border: 1px solid var(--line);
   border-radius: 16px;
   padding: 18px 20px;
-  font-family: "Fraunces", serif;
+  font-family: "Fredoka", "Nunito", system-ui, sans-serif;
   font-size: 1.2rem;
   line-height: 1.85;
   color: var(--ink);
@@ -613,7 +673,7 @@ p {
 .choice.selected,
 .spot-part.selected {
   border-color: var(--leaf);
-  background: #eef7f2;
+  background: #fff8dc;
 }
 
 .spot-parts {
@@ -623,8 +683,19 @@ p {
   margin-bottom: 14px;
 }
 
+.proof-broken {
+  background: #fff8dc;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  font-family: "Fredoka", "Nunito", system-ui, sans-serif;
+  font-size: 1.15rem;
+  line-height: 1.5;
+}
+
 .tip-box {
-  background: #fff4e8;
+  background: #fff8dc;
   border: 1px solid var(--gold);
   border-radius: 16px;
   padding: 12px 14px;
@@ -695,7 +766,7 @@ p {
 
 .math-bowl.selected {
   border-color: var(--leaf);
-  background: #eef7f2;
+  background: #fff8dc;
 }
 
 .math-bowl-label {
@@ -757,10 +828,182 @@ p {
 
 .math-equation {
   margin-top: 12px;
-  font-family: "Fraunces", serif;
+  font-family: "Fredoka", "Nunito", system-ui, sans-serif;
   font-size: 1.4rem;
   font-weight: 700;
   color: var(--leaf-deep);
+}
+
+.math-equation.reveal {
+  animation: eq-pop 0.35s ease;
+}
+
+.sum-card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  max-width: 220px;
+  margin: 8px 0 4px;
+}
+
+.sum-line {
+  position: relative;
+  font-family: "Fredoka", "Nunito", system-ui, sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: right;
+  letter-spacing: 0.06em;
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+  padding-left: 1.4em;
+}
+
+.sum-plus {
+  position: absolute;
+  left: 0;
+  color: var(--leaf-deep);
+}
+
+.sum-rule {
+  height: 3px;
+  background: var(--ink);
+  margin: 8px 0 12px;
+  border-radius: 2px;
+}
+
+.sum-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+
+.sum-answer {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: "Fredoka", "Nunito", system-ui, sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-align: right;
+  letter-spacing: 0.06em;
+  padding: 10px 12px;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  background: #fffdf6;
+  color: var(--ink);
+}
+
+.sum-answer:focus {
+  outline: none;
+  border-color: var(--leaf);
+}
+
+@keyframes eq-pop {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scene-story {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 14px 16px;
+  font-family: "Fredoka", "Nunito", system-ui, sans-serif;
+  font-size: 1.15rem;
+  line-height: 1.45;
+  margin-bottom: 12px;
+}
+
+.scene-bowl {
+  cursor: default;
+}
+
+.math-token {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff8dc;
+  border: 1px solid var(--beret);
+  color: var(--beret);
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: lowercase;
+}
+
+.path-track {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.path-stone {
+  min-width: 56px;
+  min-height: 56px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--line);
+  background: var(--paper-deep);
+  font-family: "Fredoka", "Nunito", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.path-stone.filled {
+  background: #fff8dc;
+  border-color: var(--leaf);
+  color: var(--leaf-deep);
+}
+
+.path-stone.blank {
+  background: var(--white);
+  border-style: dashed;
+  padding: 4px;
+}
+
+.path-stone.correct {
+  background: #fff3c4;
+  border-color: var(--leaf);
+  border-style: solid;
+  transform: scale(1.05);
+}
+
+.path-stone .path-blank,
+.path-stone .skip-blank {
+  border: none;
+  border-bottom: 2px solid var(--leaf);
+  background: transparent;
+  width: 2.5ch;
+  text-align: center;
+  font: inherit;
+  font-family: "Nunito", sans-serif;
+  font-weight: 800;
+  color: var(--leaf-deep);
+}
+
+.path-hop {
+  color: var(--ink-soft);
+  font-weight: 800;
+}
+
+.match-facts .choice,
+.scene-choices .choice {
+  font-family: "Fredoka", "Nunito", system-ui, sans-serif;
+  font-size: 1.1rem;
 }
 
 .skip-line {
@@ -772,7 +1015,7 @@ p {
   border: 1px solid var(--line);
   border-radius: 16px;
   padding: 16px 18px;
-  font-family: "Fraunces", serif;
+  font-family: "Fredoka", "Nunito", system-ui, sans-serif;
   font-size: 1.25rem;
 }
 
@@ -830,4 +1073,14 @@ p {
     flex-direction: column;
     align-items: flex-start;
   }
+}
+
+.feedback.ok {
+  background: #fff3c4;
+  color: var(--beret);
+}
+
+.rule-box {
+  background: #fff8dc;
+  border-color: var(--gold);
 }

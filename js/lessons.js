@@ -40,23 +40,32 @@ const WEEK_LESSONS = {
     },
   },
   w3: {
-    idea: "English likes a simple order: who, then did, then what.",
-    why: "If the words are in the wrong order, the sentence can mean something silly, like a cake eating Mia.",
-    rule: "Who did it comes first. Then the action. Then the rest.",
+    idea: "A clear sentence has jobs for its words: a noun (who/what), a verb (action), and sometimes an adjective (describing word).",
+    why: "If the jobs sit in the wrong place, the sentence can mean something silly — like a cake eating Mia.",
+    rule: "Noun (who) first. Verb (did) next. Adjective sits before the noun it paints: tiny frog, red ball.",
     steps: [
-      "Ask: who is this about?",
-      "Ask: what did they do? That word is the action.",
-      "Put the extra information last: the ball, the cake, the book.",
+      "Find the noun: who or what is this about?",
+      "Find the verb: what did they do?",
+      "If you add a describing word, put it before the noun — not after.",
+      "Extra information (the ball, the park) usually comes after the verb.",
     ],
     examples: [
-      { wrong: "the cake ate Mia", right: "Mia ate the cake.", why: "Mia is who. Ate is the action. The cake is what." },
-      { wrong: "the ball kicked Sam", right: "Sam kicked the ball.", why: "Sam did the kicking, not the ball." },
+      {
+        wrong: "the cake ate Mia",
+        right: "Mia ate the cake.",
+        why: "Mia is the noun (who). ate is the verb. The cake is what came after the action.",
+      },
+      {
+        wrong: "I saw a bird tiny.",
+        right: "I saw a tiny bird.",
+        why: "tiny is an adjective. It must sit before the noun bird.",
+      },
     ],
     tasks: {
-      spell: { title: "Action words", text: "These words tell us what someone did: run, kick, read, cook." },
-      build: { title: "Who, then did, then what", text: "Start with the person or animal. Then the action. Then the thing." },
-      fix: { title: "Unscramble the order", text: "If it sounds backwards, swap it until who is doing the action." },
-      write: { title: "Tell who did what", text: "Pick a person. Give them an action. Add what they did it to." },
+      spell: { title: "Action words", text: "These verbs tell us what someone did: run, kick, read, cook." },
+      build: { title: "Who, then did, then what", text: "Noun first. Verb next. Thing last. Adjective before its noun." },
+      fix: { title: "Unscramble the order", text: "If it sounds backwards, fix noun–verb order and adjective place." },
+      write: { title: "Tell who did what", text: "Pick a noun. Give a verb. Add an adjective if you can." },
     },
   },
   w4: {
@@ -240,6 +249,176 @@ const WEEK_LESSONS = {
       write: { title: "Your own paragraph", text: "Four sentences. One memory. Details in the middle. A feeling at the end." },
     },
   },
+  w13: {
+    idea: "Words have jobs. A noun names who or what. A verb is the action. An adjective paints the noun.",
+    why: "When kids know the jobs, they can build longer sentences without the pieces falling in the wrong order.",
+    rule: "Adjective (optional) + noun, then verb, then the rest. Example: The tiny frog jumped.",
+    steps: [
+      "Circle the noun in your head: who or what?",
+      "Find the verb: what happened?",
+      "If you use a describing word, park it in front of the noun.",
+      "Say the sentence out loud. Does the doer come before the doing?",
+    ],
+    examples: [
+      {
+        wrong: "jumped the frog tiny",
+        right: "The tiny frog jumped.",
+        why: "tiny (adjective) before frog (noun). frog before jumped (verb).",
+      },
+      {
+        wrong: "kicked the red ball Sam",
+        right: "Sam kicked the red ball.",
+        why: "Sam (noun) then kicked (verb). red sits before ball.",
+      },
+    ],
+    tasks: {
+      story: { title: "See the jobs", text: "Read and fill. Notice which gap is noun, verb or adjective." },
+      choose: { title: "Name the job", text: "Pick the line where each job sits in the right place." },
+      build: { title: "Build the pattern", text: "Adjective + noun + verb in order." },
+      write: { title: "Use the pattern", text: "Write with a clear noun, verb, and at least one adjective." },
+    },
+  },
+  w14: {
+    idea: "You can open a sentence with When, After, Suddenly or Later — then keep noun and verb in order.",
+    why: "Varied openers stop every line starting with I, but the middle of the sentence still needs who-then-did.",
+    rule: "Opener first (often with a comma). Then noun + verb as usual.",
+    steps: [
+      "Choose an opener: When, After, Suddenly, Later, Quietly…",
+      "Write the opener, then the noun (who), then the verb (did).",
+      "Check you did not flip to Suddenly barked the dog.",
+    ],
+    examples: [
+      {
+        wrong: "Suddenly barked the dog.",
+        right: "Suddenly the dog barked.",
+        why: "After Suddenly, the noun dog still comes before the verb barked.",
+      },
+      {
+        wrong: "I went. I saw. I sat.",
+        right: "After lunch I went to the park.",
+        why: "One opener makes the start fresher than three bare I sentences.",
+      },
+    ],
+    tasks: {
+      story: { title: "Spot the opener", text: "Fill openers and notice noun–verb after them." },
+      choose: { title: "Pick a strong start", text: "Choose the opener that still keeps clear order." },
+      expand: { title: "Add an opener", text: "Rewrite with When / After / Suddenly at the front." },
+      write: { title: "Mix your starts", text: "Use openers — not only I." },
+    },
+  },
+  w15: {
+    idea: "Joins like when, while, if and because stick two ideas together. Each idea still needs a noun and a verb.",
+    why: "A join is not a pile of words. It is two little sentences sharing one line.",
+    rule: "Idea 1 (noun + verb) + join + idea 2 (noun + verb).",
+    steps: [
+      "Say both ideas out loud as two short sentences.",
+      "Pick when (moment), while (same time), if (condition), or because (reason).",
+      "Check both sides still have who and did.",
+    ],
+    examples: [
+      {
+        wrong: "I ran while the whistle because.",
+        right: "I ran when the whistle blew.",
+        why: "when joins two clear ideas: I ran / the whistle blew.",
+      },
+      {
+        wrong: "Mum cooked while set the table.",
+        right: "Mum cooked while I set the table.",
+        why: "The second side needs its own noun: I.",
+      },
+    ],
+    tasks: {
+      story: { title: "See the joins", text: "Fill when / while / if / because in real sentences." },
+      choose: { title: "Pick the join", text: "Match the join to the meaning." },
+      build: { title: "Build both sides", text: "Noun + verb on each side of the join." },
+      write: { title: "Join your ideas", text: "Write with when, while, if or because." },
+    },
+  },
+  w16: {
+    idea: "Proofreading starts at the gates: capital at the start, full stop at the end.",
+    why: "Careless slips often hide in the first and last marks. Fixing them makes writing look finished.",
+    rule: "Every sentence: capital start. Telling sentences: full stop end. Names stay capital.",
+    steps: [
+      "Point to the first letter. Is it big?",
+      "Point to the end. Is there a stop?",
+      "Fix what is missing, then read again.",
+    ],
+    examples: [
+      {
+        wrong: "mum packed my lunch.",
+        right: "Mum packed my lunch.",
+        why: "mum needs a capital — it starts the sentence and it is a name.",
+      },
+      {
+        wrong: "The dog ran home",
+        right: "The dog ran home.",
+        why: "The thought is finished, so it needs a full stop.",
+      },
+    ],
+    tasks: {
+      story: { title: "Why we check", text: "Read about capitals and stops." },
+      proof: { title: "Find the gate error", text: "Name the mistake, tap it, fix the sentence — then read the rule tip." },
+      choose: { title: "Pick the finished line", text: "Only one choice has both gates right." },
+      write: { title: "Write then check", text: "Write, then hunt capitals and stops." },
+    },
+  },
+  w17: {
+    idea: "The next proofread pass checks tense (did it already happen?) and trap spellings.",
+    why: "Yesterday needs went/said. They needs were. friend and because are easy to rush.",
+    rule: "Match the time words to the verb. Spell friend, said, because the careful way.",
+    steps: [
+      "Find time clues: yesterday, today, then.",
+      "Check the verb matches (go → went, say → said).",
+      "Check they/was → they were.",
+      "Slow-check friend and because.",
+    ],
+    examples: [
+      {
+        wrong: "Yesterday we go to the beach.",
+        right: "Yesterday we went to the beach.",
+        why: "Yesterday is past, so the verb is went.",
+      },
+      {
+        wrong: "They was tired becos the walk was long.",
+        right: "They were tired because the walk was long.",
+        why: "were matches they; because is the full spelling.",
+      },
+    ],
+    tasks: {
+      story: { title: "Past clues", text: "Fill went, said, were, because in past stories." },
+      proof: { title: "Find tense or spelling", text: "Name it, tap it, fix it, read why." },
+      choose: { title: "Pick the careful line", text: "Only one choice keeps tense and spelling steady." },
+      write: { title: "Write in one tense", text: "Stay in the past and spell trap words carefully." },
+    },
+  },
+  w18: {
+    idea: "A full edit pass stacks every check: capitals, stops, tense, spelling — then read aloud.",
+    why: "Careless writing often has more than one slip in the same line. One slow pass catches them.",
+    rule: "Check → fix → read again. Do not stop after the first mistake.",
+    steps: [
+      "Pass 1: capitals and stops.",
+      "Pass 2: tense and trap words.",
+      "Pass 3: read out loud. Fix anything your ear catches.",
+    ],
+    examples: [
+      {
+        wrong: "yesterday i go to see my frend",
+        right: "Yesterday I went to see my friend.",
+        why: "Capitals, tense, spelling and stop all needed fixing together.",
+      },
+      {
+        wrong: "after lunch we runned to the oval.",
+        right: "After lunch we ran to the oval.",
+        why: "Capital on After, and ran not runned.",
+      },
+    ],
+    tasks: {
+      story: { title: "The edit habit", text: "Learn the order of a full pass." },
+      proof: { title: "Mixed mistakes", text: "Anything can be wrong — name it, tap it, fix it." },
+      choose: { title: "Pick the polished line", text: "Choose the sentence that survives every check." },
+      write: { title: "Write and edit", text: "Write first. Full edit pass before I'm done." },
+    },
+  },
 };
 
 const SCRAMBLE_LESSON = {
@@ -259,24 +438,24 @@ const SCRAMBLE_LESSON = {
 };
 
 const MATH_LESSON = {
-  idea: "Multiplication is equal groups. The × sign is a short way to say that.",
+  idea: "Multiplication is equal groups hiding in everyday things — bikes, eggs, shells.",
   why: "If you only memorise numbers, a forgotten fact has nothing to stand on. A picture of groups always helps you rebuild it.",
   rule: "a × b means a groups of b. The answer is how many altogether.",
   steps: [
-    "See it: make equal groups or fill an array.",
-    "Count it: skip-count by 2, 5, or 10 — that is the table pattern.",
-    "Know it: tap the fact once the picture feels easy.",
-    "No racing yet. Steady and clear beats fast and wobbly.",
+    "See it: count equal groups in a little mission (wheels, eggs, shells).",
+    "Match it: join the picture to the fact a × b = n.",
+    "Hop it: jump along a path by 2s, 5s, or 10s — that is the table pattern.",
+    "Know it: tap the total in a short story once the picture feels easy.",
   ],
   examples: [
     {
-      wrong: "3 × 4 means any numbers that look hard.",
-      right: "3 × 4 means 3 groups of 4. That is 12.",
+      wrong: "3 × 2 means any numbers that look hard.",
+      right: "3 bikes with 2 wheels each → 3 × 2 = 6 wheels.",
       why: "Groups first. The symbol comes after the picture.",
     },
     {
-      wrong: "Skip-count 2, 3, 4, 5…",
-      right: "Skip-count by 2: 2, 4, 6, 8…",
+      wrong: "Hop 2, 3, 4, 5…",
+      right: "Hop by 2: 2, 4, 6, 8…",
       why: "Each jump is the same size. That jump is the table you are learning.",
     },
   ],
@@ -582,5 +761,155 @@ const WRITE_EXAMPLES = {
     example: "The animal I chose is a hen. It lives by the back fence. It likes warm brown eggs and grain. I think it is a busy, funny pet.",
     why: "One animal for the whole paragraph. Topic, details, a close.",
     tip: "One animal for the whole paragraph. Topic, details, a close.",
+  },
+  "Write one sentence with an adjective before a noun, then a verb.": {
+    example: "The tiny frog jumped over the log.",
+    why: "tiny (adjective) sits before frog (noun). jumped is the verb after the noun.",
+    tip: "Pattern: The + adjective + noun + verb…",
+  },
+  "Write one sentence about a person (noun) doing something (verb).": {
+    example: "Sam kicked the red ball.",
+    why: "Sam is the noun. kicked is the verb. red paints ball.",
+    tip: "Name who, then what they did.",
+  },
+  "Write one sentence that paints a thing: adjective + noun + verb.": {
+    example: "The noisy truck rolled past the school.",
+    why: "noisy before truck. rolled is the action.",
+    tip: "Paint the noun, then give it a verb.",
+  },
+  "Write two sentences. In each, name the noun and the verb in your head first.": {
+    example: "The huge dog ran. Then Mum called my name.",
+    why: "Each sentence has a clear who and a clear action.",
+    tip: "Say who + did before you write.",
+  },
+  "Write two sentences about an animal. Put a describing word before the animal noun.": {
+    example: "The tiny ant crossed the path. A huge bird watched from the fence.",
+    why: "tiny and huge sit before their nouns.",
+    tip: "adjective + animal + verb.",
+  },
+  "Write two sentences about morning. Start one with When or After.": {
+    example: "When I woke up, I stretched. After breakfast I packed my bag.",
+    why: "Openers first; then noun + verb still in order.",
+    tip: "Try When or After — not only I.",
+  },
+  "Write two sentences about play. Start one with Suddenly or Later.": {
+    example: "Suddenly the whistle blew. Later we walked back to class.",
+    why: "Fresh starts, clear who/what after the opener.",
+    tip: "Suddenly / Later, then noun + verb.",
+  },
+  "Write two sentences about school. Start one with After or When.": {
+    example: "After lunch we lined up. When the bell rang, we went inside.",
+    why: "Time openers, then we + verb.",
+    tip: "Keep we/I before the action.",
+  },
+  "Write two sentences about home. Start one with Quietly or Outside.": {
+    example: "Quietly I opened the door. Outside the wind felt cold.",
+    why: "How/where openers still need noun then verb.",
+    tip: "Quietly / Outside + who + did.",
+  },
+  "Write three sentences about a trip. Use two different openers.": {
+    example: "When we arrived, we unpacked. Later we walked to the beach. Suddenly the sky went dark.",
+    why: "Mixed openers; each line still has noun + verb.",
+    tip: "Use at least two different starters.",
+  },
+  "Write one sentence using when.": {
+    example: "I smiled when Dad came home.",
+    why: "Two ideas joined: I smiled / Dad came home.",
+    tip: "noun + verb + when + noun + verb.",
+  },
+  "Write one sentence using while.": {
+    example: "Mum cooked while I set the table.",
+    why: "while means at the same time. Both sides have who + did.",
+    tip: "Do not drop the second noun.",
+  },
+  "Write one sentence using if.": {
+    example: "If it rains, we stay inside.",
+    why: "if sets a condition, then the result.",
+    tip: "If + idea, then noun + verb.",
+  },
+  "Write one sentence using because.": {
+    example: "I wore a coat because it was cold.",
+    why: "because adds the reason after the first idea.",
+    tip: "Spell because in full.",
+  },
+  "Write two sentences. Use when in one and because in the other.": {
+    example: "When the film started, we sat still. I was happy because the ending was funny.",
+    why: "Two different joins, each with clear noun–verb pairs.",
+    tip: "One when sentence, one because sentence.",
+  },
+  "Write two short sentences about lunch. Check capitals and stops.": {
+    example: "I ate a cheese sandwich. Then I drank some water.",
+    why: "Both lines start big and end with a stop.",
+    tip: "Proofread the gates before I'm done.",
+  },
+  "Write two short sentences about play. Check every start and end.": {
+    example: "We played soccer. My friend passed the ball.",
+    why: "Capitals and stops on both.",
+    tip: "Point to first letter and last mark.",
+  },
+  "Write two short sentences about home. No missing stops.": {
+    example: "At home I unpacked my bag. Mum asked about my day.",
+    why: "Each thought finishes cleanly.",
+    tip: "No line left without a stop.",
+  },
+  "Write three sentences about school. Proofread the gates.": {
+    example: "At school we lined up. Then we read on the mat. I finished my book.",
+    why: "Three capitals. Three stops.",
+    tip: "Count the stops — one per sentence.",
+  },
+  "Write two sentences about a pet. Capital + stop on both.": {
+    example: "My pet is a small dog. It likes to run in the yard.",
+    why: "Gates fixed on both lines.",
+    tip: "Capital + stop checklist.",
+  },
+  "Write two past-tense sentences about yesterday. Use went or said.": {
+    example: "Yesterday I went to the park. My friend said it was fun.",
+    why: "Past time matches went and said.",
+    tip: "No go/say with yesterday.",
+  },
+  "Write one sentence with because about something that already happened.": {
+    example: "I stopped because I was tired.",
+    why: "Past verbs + because spelled in full.",
+    tip: "because, not becos.",
+  },
+  "Write two sentences about a friend. Use friend and said correctly.": {
+    example: "My friend sat with me. Then they said we should play.",
+    why: "friend and said spelled carefully.",
+    tip: "ie in friend; said in the past.",
+  },
+  "Write two sentences using were or was correctly.": {
+    example: "I was hungry. They were ready to eat.",
+    why: "was for one; were for more than one.",
+    tip: "They were, not they was.",
+  },
+  "Write three past sentences about a trip. Keep the tense steady.": {
+    example: "Yesterday we went to the zoo. First we watched the lions. We were happy on the bus home.",
+    why: "All past: went, watched, were.",
+    tip: "Stay in yesterday’s tense.",
+  },
+  "Write three sentences about yesterday. Then edit capitals, stops, tense, and spelling.": {
+    example: "Yesterday we went to the beach. First we put down a towel. We were glad because the sun was out.",
+    why: "Edited gates, tense and because.",
+    tip: "Write, then full edit pass.",
+  },
+  "Write three sentences about a friend. Edit friend, said, and because if you use them.": {
+    example: "My friend came over. They said we could draw. I smiled because it was quiet.",
+    why: "Trap words checked.",
+    tip: "Slow-check friend / said / because.",
+  },
+  "Write three sentences about school. Use one opener like When or After, then edit.": {
+    example: "When the bell rang, we lined up. After lunch we read. I packed my bag.",
+    why: "Opener plus clean gates.",
+    tip: "Opener, then edit every line.",
+  },
+  "Write a short paragraph (4 sentences) about a trip. Full edit pass.": {
+    example: "Yesterday we went to the zoo. First we watched the lions. Then the monkeys jumped. I felt happy on the way home.",
+    why: "Topic, details, feeling — all edited.",
+    tip: "Four sentences. One slow proofread.",
+  },
+  "Write four sentences about a game. Edit every line before you finish.": {
+    example: "We played soccer. When Sam passed the ball, I kicked it. My friend cheered. I was proud we scored.",
+    why: "Openers, tense and gates checked.",
+    tip: "Do not tap I'm done until you re-read.",
   },
 };
