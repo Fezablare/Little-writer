@@ -274,7 +274,11 @@ function openWeek(id, showLesson) {
 
 function weekLesson() {
   const week = weekById(state.weekId);
-  return WEEK_LESSONS[week.id];
+  return week.lesson || WEEK_LESSONS[week.id];
+}
+
+function topicLabel(week) {
+  return week.group ? `Topic ${week.week}` : `Week ${week.week}`;
 }
 
 function escapeHtml(value) {
@@ -357,8 +361,7 @@ function renderExamplePairs(examples) {
         .map(
           (example) => `
         <div class="pair">
-          <p class="bad-line">Not yet: ${escapeHtml(example.wrong)}</p>
-          <p class="ok-line">Right: ${escapeHtml(example.right)}</p>
+          <p class="ok-line">${escapeHtml(example.right)}</p>
           <p class="why">${escapeHtml(example.why)}</p>
         </div>
       `
@@ -418,13 +421,13 @@ function renderLesson() {
   const story = week.story ? renderStoryCard(week, "You will read this story, fill the spelling gaps, then practise and write.") : "";
   return `
     <header class="topbar">
-      <button class="ghost" data-action="home">All weeks</button>
+      <button class="ghost" data-action="home">All topics</button>
     </header>
     <section class="hero">
-      <p class="crumb">Week ${week.week} · lesson</p>
+      <p class="crumb">${topicLabel(week)} · lesson</p>
       <h1>${escapeHtml(week.title)}</h1>
       ${story}
-      ${renderLessonBody(lesson, "Wrong, then right")}
+      ${renderLessonBody(lesson, "A clear example")}
       <div class="actions">
         <button class="primary" data-action="start-week">Start the tasks</button>
       </div>
@@ -436,25 +439,25 @@ function renderWritingHome() {
   const percent = Math.round((totalDone() / totalActivities()) * 100) || 0;
   const next = currentWeek();
   const allDone = totalDone() === totalActivities();
-  const greeting = state.name ? `Hi ${escapeHtml(state.name)}.` : "An 18-week writing path.";
+  const greeting = state.name ? `Hi ${escapeHtml(state.name)}.` : "Writing topics, not a calendar.";
   const cta = allDone
-    ? `<p class="lede">Every week is done. Open any week to practise again.</p>`
+    ? `<p class="lede">Every topic is done. Open any topic to practise again.</p>`
     : `<div class="name-row">
-        <button class="primary" data-open-week="${next.id}">Continue week ${next.week}</button>
+        <button class="primary" data-open-week="${next.id}">Continue ${escapeHtml(next.title)}</button>
       </div>
-      <p class="hint">${escapeHtml(next.title)} · ${escapeHtml(next.focus)}</p>`;
+      <p class="hint">${escapeHtml(next.focus)}</p>`;
   return `
     <header class="topbar">
-      ${brandBar("Spelling, sentences, paragraphs")}
+      ${brandBar("Topics for writing and spelling")}
       <button class="ghost" data-action="reset-all">Reset progress</button>
     </header>
     ${subjectTabs()}
     <section class="hero">
-      <p class="crumb">18-week programme</p>
+      <p class="crumb">Topics · stay until it feels easy</p>
       <h1>${greeting}</h1>
       <p class="lede">
-        Each week has a short story to read with spelling gaps, then practise, then write.
-        Progress stays on this device.
+        Sentence craft, then writing for a purpose, then a short spelling path.
+        Stay in a topic as long as you need. Progress stays on this device.
       </p>
       <div class="name-row">
         <input id="name-input" type="text" maxlength="24" placeholder="Writer's name" value="${escapeHtml(state.name)}" />
@@ -464,29 +467,7 @@ function renderWritingHome() {
       <div class="progress-line"><span style="width:${percent}%"></span></div>
       <p class="hint">${totalDone()} of ${totalActivities()} steps done</p>
     </section>
-    <div class="week-grid">
-      ${CURRICULUM.map((week) => {
-        const done = weekQuestionsDone(week);
-        const total = weekQuestionTotal(week);
-        const isNext = !allDone && week.id === next.id;
-        return `
-          <button class="week-card ${isNext ? "current" : ""}" data-open-week="${week.id}">
-            <div class="num">Week ${week.week}${isNext ? " · next" : ""}</div>
-            <h3>${escapeHtml(week.title)}</h3>
-            <p>${escapeHtml(week.story ? week.story.theme : week.focus)}</p>
-            <div class="pills">
-              ${week.activities
-                .map(
-                  (activity) =>
-                    `<span class="pill ${state.completed[activity.id] ? "done" : ""}"></span>`
-                )
-                .join("")}
-            </div>
-            <p class="hint">${done}/${total} steps</p>
-          </button>
-        `;
-      }).join("")}
-    </div>
+    ${renderTopicSections(next, allDone)}
     ${renderScrambleHome()}
   `;
 }
@@ -545,7 +526,7 @@ function renderMathHome() {
     </section>
     <div class="block-title">
       <h2>Times tables missions</h2>
-      <p>Bikes, farm, beach, then hopping paths. Build the picture before you race the answers.</p>
+      <p>3s and 4s first, then 2s, 5s and 10s. See the groups, match the fact, hop the path, then know the total.</p>
     </div>
     <div class="week-grid">
       ${packCards(timesPacks)}
@@ -561,6 +542,50 @@ function renderMathHome() {
       ${packCards(addPacks)}
     </div>
   `;
+}
+
+function renderTopicSections(next, allDone) {
+  const groups = [];
+  CURRICULUM.forEach((week) => {
+    const name = week.group || "Writing";
+    let group = groups.find((item) => item.name === name);
+    if (!group) {
+      group = { name, weeks: [] };
+      groups.push(group);
+    }
+    group.weeks.push(week);
+  });
+  return groups
+    .map((group) => {
+      const cards = group.weeks
+        .map((week) => {
+          const done = weekQuestionsDone(week);
+          const total = weekQuestionTotal(week);
+          const isNext = !allDone && week.id === next.id;
+          return `
+          <button class="week-card ${isNext ? "current" : ""}" data-open-week="${week.id}">
+            <div class="num">${topicLabel(week)}${isNext ? " · next" : ""}</div>
+            <h3>${escapeHtml(week.title)}</h3>
+            <p>${escapeHtml(week.focus)}</p>
+            <div class="pills">
+              ${week.activities
+                .map(
+                  (activity) =>
+                    `<span class="pill ${state.completed[activity.id] ? "done" : ""}"></span>`
+                )
+                .join("")}
+            </div>
+            <p class="hint">${done}/${total} steps</p>
+          </button>`;
+        })
+        .join("");
+      return `
+        <div class="block-title">
+          <h2>${escapeHtml(group.name)}</h2>
+        </div>
+        <div class="week-grid">${cards}</div>`;
+    })
+    .join("");
 }
 
 function renderScrambleHome() {
@@ -607,14 +632,14 @@ function renderWeek() {
   const draft = Array.isArray(draftRaw) ? draftRaw.filter(Boolean).join("\n\n") : draftRaw;
   return `
     <header class="topbar">
-      <button class="ghost" data-action="home">All weeks</button>
+      <button class="ghost" data-action="home">All topics</button>
     </header>
     <div class="week-head">
-      <p class="crumb">Week ${week.week}</p>
+      <p class="crumb">${topicLabel(week)} · ${escapeHtml(week.group || "Writing")}</p>
       <h1>${escapeHtml(week.title)}</h1>
       <p class="lede">${escapeHtml(week.focus)}</p>
       ${week.story ? renderStoryCard(week, "Read this story first. Then open Read to fill the gaps.") : ""}
-      ${finished ? `<p class="done-tag">This week is complete</p>` : ""}
+      ${finished ? `<p class="done-tag">This topic is complete</p>` : ""}
       <div class="name-row">
         <button class="secondary" data-action="show-lesson">Show the lesson again</button>
       </div>
@@ -622,7 +647,7 @@ function renderWeek() {
     ${
       draft
         ? `<section class="draft-strip">
-            <strong>Your writing this week</strong>
+            <strong>Your writing in this topic</strong>
             <p>${escapeHtml(draft)}</p>
           </section>`
         : ""
@@ -712,7 +737,7 @@ function renderActivity() {
   } else if (state.scrambleId) {
     back = `<button class="ghost" data-action="home">All sentence packs</button>`;
   } else {
-    back = `<button class="ghost" data-action="week">Back to week ${week.week}</button>`;
+    back = `<button class="ghost" data-action="week">Back to ${escapeHtml(week.title)}</button>`;
   }
 
   const tip =
@@ -876,8 +901,13 @@ function renderProof(round) {
     )
     .join("");
   return `
-    <p class="hint">Read carefully. First tap what kind of mistake it is. Then tap the broken bit and type the fix.</p>
+    <p class="hint">Read carefully. Name the mistake, tap the broken bit, then write a full sentence.</p>
     <p class="proof-broken"><strong>Broken:</strong> ${escapeHtml(round.broken)}</p>
+    ${
+      round.guide
+        ? `<div class="tip-box"><strong>Before you fix</strong> ${escapeHtml(round.guide)}</div>`
+        : ""
+    }
     ${
       errorChoices
         ? `<p class="hint">What kind of mistake is this?</p><div class="choice-list proof-errors">${errorChoices}</div>`
@@ -892,7 +922,7 @@ function renderProof(round) {
         )
         .join("")}
     </div>
-    <textarea class="fix-box" id="spot-fix" placeholder="Type the fixed sentence"></textarea>
+    <textarea class="fix-box" id="spot-fix" placeholder="Type the fixed full sentence"></textarea>
   `;
 }
 
@@ -1221,13 +1251,13 @@ function checkProof(round) {
       return false;
     }
     if (Number(errorPick.dataset.choice) !== round.errorIndex) {
-      setFeedback(false, "Not that kind of mistake. Look again at capitals, stops, spelling, or tense.");
+      setFeedback(false, "Not that kind of mistake. Look for unfinished thoughts, missing who/verb, capitals, or stops.");
       return false;
     }
   }
   const selected = document.querySelector(".spot-part.selected");
   if (!selected) {
-    setFeedback(false, "Tap the broken bit in the sentence.");
+    setFeedback(false, "Tap the broken bit.");
     return false;
   }
   if (Number(selected.dataset.spot) !== round.brokenIndex) {
@@ -1235,14 +1265,27 @@ function checkProof(round) {
     return false;
   }
   const value = normalise(document.getElementById("spot-fix").value);
-  if (value.toLowerCase() !== normalise(round.answer || round.fix).toLowerCase()) {
-    setFeedback(false, `Almost. Aim for: ${round.answer || round.fix}`);
+  const accepted = (round.answers || [round.answer || round.fix || ""])
+    .filter(Boolean)
+    .map((item) => normalise(item).toLowerCase());
+  let ok = accepted.includes(value.toLowerCase());
+  if (!ok && round.mustInclude) {
+    const hasWords = round.mustInclude.every((word) =>
+      value.toLowerCase().includes(String(word).toLowerCase())
+    );
+    const longEnough = wordCount(value) >= (round.minWords || 3);
+    const gated = /^[A-Z]/.test(value) && /[.!?]$/.test(value);
+    ok = hasWords && longEnough && gated;
+  }
+  if (!ok) {
+    setFeedback(false, `Almost. Aim for something like: ${round.answer || round.fix}`);
     return false;
   }
+  const model = round.answer || round.fix || accepted[0];
   setFeedbackHtml(
     true,
-    `<p>Nice editing. You found the careless bit and fixed it.</p>
-     <p class="compare-model"><strong>Fixed</strong> ${escapeHtml(round.answer || round.fix)}</p>
+    `<p>Nice editing. You made a full, clear sentence.</p>
+     <p class="compare-model"><strong>One good fix</strong> ${escapeHtml(model)}</p>
      <div class="tip-box"><strong>Remember</strong> ${escapeHtml(round.explain)}</div>`
   );
   return true;

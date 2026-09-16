@@ -1,4 +1,4 @@
-function L(warm, practice, boss) {
+﻿function L(warm, practice, boss) {
   return [
     { id: "warm", label: "Warm-up", needCorrect: 2, rounds: warm },
     { id: "practice", label: "Practice", needCorrect: 2, rounds: practice },
@@ -6,7 +6,7 @@ function L(warm, practice, boss) {
   ];
 }
 
-const CURRICULUM = [
+let CURRICULUM = [
   {
     id: "w1",
     week: 1,
@@ -56,8 +56,8 @@ const CURRICULUM = [
       {
         id: "w1-choose",
         kind: "choose",
-        title: "Pick the capital start",
-        prompt: "Which sentence starts the right way?",
+        title: "Capital  and who first",
+        prompt: "Pick the sentence that starts big and keeps who before the action.",
         layers: L(
           [
             {
@@ -66,8 +66,8 @@ const CURRICULUM = [
               answerIndex: 1,
             },
             {
-              question: "Which one is right?",
-              choices: ["mum has a hat.", "Mum has a hat.", "mUm has a hat."],
+              question: "Which has who then did?",
+              choices: ["sat the cat.", "The cat sat.", "The sat cat."],
               answerIndex: 1,
             },
           ],
@@ -78,18 +78,18 @@ const CURRICULUM = [
               answerIndex: 1,
             },
             {
-              question: "Which one is right?",
-              choices: ["dad can hop.", "Dad can hop.", "DAD can hop."],
-              answerIndex: 1,
+              question: "Which keeps who before the action?",
+              choices: ["Mia ate the cake.", "The cake ate Mia.", "ate Mia the cake."],
+              answerIndex: 0,
             },
           ],
           [
             {
-              question: "Which one starts my favourite-thing story right?",
+              question: "Best start for a clear sentence?",
               choices: [
                 "my favourite thing is my red bike.",
                 "My favourite thing is my red bike.",
-                "my Favourite thing is my red bike.",
+                "is my favourite thing my red bike.",
               ],
               answerIndex: 1,
             },
@@ -100,22 +100,22 @@ const CURRICULUM = [
         id: "w1-build",
         kind: "build",
         title: "Build a sentence",
-        prompt: "Tap the words in order. Capital first.",
+        prompt: "Tap who first, then the action. Capital on the first word.",
         layers: L(
           [
-            { answer: "The cat sat.", tiles: ["The", "cat", "sat."] },
-            { answer: "Mum has a hat.", tiles: ["Mum", "has", "a", "hat."] },
-            { answer: "Dad can hop.", tiles: ["Dad", "can", "hop."] },
+            { answer: "The cat sat.", tiles: ["sat.", "The", "cat"] },
+            { answer: "Mum has a hat.", tiles: ["has", "a", "hat.", "Mum"] },
+            { answer: "Dad can hop.", tiles: ["can", "hop.", "Dad"] },
           ],
           [
-            { answer: "The cat sat on the mat.", tiles: ["The", "cat", "sat", "on", "the", "mat."] },
-            { answer: "A dog ran in the sun.", tiles: ["A", "dog", "ran", "in", "the", "sun."] },
-            { answer: "I like my red bike.", tiles: ["I", "like", "my", "red", "bike."] },
+            { answer: "The cat sat on the mat.", tiles: ["sat", "on", "the", "mat.", "The", "cat"] },
+            { answer: "A dog ran in the sun.", tiles: ["ran", "in", "the", "sun.", "A", "dog"] },
+            { answer: "I like my red bike.", tiles: ["like", "my", "red", "bike.", "I"] },
           ],
           [
             {
               answer: "My favourite thing is my big bike.",
-              tiles: ["My", "favourite", "thing", "is", "my", "big", "bike."],
+              tiles: ["is", "my", "big", "bike.", "My", "favourite", "thing"],
             },
           ]
         ),
@@ -199,8 +199,8 @@ const CURRICULUM = [
       {
         id: "w2-spot",
         kind: "spot",
-        title: "Spot the missing stop",
-        prompt: "Tap what is wrong, then type the fix.",
+        title: "Spot the missing piece",
+        prompt: "Tap what is wrong, then type the fix. Watch for stops  and missing who.",
         layers: L(
           [
             {
@@ -209,9 +209,10 @@ const CURRICULUM = [
               fix: "lunch.",
             },
             {
-              parts: ["The", "pig", "is", "in", "the", "mud"],
-              brokenIndex: 5,
-              fix: "mud.",
+              parts: ["Kicked", "the", "ball."],
+              brokenIndex: 0,
+              fix: "Sam kicked the ball.",
+              explain: "Kicked has no who. Put who first: Sam kicked the ball.",
             },
           ],
           [
@@ -221,9 +222,10 @@ const CURRICULUM = [
               fix: "I",
             },
             {
-              parts: ["Dad", "sat", "on", "the", "log"],
-              brokenIndex: 4,
-              fix: "log.",
+              parts: ["Packed", "my", "lunch."],
+              brokenIndex: 0,
+              fix: "Mum packed my lunch.",
+              explain: "Packed my lunch is only the action. Add who: Mum packed",
             },
           ],
           [
@@ -239,20 +241,20 @@ const CURRICULUM = [
         id: "w2-build",
         kind: "build",
         title: "Put the full stop on",
-        prompt: "Build the sentence. The last tile has the full stop.",
+        prompt: "Build who + did, then end with the stop tile.",
         layers: L(
           [
-            { answer: "I can hop.", tiles: ["I", "can", "hop."] },
-            { answer: "Mum packed lunch.", tiles: ["Mum", "packed", "lunch."] },
+            { answer: "I can hop.", tiles: ["can", "hop.", "I"] },
+            { answer: "Mum packed lunch.", tiles: ["packed", "lunch.", "Mum"] },
           ],
           [
-            { answer: "I can hop on one foot.", tiles: ["I", "can", "hop", "on", "one", "foot."] },
-            { answer: "We had lunch in the sun.", tiles: ["We", "had", "lunch", "in", "the", "sun."] },
+            { answer: "I can hop on one foot.", tiles: ["can", "hop", "on", "one", "foot.", "I"] },
+            { answer: "We had lunch in the sun.", tiles: ["had", "lunch", "in", "the", "sun.", "We"] },
           ],
           [
             {
               answer: "Mum packed my red lunch bag.",
-              tiles: ["Mum", "packed", "my", "red", "lunch", "bag."],
+              tiles: ["packed", "my", "red", "lunch", "bag.", "Mum"],
             },
           ]
         ),
@@ -279,41 +281,84 @@ const CURRICULUM = [
     focus: "Word order: who + did + what",
     story: {
       theme: "Someone did something",
-      text: "Sam kicked the ball. Mia jumped up high. Dad cooked the fish. Mum read a book. My sister kicked the red ball. My friend played too. The dog jumped over the log. Then I played with my friend.",
+      text: "The nurse washed her hands. Everyone cheered at the game. My twin spilled the juice. A bee landed on the flower. Sam kicked the ball. The team won. Then I waved to Mum.",
       draftKey: "w3",
-      wordBank: ["kicked", "jumped", "cooked", "played", "sister", "friend", "ball"],
+      wordBank: ["nurse", "cheered", "twin", "spilled", "bee", "team", "waved"],
     },
     activities: [
       {
         id: "w3-story",
         kind: "story",
         title: "Read: Someone did something",
-        prompt: "Read the story. Notice how the words are ordered, then fill the gaps.",
+        prompt: "Read the story. Notice who comes first, then fill the gaps.",
         layers: L(
           [
             {
-              passage: "Sam {{kicked}} the {{ball}}. Mia {{jumped}} up high.",
-              tip: "English order: who, then the action, then the thing. Sam kicked the ball � not the ball kicked Sam.",
+              passage: "The {{nurse}} washed her hands. {{Everyone}} cheered at the game.",
+              tip: "Who first: the nurse, Everyone. Then the action: washed, cheered.",
             },
             {
-              passage: "Dad {{cooked}} the fish. Mum {{read}} a book.",
-              tip: "Who first (Dad, Mum), then what they did (cooked, read), then what they did it to.",
-            },
-          ],
-          [
-            {
-              passage: "My {{sister}} {{kicked}} the red ball. My {{friend}} {{played}} too.",
-              tip: "Who (sister) then action (kicked). red sits before ball because describing words come before the noun.",
-            },
-            {
-              passage: "The dog {{jumped}} over the log. Then it {{ran}} home.",
-              tip: "Who + action + where. jumped and ran are the doing words, so they come after who.",
+              passage: "My {{twin}} spilled the juice. A {{bee}} landed on the flower.",
+              tip: "Who (twin, bee) then did (spilled, landed). The thing comes after the action.",
             },
           ],
           [
             {
-              passage: "My sister {{kicked}} the ball. Dad {{cooked}} dinner. I {{played}} with my friend.",
-              tip: "Keep who before the action in every sentence. The thing or place comes after the action.",
+              passage: "Sam {{kicked}} the ball. The {{team}} won.",
+              tip: "Keep who before the action. Not: the ball kicked Sam.",
+            },
+            {
+              passage: "Then I {{waved}} to Mum. The dog {{ran}} home.",
+              tip: "I and The dog are who. waved and ran are the doing words.",
+            },
+          ],
+          [
+            {
+              passage: "The {{nurse}} washed her hands. My {{twin}} spilled the juice. {{Everyone}} cheered.",
+              tip: "Different kinds of who: a job (nurse), a person (twin), a group (Everyone).",
+            },
+          ]
+        ),
+      },
+      {
+        id: "w3-choose",
+        kind: "choose",
+        title: "Who then did â€” or incomplete?",
+        prompt: "Pick the line with who before the action. Spot unfinished thoughts too.",
+        layers: L(
+          [
+            {
+              question: "Which has who then did?",
+              choices: ["Mia ate the cake.", "The cake ate Mia.", "ate Mia the cake."],
+              answerIndex: 0,
+            },
+            {
+              question: "Which is a full sentence?",
+              choices: ["Kicked the ball.", "Sam kicked the ball.", "the ball"],
+              answerIndex: 1,
+            },
+          ],
+          [
+            {
+              question: "Which keeps who first?",
+              choices: ["jumped the dog.", "The dog jumped.", "The jumped dog."],
+              answerIndex: 1,
+            },
+            {
+              question: "Which is unfinished (no who)?",
+              choices: ["The nurse washed her hands.", "Opened the quiet door.", "Everyone cheered."],
+              answerIndex: 1,
+            },
+          ],
+          [
+            {
+              question: "Best clear sentence?",
+              choices: [
+                "the juice spilled my twin.",
+                "My twin spilled the juice.",
+                "spilled the juice my twin.",
+              ],
+              answerIndex: 1,
             },
           ]
         ),
@@ -325,18 +370,18 @@ const CURRICULUM = [
         prompt: "Start with who. Then the action. Then the rest.",
         layers: L(
           [
-            { answer: "Mia ate the cake.", tiles: ["Mia", "ate", "the", "cake."] },
-            { answer: "Sam kicked the ball.", tiles: ["Sam", "kicked", "the", "ball."] },
+            { answer: "The nurse washed her hands.", tiles: ["washed", "her", "hands.", "The", "nurse"] },
+            { answer: "Everyone cheered.", tiles: ["cheered.", "Everyone"] },
           ],
           [
-            { answer: "Sam kicked the red ball.", tiles: ["Sam", "kicked", "the", "red", "ball."] },
-            { answer: "Dad cooked the fish.", tiles: ["Dad", "cooked", "the", "fish."] },
-            { answer: "Mum read a long book.", tiles: ["Mum", "read", "a", "long", "book."] },
+            { answer: "My twin spilled the juice.", tiles: ["spilled", "the", "juice.", "My", "twin"] },
+            { answer: "A bee landed on the flower.", tiles: ["landed", "on", "the", "flower.", "A", "bee"] },
+            { answer: "The team won the game.", tiles: ["won", "the", "game.", "The", "team"] },
           ],
           [
             {
-              answer: "My sister kicked the red ball.",
-              tiles: ["My", "sister", "kicked", "the", "red", "ball."],
+              answer: "I waved to Mum after the game.",
+              tiles: ["waved", "to", "Mum", "after", "the", "game.", "I"],
             },
           ]
         ),
@@ -344,42 +389,42 @@ const CURRICULUM = [
       {
         id: "w3-expand",
         kind: "expand",
-        title: "Add one detail",
-        prompt: "Make the sentence fuller with one extra detail.",
+        title: "Add the missing who",
+        prompt: "These pieces are unfinished. Add who, then one detail if you can.",
         layers: L(
           [
             {
-              seed: "Sam kicked the ball.",
-              hint: "Add a colour or size word.",
-              mustInclude: ["ball"],
+              seed: "Kicked the red ball.",
+              hint: "Who kicked? Put who first. You can keep red.",
+              mustInclude: ["kicked", "ball"],
               needCapital: true,
             },
             {
-              seed: "Mia ate the cake.",
-              hint: "Add a word like sweet or big.",
-              mustInclude: ["cake"],
-              needCapital: true,
-            },
-          ],
-          [
-            {
-              seed: "Dad cooked the fish.",
-              hint: "Add where or how.",
-              mustInclude: ["fish"],
-              needCapital: true,
-            },
-            {
-              seed: "The bird sang a song.",
-              hint: "Add a describing word for the bird or song.",
-              mustInclude: ["sang"],
+              seed: "Spilled the juice.",
+              hint: "Who spilled it? Start with a person.",
+              mustInclude: ["spilled", "juice"],
               needCapital: true,
             },
           ],
           [
             {
-              seed: "Mum read a book.",
-              hint: "Add two details: what kind of book, and where.",
-              mustInclude: ["book"],
+              seed: "Opened the quiet door.",
+              hint: "Who opened it? Keep quiet before door.",
+              mustInclude: ["opened", "door"],
+              needCapital: true,
+            },
+            {
+              seed: "Cheered at the game.",
+              hint: "Who cheered? Try Everyone, We, or The team.",
+              mustInclude: ["cheered"],
+              needCapital: true,
+            },
+          ],
+          [
+            {
+              seed: "Waved to Mum.",
+              hint: "Add who, and where or when.",
+              mustInclude: ["waved", "Mum"],
               needCapital: true,
             },
           ]
@@ -389,27 +434,27 @@ const CURRICULUM = [
         id: "w3-write",
         kind: "write",
         title: "Tell who did what",
-        prompt: "Write sentences about someone doing something.",
+        prompt: "Write sentences about someone doing something. Name who clearly.",
         rounds: [
           {
             prompt: "Write a sentence about a friend or family member doing something.",
-            starters: ["Dad ", "My sister ", "My friend "],
+            starters: ["My twin ", "My friend ", "Mum "],
+          },
+          {
+            prompt: "Write a sentence about a worker or helper doing something.",
+            starters: ["The nurse ", "The teacher ", "The driver "],
+          },
+          {
+            prompt: "Write a sentence about a group doing something.",
+            starters: ["Everyone ", "The team ", "We "],
           },
           {
             prompt: "Write a sentence about an animal doing something.",
-            starters: ["The dog ", "A bird "],
+            starters: ["A bee ", "The dog ", "The bird "],
           },
           {
-            prompt: "Write a sentence about you doing something at school.",
-            starters: ["I ", "We "],
-          },
-          {
-            prompt: "Write a sentence about someone cooking or eating.",
-            starters: ["Mum ", "Grandma "],
-          },
-          {
-            prompt: "Write a sentence about someone playing a game.",
-            starters: ["Sam ", "My brother "],
+            prompt: "Write two sentences. In each, say who first, then what they did.",
+            starters: ["I ", "Then the "],
           },
         ],
       },
@@ -565,7 +610,7 @@ const CURRICULUM = [
             },
             {
               passage: "I ate an apple {{because}} I was {{hungry}}.",
-              tip: "Who + action first. because adds the reason after � not at the very start here.",
+              tip: "Who + action first. because adds the reason after  not at the very start here.",
             },
           ],
           [
@@ -828,7 +873,7 @@ const CURRICULUM = [
             },
             {
               passage: "My room is {{small}} and {{bright}}. I have a {{soft}} lamp.",
-              tip: "small and bright describe the room. soft comes before lamp � adjective before noun.",
+              tip: "small and bright describe the room. soft comes before lamp  adjective before noun.",
             },
           ],
           [
@@ -850,43 +895,86 @@ const CURRICULUM = [
         ),
       },
       {
+        id: "w7-choose",
+        kind: "choose",
+        title: "Who, paint, action",
+        prompt: "Keep who before the action. Put the describing word before the noun.",
+        layers: L(
+          [
+            {
+              question: "Which keeps who then did?",
+              choices: ["The brown dog ran.", "ran the brown dog.", "The dog brown ran."],
+              answerIndex: 0,
+            },
+            {
+              question: "Which is unfinished (no who)?",
+              choices: ["The tiny bird sang.", "Running in the park.", "A loud truck rolled past."],
+              answerIndex: 1,
+            },
+          ],
+          [
+            {
+              question: "In “The soft lamp glowed”, which word is who/what (the noun)?",
+              choices: ["soft", "lamp", "glowed"],
+              answerIndex: 1,
+            },
+            {
+              question: "Which paints cleanly?",
+              choices: ["I saw a bird tiny.", "I saw a tiny bird.", "tiny saw I a bird."],
+              answerIndex: 1,
+            },
+          ],
+          [
+            {
+              question: "Best full sentence?",
+              choices: [
+                "hid the tiny frog under a leaf.",
+                "The tiny frog hid under a leaf.",
+                "The frog tiny hid under a leaf.",
+              ],
+              answerIndex: 1,
+            },
+          ]
+        ),
+      },
+      {
         id: "w7-expand",
         kind: "expand",
-        title: "Paint the sentence",
-        prompt: "Add a describing word to the short sentence.",
+        title: "Paint — or add who",
+        prompt: "Add a describing word, or finish an unfinished thought with who.",
         layers: L(
           [
             {
               seed: "The dog ran in the park.",
-              hint: "Add a colour or size for the dog.",
+              hint: "Add a colour or size for the dog. Keep The dog before ran.",
               mustInclude: ["dog"],
               needCapital: true,
             },
             {
-              seed: "The bird sat in the tree.",
-              hint: "Add tiny, loud, or pretty.",
-              mustInclude: ["bird"],
+              seed: "Running in the park.",
+              hint: "Who was running? Add who, then you may add tiny or brown.",
+              mustInclude: ["park"],
               needCapital: true,
             },
           ],
           [
             {
               seed: "A car went down the road.",
-              hint: "Add red, fast, or huge.",
+              hint: "Add red, fast, or huge. Keep A car before went.",
               mustInclude: ["car"],
               needCapital: true,
             },
             {
-              seed: "Waves hit the sand.",
-              hint: "Add huge or cold.",
-              mustInclude: ["waves"],
+              seed: "Hit the sand.",
+              hint: "Who or what hit? Try The huge wave…",
+              mustInclude: ["sand"],
               needCapital: true,
             },
           ],
           [
             {
               seed: "The park was quiet.",
-              hint: "Add another describing word and one thing you saw.",
+              hint: "Add another describing word and one thing you saw — with who + did.",
               mustInclude: ["park"],
               needCapital: true,
             },
@@ -897,28 +985,32 @@ const CURRICULUM = [
         id: "w7-build",
         kind: "build",
         title: "Add a describing word",
-        prompt: "Build a sentence with a clear picture.",
+        prompt: "Build who + paint + action. Describing word before the noun.",
         layers: L(
           [
             {
-              answer: "The tiny frog hid.",
-              tiles: ["The", "tiny", "frog", "hid."],
+              answer: "The busy bee landed.",
+              tiles: ["landed.", "The", "busy", "bee"],
+            },
+            {
+              answer: "A loud truck rolled past.",
+              tiles: ["rolled", "past.", "A", "loud", "truck"],
             },
           ],
           [
             {
-              answer: "The tiny frog hid under a leaf.",
-              tiles: ["The", "tiny", "frog", "hid", "under", "a", "leaf."],
+              answer: "The soft lamp glowed.",
+              tiles: ["glowed.", "The", "soft", "lamp"],
             },
             {
               answer: "A loud bird sat on the fence.",
-              tiles: ["A", "loud", "bird", "sat", "on", "the", "fence."],
+              tiles: ["sat", "on", "the", "fence.", "A", "loud", "bird"],
             },
           ],
           [
             {
               answer: "The huge wave crashed on the sand.",
-              tiles: ["The", "huge", "wave", "crashed", "on", "the", "sand."],
+              tiles: ["crashed", "on", "the", "sand.", "The", "huge", "wave"],
             },
           ]
         ),
@@ -1425,7 +1517,7 @@ const CURRICULUM = [
             },
             {
               passage: "The game I chose is {{soccer}}. You kick a ball into a net.",
-              tip: "Name the topic, then a detail about that game only � not a new topic.",
+              tip: "Name the topic, then a detail about that game only  not a new topic.",
             },
           ],
           [
@@ -1441,7 +1533,7 @@ const CURRICULUM = [
           [
             {
               passage: "I chose {{pancakes}}. They taste sweet with lemon. I eat them on a slow Saturday. No other {{topic}} sneaks in.",
-              tip: "One topic only. sweet describes taste; slow describes Saturday � describing word before the noun.",
+              tip: "One topic only. sweet describes taste; slow describes Saturday  describing word before the noun.",
             },
           ]
         ),

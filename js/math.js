@@ -44,6 +44,142 @@ function storyChoose(question, a, b, distractors) {
 
 const MATH = [
   packMath(
+    "m-3-see",
+    "3s · see it",
+    "See it",
+    "scene",
+    "Count equal groups of 3. Stools, triangles, and tricycles.",
+    [
+      sceneRound("2 stools. Each stool has 3 legs.", 2, 3, "leg", [5, 8]),
+      sceneRound("3 stools. Each stool has 3 legs.", 3, 3, "leg", [6, 12]),
+      sceneRound("4 stools. Each stool has 3 legs.", 4, 3, "leg", [10, 15]),
+      sceneRound("5 stools. Each stool has 3 legs.", 5, 3, "leg", [12, 18]),
+      sceneRound("2 triangles. Each triangle has 3 sides.", 2, 3, "side", [5, 8]),
+      sceneRound("4 triangles. Each triangle has 3 sides.", 4, 3, "side", [10, 15]),
+      sceneRound("3 tricycles. Each tricycle has 3 wheels.", 3, 3, "wheel", [6, 12]),
+      sceneRound("6 tricycles. Each tricycle has 3 wheels.", 6, 3, "wheel", [15, 21]),
+    ]
+  ),
+  packMath(
+    "m-3-match",
+    "3s · match it",
+    "See it",
+    "match",
+    "Look at the groups of 3. Tap the fact that matches the picture.",
+    [
+      matchRound("2 stools. Each stool has 3 legs.", 2, 3, "leg", ["3 × 3 = 9", "2 × 4 = 8", "2 × 2 = 4"]),
+      matchRound("3 stools. Each stool has 3 legs.", 3, 3, "leg", ["2 × 3 = 6", "4 × 3 = 12", "3 × 2 = 6"]),
+      matchRound("4 triangles. Each triangle has 3 sides.", 4, 3, "side", ["3 × 4 = 12", "5 × 3 = 15", "4 × 2 = 8"]),
+      matchRound("5 triangles. Each triangle has 3 sides.", 5, 3, "side", ["4 × 3 = 12", "5 × 2 = 10", "6 × 3 = 18"]),
+      matchRound("3 tricycles. Each tricycle has 3 wheels.", 3, 3, "wheel", ["3 × 4 = 12", "2 × 3 = 6", "3 × 5 = 15"]),
+      matchRound("6 tricycles. Each tricycle has 3 wheels.", 6, 3, "wheel", ["5 × 3 = 15", "6 × 2 = 12", "7 × 3 = 21"]),
+      matchRound("1 clover. The clover has 3 leaves.", 1, 3, "leaf", ["2 × 3 = 6", "1 × 4 = 4", "3 × 3 = 9"]),
+      matchRound("7 packs. Each pack has 3 crayons.", 7, 3, "crayon", ["6 × 3 = 18", "7 × 2 = 14", "8 × 3 = 24"]),
+    ]
+  ),
+  packMath(
+    "m-hop-3",
+    "3s · hop it",
+    "Count it",
+    "path",
+    "Hop along the stones. Each hop is +3.",
+    [
+      pathRound(3, [0, 3, null, 9, null, 15]),
+      pathRound(3, [0, null, 6, null, 12, 15]),
+      pathRound(3, [3, 6, null, 12, null, 18]),
+      pathRound(3, [0, 3, 6, null, null, 15]),
+      pathRound(3, [0, null, null, 9, 12, 15]),
+      pathRound(3, [6, null, 12, null, 18, 21]),
+      pathRound(3, [0, 3, null, null, 12, null, 18]),
+      pathRound(3, [3, null, 9, 12, null, 18]),
+    ]
+  ),
+  packMath(
+    "m-3-know",
+    "3s · know it",
+    "Know it",
+    "choose",
+    "You have seen stools, triangles and tricycles. Tap how many altogether.",
+    [
+      storyChoose("2 stools. Each has 3 legs. How many legs?", 2, 3, [5, 8]),
+      storyChoose("4 stools. Each has 3 legs. How many legs?", 4, 3, [7, 15]),
+      storyChoose("5 triangles. Each has 3 sides. How many sides?", 5, 3, [8, 18]),
+      storyChoose("3 tricycles. Each has 3 wheels. How many wheels?", 3, 3, [6, 12]),
+      storyChoose("6 tricycles. Each has 3 wheels. How many wheels?", 6, 3, [15, 21]),
+      storyChoose("7 packs of 3 crayons. How many crayons?", 7, 3, [10, 24]),
+      storyChoose("8 bowls with 3 strawberries each. How many strawberries?", 8, 3, [11, 21]),
+      storyChoose("9 nests with 3 eggs each. How many eggs?", 9, 3, [12, 24]),
+    ]
+  ),
+  packMath(
+    "m-4-see",
+    "4s · see it",
+    "See it",
+    "scene",
+    "Count equal groups of 4. Legs, wheels, and sides.",
+    [
+      sceneRound("2 dogs. Each dog has 4 legs.", 2, 4, "leg", [6, 10]),
+      sceneRound("3 dogs. Each dog has 4 legs.", 3, 4, "leg", [10, 16]),
+      sceneRound("4 dogs. Each dog has 4 legs.", 4, 4, "leg", [12, 20]),
+      sceneRound("2 cars. Each car has 4 wheels.", 2, 4, "wheel", [6, 10]),
+      sceneRound("3 cars. Each car has 4 wheels.", 3, 4, "wheel", [10, 16]),
+      sceneRound("5 cars. Each car has 4 wheels.", 5, 4, "wheel", [16, 24]),
+      sceneRound("2 squares. Each square has 4 sides.", 2, 4, "side", [6, 10]),
+      sceneRound("4 chairs. Each chair has 4 legs.", 4, 4, "leg", [12, 20]),
+    ]
+  ),
+  packMath(
+    "m-4-match",
+    "4s · match it",
+    "See it",
+    "match",
+    "Look at the groups of 4. Tap the fact that matches the picture.",
+    [
+      matchRound("2 dogs. Each dog has 4 legs.", 2, 4, "leg", ["3 × 4 = 12", "2 × 3 = 6", "2 × 5 = 10"]),
+      matchRound("3 dogs. Each dog has 4 legs.", 3, 4, "leg", ["4 × 4 = 16", "2 × 4 = 8", "3 × 3 = 9"]),
+      matchRound("4 dogs. Each dog has 4 legs.", 4, 4, "leg", ["3 × 4 = 12", "5 × 4 = 20", "4 × 3 = 12"]),
+      matchRound("2 cars. Each car has 4 wheels.", 2, 4, "wheel", ["2 × 3 = 6", "4 × 2 = 8", "3 × 4 = 12"]),
+      matchRound("5 cars. Each car has 4 wheels.", 5, 4, "wheel", ["4 × 4 = 16", "5 × 3 = 15", "6 × 4 = 24"]),
+      matchRound("3 squares. Each square has 4 sides.", 3, 4, "side", ["4 × 3 = 12", "2 × 4 = 8", "3 × 5 = 15"]),
+      matchRound("6 chairs. Each chair has 4 legs.", 6, 4, "leg", ["5 × 4 = 20", "6 × 3 = 18", "7 × 4 = 28"]),
+      matchRound("1 table. The table has 4 legs.", 1, 4, "leg", ["2 × 4 = 8", "1 × 3 = 3", "4 × 4 = 16"]),
+    ]
+  ),
+  packMath(
+    "m-hop-4",
+    "4s · hop it",
+    "Count it",
+    "path",
+    "Hop along the stones. Each hop is +4.",
+    [
+      pathRound(4, [0, 4, null, 12, null, 20]),
+      pathRound(4, [0, null, 8, null, 16, 20]),
+      pathRound(4, [4, 8, null, 16, null, 24]),
+      pathRound(4, [0, 4, 8, null, null, 20]),
+      pathRound(4, [0, null, null, 12, 16, 20]),
+      pathRound(4, [8, null, 16, null, 24, 28]),
+      pathRound(4, [0, 4, null, null, 16, null, 24]),
+      pathRound(4, [4, null, 12, 16, null, 24]),
+    ]
+  ),
+  packMath(
+    "m-4-know",
+    "4s · know it",
+    "Know it",
+    "choose",
+    "You have seen dogs, cars and chairs. Tap how many altogether.",
+    [
+      storyChoose("2 dogs. Each has 4 legs. How many legs?", 2, 4, [6, 10]),
+      storyChoose("3 cars. Each has 4 wheels. How many wheels?", 3, 4, [7, 16]),
+      storyChoose("5 cars. Each has 4 wheels. How many wheels?", 5, 4, [9, 16]),
+      storyChoose("4 chairs. Each has 4 legs. How many legs?", 4, 4, [8, 20]),
+      storyChoose("6 chairs. Each has 4 legs. How many legs?", 6, 4, [10, 20]),
+      storyChoose("7 tables. Each has 4 legs. How many legs?", 7, 4, [11, 24]),
+      storyChoose("8 squares. Each has 4 sides. How many sides?", 8, 4, [12, 28]),
+      storyChoose("9 dogs. Each has 4 legs. How many legs?", 9, 4, [13, 32]),
+    ]
+  ),
+  packMath(
     "m-bikes-see",
     "Bikes · see it",
     "See it",
@@ -213,23 +349,6 @@ const MATH = [
       storyChoose("5 rows of 5 seats. How many seats?", 5, 5, [10, 30]),
       storyChoose("6 trays of 10 muffins. How many muffins?", 6, 10, [16, 70]),
       storyChoose("7 trays of 10 muffins. How many muffins?", 7, 10, [17, 80]),
-    ]
-  ),
-  packMath(
-    "m-spiders-see",
-    "Spiders · see it",
-    "See it",
-    "scene",
-    "A new family: 3s. Spiders and stools — count the equal groups.",
-    [
-      sceneRound("1 stool. The stool has 3 legs.", 1, 3, "leg", [2, 4]),
-      sceneRound("2 stools. Each stool has 3 legs.", 2, 3, "leg", [5, 9]),
-      sceneRound("3 stools. Each stool has 3 legs.", 3, 3, "leg", [6, 12]),
-      sceneRound("4 stools. Each stool has 3 legs.", 4, 3, "leg", [10, 15]),
-      sceneRound("5 stools. Each stool has 3 legs.", 5, 3, "leg", [12, 18]),
-      sceneRound("2 triangles. Each triangle has 3 sides.", 2, 3, "side", [5, 8]),
-      sceneRound("3 triangles. Each triangle has 3 sides.", 3, 3, "side", [6, 12]),
-      sceneRound("3 packs of 4 crayons. How many crayons? (picture shows 3 groups of 4)", 3, 4, "crayon", [7, 14]),
     ]
   ),
   packMath(

@@ -4,16 +4,15 @@ A kids’ learning app with two tabs and a warm cream / gold / brown look. Open 
 
 ## Writing
 
-An **18-week** writing programme:
+Topics, not a calendar. Stay in one until it feels easy. New drills follow [CONTENT.md](CONTENT.md).
 
-- Weeks 1–12: capitals, stops, order, joins, adjectives, paragraphs  
-- Weeks 13–15: noun / verb / adjective placement, varied openers, when–while–if  
-- Weeks 16–18: proofreading (capitals, tense/spelling, full edit pass)
-
-Each week: lesson → story/practice → write. Proof weeks use find-the-error drills with a short rule tip after each fix.
+- Sentence craft: start and stop, who, joins, when/while, paint the noun
+- Purpose: recount, facts, opinion, the same idea two ways, pronouns
+- Edit: unfinished, wrong job, then finish marks
+- Spelling path: vowel teams, clusters and silent letters, trap words, un- and -ed
 
 ## Maths
 
-Times tables missions (equal groups, match a fact, hop paths, know the total) plus a separate **Addition practice** section: about 40 typed sums with 2- and 3-digit numbers. No timers in this version.
+Times tables missions start with **3s and 4s** (see, match, hop, know), then 2s, 5s and 10s. A separate **Addition practice** section has about 40 typed sums with 2- and 3-digit numbers. No timers in this version.
 
 Progress for both tabs stays in the browser on this device.

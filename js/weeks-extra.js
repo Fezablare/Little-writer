@@ -6,7 +6,7 @@ const EXTRA_WEEKS = [
     focus: "Who / action / describing word — and where each sits",
     story: {
       theme: "Building a clear sentence",
-      text: "The tiny frog jumped over the log. Sam kicked the red ball into the net. A huge wave hit the rocks. The soft rug felt warm under my feet. The quiet library held a tiny book. The noisy truck rolled past the school.",
+      text: "The busy bee landed on a flower. The nurse washed her hands. My twin spilled the juice. A loud truck rolled past the school. The soft lamp glowed. Everyone cheered at the game.",
       draftKey: "w13",
       wordBank: ["noun", "verb", "adjective", "who", "action", "describe"],
     },
@@ -23,24 +23,24 @@ const EXTRA_WEEKS = [
               tip: "Order to remember: adjective (optional) + noun, then verb, then the rest.",
             },
             {
-              passage: "The {{tiny}} frog {{jumped}} over the log.",
-              tip: "tiny = adjective (describes). frog = noun (who/what). jumped = verb (action). Adjective before noun; noun before verb.",
+              passage: "The {{busy}} bee {{landed}} on a flower.",
+              tip: "busy = adjective. bee = noun (who). landed = verb. Adjective before noun; noun before verb.",
             },
           ],
           [
             {
-              passage: "Sam {{kicked}} the {{red}} ball into the net.",
-              tip: "Sam = noun (who). kicked = verb. red = adjective before the noun ball.",
+              passage: "The {{nurse}} washed her hands. My {{twin}} spilled the juice.",
+              tip: "nurse and twin are who (nouns). washed and spilled are verbs.",
             },
             {
-              passage: "A {{huge}} wave {{hit}} the rocks.",
-              tip: "huge paints wave (adjective before noun). hit is the verb after the noun.",
+              passage: "A {{loud}} truck {{rolled}} past the school.",
+              tip: "loud paints truck. rolled is the action after the noun.",
             },
           ],
           [
             {
-              passage: "The {{quiet}} library {{held}} a {{tiny}} book.",
-              tip: "Each adjective sits next to its noun. The verb follows who/what is doing something.",
+              passage: "The {{soft}} lamp {{glowed}}. {{Everyone}} cheered at the game.",
+              tip: "Different who types: a thing (lamp), a group (Everyone).",
             },
           ]
         ),
@@ -49,7 +49,7 @@ const EXTRA_WEEKS = [
         id: "w13-choose",
         kind: "choose",
         title: "Name the job of the word",
-        prompt: "Pick the sentence where noun, verb and adjective are in sensible places.",
+        prompt: "Pick clear who + did. Spot unfinished thoughts and wrong jobs.",
         layers: L(
           [
             {
@@ -59,20 +59,20 @@ const EXTRA_WEEKS = [
             },
             {
               question: "Which has who then action?",
-              choices: ["kicked Sam the ball.", "Sam kicked the ball.", "the ball Sam kicked."],
+              choices: ["washed the nurse her hands.", "The nurse washed her hands.", "hands washed the nurse."],
               answerIndex: 1,
             },
           ],
           [
             {
-              question: "In “The huge dog ran”, which word is the verb (action)?",
-              choices: ["huge", "dog", "ran"],
-              answerIndex: 2,
+              question: "In “The busy bee landed”, which word is the noun (who/what)?",
+              choices: ["busy", "bee", "landed"],
+              answerIndex: 1,
             },
             {
-              question: "In “The soft rug felt warm”, which word is the adjective?",
-              choices: ["rug", "soft", "felt"],
-              answerIndex: 1,
+              question: "Which is incomplete (no who)?",
+              choices: ["Opened the quiet door.", "Mum opened the quiet door.", "The quiet door slammed."],
+              answerIndex: 0,
             },
           ],
           [
@@ -95,17 +95,17 @@ const EXTRA_WEEKS = [
         prompt: "Tap in order. Describing word before the noun. Noun before the verb.",
         layers: L(
           [
-            { answer: "The tiny frog jumped.", tiles: ["The", "tiny", "frog", "jumped."] },
-            { answer: "Sam kicked the red ball.", tiles: ["Sam", "kicked", "the", "red", "ball."] },
+            { answer: "The busy bee landed.", tiles: ["landed.", "The", "busy", "bee"] },
+            { answer: "My twin spilled the juice.", tiles: ["spilled", "the", "juice.", "My", "twin"] },
           ],
           [
-            { answer: "A huge wave hit the rocks.", tiles: ["A", "huge", "wave", "hit", "the", "rocks."] },
-            { answer: "The soft rug felt warm.", tiles: ["The", "soft", "rug", "felt", "warm."] },
+            { answer: "A loud truck rolled past.", tiles: ["rolled", "past.", "A", "loud", "truck"] },
+            { answer: "The soft lamp glowed.", tiles: ["glowed.", "The", "soft", "lamp"] },
           ],
           [
             {
-              answer: "The quiet library held a tiny book.",
-              tiles: ["The", "quiet", "library", "held", "a", "tiny", "book."],
+              answer: "The quiet nurse washed her hands.",
+              tiles: ["washed", "her", "hands.", "The", "quiet", "nurse"],
             },
           ]
         ),
@@ -118,23 +118,23 @@ const EXTRA_WEEKS = [
         rounds: [
           {
             prompt: "Write one sentence with an adjective before a noun, then a verb.",
-            starters: ["The tiny ", "A huge "],
+            starters: ["The busy ", "A loud "],
           },
           {
-            prompt: "Write one sentence about a person (noun) doing something (verb).",
-            starters: ["Sam ", "Mum ", "My friend "],
+            prompt: "Write one sentence about a worker (noun) doing something (verb).",
+            starters: ["The nurse ", "The teacher "],
           },
           {
             prompt: "Write one sentence that paints a thing: adjective + noun + verb.",
             starters: ["The soft ", "The noisy "],
           },
           {
-            prompt: "Write two sentences. In each, name the noun and the verb in your head first.",
-            starters: ["The ", "Then the "],
+            prompt: "Write two sentences. Try one person and one group as who.",
+            starters: ["My twin ", "Everyone "],
           },
           {
             prompt: "Write two sentences about an animal. Put a describing word before the animal noun.",
-            starters: ["The tiny ", "A huge "],
+            starters: ["The busy ", "A tiny "],
           },
         ],
       },
@@ -207,7 +207,7 @@ const EXTRA_WEEKS = [
               choices: [
                 "Suddenly barked the dog.",
                 "Suddenly the dog barked.",
-                "the dog Suddenly barked.",
+                "Suddenly barked.",
               ],
               answerIndex: 1,
             },
@@ -218,14 +218,14 @@ const EXTRA_WEEKS = [
               choices: [
                 "When the film ended we clapped.",
                 "we clapped When the film ended.",
-                "I clapped. I stood. I cheered.",
+                "When the film ended clapped.",
               ],
               answerIndex: 0,
             },
             {
-              question: "Which is right?",
-              choices: ["Slowly I walked home.", "Slowly walked I home.", "home I walked Slowly."],
-              answerIndex: 0,
+              question: "Which is unfinished after the opener?",
+              choices: ["After lunch we played.", "After lunch played.", "Slowly I walked home."],
+              answerIndex: 1,
             },
           ],
           [
@@ -234,7 +234,7 @@ const EXTRA_WEEKS = [
               choices: [
                 "I woke up. I ate toast. I left.",
                 "When I woke up, I ate toast. Later I left for school.",
-                "Ate toast when I woke up later left.",
+                "When I woke up. Later left.",
               ],
               answerIndex: 1,
             },
@@ -244,8 +244,8 @@ const EXTRA_WEEKS = [
       {
         id: "w14-expand",
         kind: "expand",
-        title: "Add an opener",
-        prompt: "Rewrite with a time or how opener. Keep noun before verb.",
+        title: "Add an opener — keep who",
+        prompt: "Rewrite with a time or how opener. Keep who before the verb. Fix unfinished seeds.",
         layers: L(
           [
             {
@@ -255,9 +255,9 @@ const EXTRA_WEEKS = [
               needCapital: true,
             },
             {
-              seed: "We ran to the oval.",
-              hint: "Try Suddenly or After lunch at the start.",
-              mustInclude: ["ran"],
+              seed: "Suddenly barked.",
+              hint: "Add who after Suddenly (the dog, Mum, a bird…).",
+              mustInclude: ["Suddenly"],
               needCapital: true,
             },
           ],
@@ -269,17 +269,17 @@ const EXTRA_WEEKS = [
               needCapital: true,
             },
             {
-              seed: "The dog barked.",
-              hint: "Start with Suddenly. Keep The dog before barked.",
-              mustInclude: ["dog"],
+              seed: "After lunch played.",
+              hint: "Who played? Add we / I / the team after After lunch.",
+              mustInclude: ["After", "lunch"],
               needCapital: true,
             },
           ],
           [
             {
-              seed: "We walked home.",
-              hint: "Start with After the game and add one detail.",
-              mustInclude: ["After"],
+              seed: "When the bell rang.",
+              hint: "Finish: what did we do? Keep who + did after the comma.",
+              mustInclude: ["When", "bell"],
               needCapital: true,
             },
           ]
@@ -365,7 +365,7 @@ const EXTRA_WEEKS = [
         id: "w15-choose",
         kind: "choose",
         title: "Pick the right join",
-        prompt: "Which join fits — and keeps the sentence clear?",
+        prompt: "Which join fits — and keeps who + did on both sides?",
         layers: L(
           [
             {
@@ -374,8 +374,12 @@ const EXTRA_WEEKS = [
               answerIndex: 1,
             },
             {
-              question: "Mum read ___ I drew.",
-              choices: ["while", "because", "Suddenly"],
+              question: "Which keeps who on both sides?",
+              choices: [
+                "Mum cooked while I set the table.",
+                "Mum cooked while set the table.",
+                "while Mum cooked set I.",
+              ],
               answerIndex: 0,
             },
           ],
@@ -386,8 +390,12 @@ const EXTRA_WEEKS = [
               answerIndex: 0,
             },
             {
-              question: "___ it is sunny, we eat outside.",
-              choices: ["While", "If", "Because"],
+              question: "Which is missing who after when?",
+              choices: [
+                "I smiled when Dad came home.",
+                "I smiled when came home.",
+                "When Dad came home, I smiled.",
+              ],
               answerIndex: 1,
             },
           ],
@@ -396,7 +404,7 @@ const EXTRA_WEEKS = [
               question: "Best sentence?",
               choices: [
                 "I ran when the whistle blew.",
-                "I ran while the whistle because.",
+                "I ran when blew.",
                 "When blew whistle I ran the.",
               ],
               answerIndex: 0,
@@ -408,20 +416,20 @@ const EXTRA_WEEKS = [
         id: "w15-build",
         kind: "build",
         title: "Build a joined sentence",
-        prompt: "Keep noun + verb on each side of the join.",
+        prompt: "Keep noun + verb on each side of the join. Do not drop the second who.",
         layers: L(
           [
-            { answer: "I smiled when Dad came home.", tiles: ["I", "smiled", "when", "Dad", "came", "home."] },
-            { answer: "Mum cooked while I set the table.", tiles: ["Mum", "cooked", "while", "I", "set", "the", "table."] },
+            { answer: "I smiled when Dad came home.", tiles: ["smiled", "when", "Dad", "came", "home.", "I"] },
+            { answer: "Mum cooked while I set the table.", tiles: ["cooked", "while", "I", "set", "the", "table.", "Mum"] },
           ],
           [
-            { answer: "If it rains we stay inside.", tiles: ["If", "it", "rains", "we", "stay", "inside."] },
-            { answer: "I stopped because I was tired.", tiles: ["I", "stopped", "because", "I", "was", "tired."] },
+            { answer: "If it rains we stay inside.", tiles: ["it", "rains", "we", "stay", "inside.", "If"] },
+            { answer: "We packed while Mum found the keys.", tiles: ["packed", "while", "Mum", "found", "the", "keys.", "We"] },
           ],
           [
             {
               answer: "When the film started we sat still.",
-              tiles: ["When", "the", "film", "started", "we", "sat", "still."],
+              tiles: ["the", "film", "started", "we", "sat", "still.", "When"],
             },
           ]
         ),
@@ -448,7 +456,7 @@ const EXTRA_WEEKS = [
     id: "w16",
     week: 16,
     title: "Check the gates",
-    focus: "Proofread capitals and full stops",
+    focus: "Capitals, stops — and spot unfinished thoughts",
     story: {
       theme: "Careful eyes",
       text: "I wrote two sentences about lunch. Then I looked with careful eyes. Every sentence needs a capital start. Every telling sentence needs a stop. I check the first letter. Then I check the last mark. Mum said to fix my work. I found a missing stop and fixed it.",
@@ -493,8 +501,8 @@ const EXTRA_WEEKS = [
       {
         id: "w16-proof",
         kind: "proof",
-        title: "Find the capital or stop",
-        prompt: "Name the mistake, tap the broken bit, type the fixed sentence.",
+        title: "Find unfinished or broken lines",
+        prompt: "Name the mistake, tap it, rewrite as a full sentence.",
         layers: L(
           [
             {
@@ -502,49 +510,77 @@ const EXTRA_WEEKS = [
               parts: ["mum", "packed", "my", "lunch."],
               brokenIndex: 0,
               answer: "Mum packed my lunch.",
-              errorChoices: ["Missing capital", "Wrong tense", "Missing full stop"],
+              errorChoices: ["Missing capital", "Incomplete sentence", "Missing full stop"],
               errorIndex: 0,
+              guide: "This line already has who (mum) and did (packed). Check the first letter.",
               explain: "The first word needs a capital. Mum is also a name, so it stays big.",
             },
+            {
+              broken: "Eating toast at the table.",
+              parts: ["Eating toast at the table."],
+              brokenIndex: 0,
+              answer: "I was eating toast at the table.",
+              answers: [
+                "I was eating toast at the table.",
+                "We were eating toast at the table.",
+                "Mum was eating toast at the table.",
+              ],
+              mustInclude: ["toast"],
+              minWords: 5,
+              errorChoices: ["Incomplete sentence (no who)", "Missing full stop", "Wrong spelling"],
+              errorIndex: 0,
+              guide: "Eating… names an action. Who was eating?",
+              explain: "Add who before the -ing action: I was eating… / We were eating…",
+            },
+          ],
+          [
             {
               broken: "The dog ran home",
               parts: ["The", "dog", "ran", "home"],
               brokenIndex: 3,
               answer: "The dog ran home.",
-              errorChoices: ["Missing capital", "Missing full stop", "Wrong spelling"],
-              errorIndex: 1,
+              errorChoices: ["Missing full stop", "Incomplete sentence", "Missing capital"],
+              errorIndex: 0,
+              guide: "Who and did are here. What is missing at the end?",
               explain: "A telling sentence needs a full stop to show the thought is finished.",
             },
-          ],
-          [
             {
-              broken: "we played soccer after school.",
-              parts: ["we", "played", "soccer", "after", "school."],
+              broken: "Opened the lunch bag.",
+              parts: ["Opened the lunch bag."],
               brokenIndex: 0,
-              answer: "We played soccer after school.",
-              errorChoices: ["Missing capital", "Wrong tense", "Missing question mark"],
+              answer: "Mum opened the lunch bag.",
+              answers: [
+                "Mum opened the lunch bag.",
+                "I opened the lunch bag.",
+                "Dad opened the lunch bag.",
+                "Sam opened the lunch bag.",
+              ],
+              mustInclude: ["opened", "bag"],
+              minWords: 4,
+              errorChoices: ["Incomplete sentence (no who)", "Missing capital", "Wrong tense"],
               errorIndex: 0,
-              explain: "Even short words like We need a capital when they open the sentence.",
-            },
-            {
-              broken: "Sam kicked the ball",
-              parts: ["Sam", "kicked", "the", "ball"],
-              brokenIndex: 3,
-              answer: "Sam kicked the ball.",
-              errorChoices: ["Missing capital", "Missing full stop", "Wrong join"],
-              errorIndex: 1,
-              explain: "Sam already has a capital. The missing piece is the stop at the end.",
+              guide: "This starts with the verb. Ask: who opened?",
+              explain: "Opened the lunch bag has the action but no who. Put a noun first.",
             },
           ],
           [
             {
-              broken: "i like my red bike",
-              parts: ["i", "like", "my", "red", "bike"],
+              broken: "Because I was tired.",
+              parts: ["Because I was tired."],
               brokenIndex: 0,
-              answer: "I like my red bike.",
-              errorChoices: ["Missing capital and full stop", "Wrong tense", "Wrong adjective order"],
+              answer: "I sat down because I was tired.",
+              answers: [
+                "I sat down because I was tired.",
+                "I stopped because I was tired.",
+                "I went to bed because I was tired.",
+                "I was tired.",
+              ],
+              mustInclude: ["tired"],
+              minWords: 3,
+              errorChoices: ["Incomplete sentence (hanging because)", "Missing capital", "Wrong spelling"],
               errorIndex: 0,
-              explain: "I needs a capital, and the sentence still needs a full stop. Fix both gates.",
+              guide: "Because… is only a reason. Pair it with a main idea: who did what because…",
+              explain: "Because I was tired cannot stand alone. Add the main action, or drop because and say I was tired.",
             },
           ]
         ),
@@ -552,42 +588,42 @@ const EXTRA_WEEKS = [
       {
         id: "w16-choose",
         kind: "choose",
-        title: "Which sentence is finished?",
-        prompt: "Pick the sentence with a proper capital and stop.",
+        title: "Finished or unfinished?",
+        prompt: "Pick the line that is a full sentence.",
         layers: L(
           [
             {
-              question: "Which is right?",
-              choices: ["the cat sat.", "The cat sat.", "The cat sat"],
+              question: "Which is a full sentence?",
+              choices: ["Running to school.", "I was running to school.", "to school running"],
               answerIndex: 1,
             },
             {
-              question: "Which is right?",
-              choices: ["We ran home.", "we ran home.", "We ran home"],
+              question: "Which is a full sentence?",
+              choices: ["The cat sat.", "Sat on the mat.", "the cat sat."],
               answerIndex: 0,
             },
           ],
           [
             {
-              question: "Which is right?",
-              choices: ["dad cooked fish.", "Dad cooked fish", "Dad cooked fish."],
-              answerIndex: 2,
+              question: "Which is a full sentence?",
+              choices: ["Kicked the ball.", "Sam kicked the ball.", "the red ball"],
+              answerIndex: 1,
             },
             {
-              question: "Which is right?",
-              choices: ["I can hop.", "i can hop.", "I can hop"],
-              answerIndex: 0,
+              question: "Which is a full sentence?",
+              choices: ["Because it was cold.", "I wore a coat because it was cold.", "because cold"],
+              answerIndex: 1,
             },
           ],
           [
             {
-              question: "Which pair is fully finished?",
+              question: "Which is finished and complete?",
               choices: [
-                "I sat down. Then I read.",
-                "I sat down then I read",
-                "i sat down. then I read.",
+                "When the bell rang.",
+                "When the bell rang, we lined up.",
+                "lined up when",
               ],
-              answerIndex: 0,
+              answerIndex: 1,
             },
           ]
         ),
@@ -610,45 +646,45 @@ const EXTRA_WEEKS = [
   {
     id: "w17",
     week: 17,
-    title: "Check spelling and tense",
-    focus: "Proofread tricky words and past/present",
+    title: "Finish the thought",
+    focus: "Turn sentence fragments into full sentences",
     story: {
-      theme: "Yesterday or today",
-      text: "Yesterday we went to the park. My friend said it was fun. I stopped because I was tired. They were happy on the grass. Today I walk to school. Yesterday I went with Mum. My friend said we should go again. We went because it looked fun.",
+      theme: "Missing pieces",
+      text: "Running is not enough on its own. Who was running? The tiny frog on the log needs a verb. When the bell rang is only half a thought. Because I was tired needs a main action. A full sentence has who and what they did.",
       draftKey: "w17",
-      wordBank: ["said", "friend", "because", "went", "was", "were"],
+      wordBank: ["who", "verb", "missing", "finish", "thought", "sentence"],
     },
     activities: [
       {
         id: "w17-story",
         kind: "story",
-        title: "Read: Yesterday or today",
-        prompt: "Read the story. Watch tense and tricky spellings.",
+        title: "Read: Missing pieces",
+        prompt: "Read the story. Notice what a sentence needs before you fill gaps.",
         layers: L(
           [
             {
-              passage: "Yesterday we {{went}} to the park. My {{friend}} {{said}} it was fun.",
-              tip: "Yesterday pairs with past verbs: went, said.",
+              passage: "A full sentence needs {{who}} and a {{verb}}. A piece with only the action is not finished.",
+              tip: "Ask: who? what did they do? If either answer is missing, it is a fragment.",
             },
             {
-              passage: "I stopped {{because}} I {{was}} tired. They {{were}} happy.",
-              tip: "was for one, were for more than one. because needs careful spelling.",
-            },
-          ],
-          [
-            {
-              passage: "Today I walk to school. Yesterday I {{went}} with Mum.",
-              tip: "Keep the tense steady inside one past idea.",
-            },
-            {
-              passage: "My friend {{said}} we should go. We went {{because}} it looked fun.",
-              tip: "said and because are common careless spellings.",
+              passage: "Running is not enough. {{Who}} was running? Add the person, then the action.",
+              tip: "-ing lines often hide a missing who.",
             },
           ],
           [
             {
-              passage: "Yesterday my {{friend}} {{said}} we {{were}} late {{because}} the bus was full.",
-              tip: "One past story: said, were, was, because — matching the time.",
+              passage: "The tiny frog on the log needs a {{verb}}. Try sat, jumped or slept.",
+              tip: "A noun phrase alone is not a sentence until something happens.",
+            },
+            {
+              passage: "{{When}} the bell rang is only half a thought. Finish with what happened next.",
+              tip: "When / After / Because openers need a main idea after them.",
+            },
+          ],
+          [
+            {
+              passage: "I {{finish}} the thought. Then the {{sentence}} has who and did.",
+              tip: "Edit habit: if it cannot answer who + did, rebuild it.",
             },
           ]
         ),
@@ -656,58 +692,101 @@ const EXTRA_WEEKS = [
       {
         id: "w17-proof",
         kind: "proof",
-        title: "Find spelling or tense slips",
-        prompt: "Name the mistake, tap it, write the fixed sentence.",
+        title: "Fix the fragments",
+        prompt: "These lines are unfinished. Name the gap, tap it, rewrite a full sentence.",
         layers: L(
           [
             {
-              broken: "My frend said we can play.",
-              parts: ["My", "frend", "said", "we", "can", "play."],
-              brokenIndex: 1,
-              answer: "My friend said we can play.",
-              errorChoices: ["Wrong spelling", "Missing capital", "Wrong tense"],
+              broken: "Playing cards on the rug.",
+              parts: ["Playing cards on the rug."],
+              brokenIndex: 0,
+              answer: "We were playing cards on the rug.",
+              answers: [
+                "We were playing cards on the rug.",
+                "I was playing cards on the rug.",
+                "They were playing cards on the rug.",
+              ],
+              mustInclude: ["playing", "cards"],
+              minWords: 5,
+              errorChoices: ["Incomplete sentence (no who)", "Missing full stop", "Wrong spelling"],
               errorIndex: 0,
-              explain: "friend has ie in the middle: f-r-i-e-n-d.",
+              guide: "Playing… names an action. Who was playing?",
+              explain: "Add a who before the -ing action: We were playing…",
             },
             {
-              broken: "We go to the beach yesterday.",
-              parts: ["We", "go", "to", "the", "beach", "yesterday."],
-              brokenIndex: 1,
-              answer: "We went to the beach yesterday.",
-              errorChoices: ["Wrong tense", "Missing full stop", "Wrong adjective"],
+              broken: "The busy bee on the flower.",
+              parts: ["The busy bee on the flower."],
+              brokenIndex: 0,
+              answer: "The busy bee landed on the flower.",
+              answers: [
+                "The busy bee landed on the flower.",
+                "The busy bee sat on the flower.",
+                "The busy bee flew to the flower.",
+              ],
+              mustInclude: ["bee", "flower"],
+              minWords: 5,
+              errorChoices: ["Incomplete sentence (no verb)", "Missing capital", "Wrong adjective order"],
               errorIndex: 0,
-              explain: "Yesterday means past time, so use went, not go.",
-            },
-          ],
-          [
-            {
-              broken: "I stopped becos I was tired.",
-              parts: ["I", "stopped", "becos", "I", "was", "tired."],
-              brokenIndex: 2,
-              answer: "I stopped because I was tired.",
-              errorChoices: ["Wrong spelling", "Missing capital", "Wrong opener"],
-              errorIndex: 0,
-              explain: "because is be-cause — not the short form becos.",
-            },
-            {
-              broken: "They was happy after the game.",
-              parts: ["They", "was", "happy", "after", "the", "game."],
-              brokenIndex: 1,
-              answer: "They were happy after the game.",
-              errorChoices: ["Wrong tense helper", "Missing stop", "Wrong spelling of happy"],
-              errorIndex: 0,
-              explain: "They is more than one, so use were, not was.",
+              guide: "We have who (the busy bee) but nothing happens. Add a verb.",
+              explain: "A noun phrase needs an action: landed, sat, flew…",
             },
           ],
           [
             {
-              broken: "Yesterday my friend say we were late.",
-              parts: ["Yesterday", "my", "friend", "say", "we", "were", "late."],
-              brokenIndex: 3,
-              answer: "Yesterday my friend said we were late.",
-              errorChoices: ["Wrong tense", "Missing capital", "Wrong join"],
+              broken: "When the bell rang.",
+              parts: ["When the bell rang."],
+              brokenIndex: 0,
+              answer: "When the bell rang, we lined up.",
+              answers: [
+                "When the bell rang, we lined up.",
+                "When the bell rang, we went inside.",
+                "When the bell rang, I packed my bag.",
+                "The bell rang.",
+              ],
+              mustInclude: ["bell"],
+              minWords: 3,
+              errorChoices: ["Incomplete sentence (hanging when)", "Missing capital", "Wrong tense"],
               errorIndex: 0,
-              explain: "In the past, say becomes said.",
+              guide: "When… sets the time. What happened then?",
+              explain: "Finish the opener: When the bell rang, we lined up. Or make a short main sentence: The bell rang.",
+            },
+            {
+              broken: "After lunch.",
+              parts: ["After lunch."],
+              brokenIndex: 0,
+              answer: "After lunch we played outside.",
+              answers: [
+                "After lunch we played outside.",
+                "After lunch I read a book.",
+                "After lunch we lined up.",
+                "We played after lunch.",
+              ],
+              mustInclude: ["lunch"],
+              minWords: 3,
+              errorChoices: ["Incomplete sentence (hanging after)", "Missing full stop", "Wrong spelling"],
+              errorIndex: 0,
+              guide: "After lunch tells when — not what anyone did.",
+              explain: "Add who + did after the time: After lunch we played…",
+            },
+          ],
+          [
+            {
+              broken: "My friend on the bus.",
+              parts: ["My friend on the bus."],
+              brokenIndex: 0,
+              answer: "My friend sat on the bus.",
+              answers: [
+                "My friend sat on the bus.",
+                "My friend waved on the bus.",
+                "My friend was on the bus.",
+                "My friend rode on the bus.",
+              ],
+              mustInclude: ["friend", "bus"],
+              minWords: 5,
+              errorChoices: ["Incomplete sentence (no verb)", "Missing capital", "Wrong spelling of friend"],
+              errorIndex: 0,
+              guide: "Who is clear. What did your friend do?",
+              explain: "Add a verb between friend and the place: sat / waved / rode…",
             },
           ]
         ),
@@ -715,54 +794,42 @@ const EXTRA_WEEKS = [
       {
         id: "w17-choose",
         kind: "choose",
-        title: "Pick the careful sentence",
-        prompt: "Which sentence has the right spelling and tense?",
+        title: "Fragment or full sentence?",
+        prompt: "Pick the line that has who and what they did.",
         layers: L(
           [
             {
-              question: "Which is right?",
-              choices: [
-                "Yesterday we go to the shop.",
-                "Yesterday we went to the shop.",
-                "Yesterday we goed to the shop.",
-              ],
+              question: "Which is a full sentence?",
+              choices: ["Playing soccer after school.", "We were playing soccer after school.", "after school playing"],
               answerIndex: 1,
             },
             {
-              question: "Which is right?",
-              choices: [
-                "My frend said hello.",
-                "My friend said hello.",
-                "My friend say hello yesterday.",
-              ],
+              question: "Which is a full sentence?",
+              choices: ["The tiny frog on the log.", "The tiny frog sat on the log.", "on the log"],
               answerIndex: 1,
             },
           ],
           [
             {
-              question: "Which is right?",
-              choices: ["They was tired.", "They were tired.", "They is tired yesterday."],
+              question: "Which is a full sentence?",
+              choices: ["When the bell rang.", "When the bell rang, we lined up.", "When the bell"],
               answerIndex: 1,
             },
             {
-              question: "Which is right?",
-              choices: [
-                "I stopped becos I was full.",
-                "I stopped because I was full.",
-                "I stop because I were full.",
-              ],
+              question: "Which is a full sentence?",
+              choices: ["After lunch.", "After lunch we played.", "After"],
               answerIndex: 1,
             },
           ],
           [
             {
-              question: "Best past sentence?",
+              question: "Which finishes the thought?",
               choices: [
-                "Yesterday my friend said we were late because the bus was full.",
-                "Yesterday my friend say we was late becos the bus were full.",
-                "Yesterday my frend said we was late because the bus was full.",
+                "My friend on the bus.",
+                "My friend sat on the bus.",
+                "friend bus",
               ],
-              answerIndex: 0,
+              answerIndex: 1,
             },
           ]
         ),
@@ -770,28 +837,28 @@ const EXTRA_WEEKS = [
       {
         id: "w17-write",
         kind: "write",
-        title: "Write in one tense",
-        prompt: "Stay in the past. Spell friend, said, because carefully.",
+        title: "Write full sentences",
+        prompt: "Every line needs who and what they did. No hanging pieces.",
         rounds: [
           {
-            prompt: "Write two past-tense sentences about yesterday. Use went or said.",
-            starters: ["Yesterday I went ", "My friend said "],
+            prompt: "Write two sentences about play. Make sure each has who + did.",
+            starters: ["We played ", "My friend "],
           },
           {
-            prompt: "Write one sentence with because about something that already happened.",
-            starters: ["I stopped because ", "We left because "],
+            prompt: "Fix this idea into a full sentence, then write one more: Running to school.",
+            starters: ["I was running ", "Then I "],
           },
           {
-            prompt: "Write two sentences about a friend. Use friend and said correctly.",
-            starters: ["My friend ", "Then they said "],
+            prompt: "Write two sentences using When or After — finish both sides.",
+            starters: ["When the bell rang, ", "After lunch "],
           },
           {
-            prompt: "Write two sentences using were or was correctly.",
-            starters: ["I was ", "They were "],
+            prompt: "Write two sentences about a friend. No missing verbs.",
+            starters: ["My friend ", "Then they "],
           },
           {
-            prompt: "Write three past sentences about a trip. Keep the tense steady.",
-            starters: ["Yesterday we went ", "First we ", "We were "],
+            prompt: "Write three full sentences about yesterday. Check each has who + did.",
+            starters: ["Yesterday I ", "First we ", "We "],
           },
         ],
       },
@@ -801,12 +868,12 @@ const EXTRA_WEEKS = [
     id: "w18",
     week: 18,
     title: "The full edit pass",
-    focus: "Proofread mixed careless mistakes",
+    focus: "Fragments, gates, and mixed careless slips",
     story: {
       theme: "Polish the page",
-      text: "I wrote about a trip to the zoo. First I check capitals. Next I check stops. Then I fix spelling. I look for wrong tense words. When I fix a line, I read it out loud. I check friend and because. I check, I fix, then I read again.",
+      text: "I wrote about a trip to the zoo. First I check for unfinished thoughts. Does every line have who and did? Next I check capitals and stops. Then I fix spelling. When I fix a line, I read it out loud. I check, I fix, then I read again.",
       draftKey: "w18",
-      wordBank: ["check", "fix", "capital", "stop", "tense", "spelling"],
+      wordBank: ["check", "fix", "who", "verb", "stop", "finish"],
     },
     activities: [
       {
@@ -817,22 +884,22 @@ const EXTRA_WEEKS = [
         layers: L(
           [
             {
-              passage: "First I {{check}} capitals. Next I {{check}} stops. Then I {{fix}} spelling.",
-              tip: "Edit order: gates first, then spelling and tense.",
+              passage: "First I {{check}} for unfinished thoughts. Does every line have {{who}} and a verb?",
+              tip: "Edit order: finish fragments first, then gates and spelling.",
             },
             {
-              passage: "I look for wrong {{tense}}. I look for missing {{capital}} letters.",
-              tip: "Careless writing often slips on tense and capitals together.",
+              passage: "Next I {{check}} capitals and {{stop}}s. Then I {{fix}} what still looks wrong.",
+              tip: "Careless writing often has a fragment and a missing stop together.",
             },
           ],
           [
             {
-              passage: "When I {{fix}} a line, I read it out loud. A missing {{stop}} is easier to hear.",
-              tip: "Reading aloud catches what your eye skips.",
+              passage: "When I {{fix}} a line, I read it out loud. A missing {{who}} is easier to hear.",
+              tip: "Reading aloud catches pieces that are not full sentences.",
             },
             {
-              passage: "I {{check}} friend and because. Those {{spelling}} traps appear a lot.",
-              tip: "Keep a short list of trap words and check them every time.",
+              passage: "I {{check}} hanging When and Because. Those openers need a {{finish}}.",
+              tip: "If the line only sets time or reason, rebuild it.",
             },
           ],
           [
@@ -847,57 +914,84 @@ const EXTRA_WEEKS = [
         id: "w18-proof",
         kind: "proof",
         title: "Mixed proofreading",
-        prompt: "Any careless slip can hide here. Name it, tap it, fix it.",
+        prompt: "Fragments and careless slips mix here. Name it, tap it, fix it.",
         layers: L(
           [
+            {
+              broken: "Went to the zoo with Mum.",
+              parts: ["Went to the zoo with Mum."],
+              brokenIndex: 0,
+              answer: "I went to the zoo with Mum.",
+              answers: [
+                "I went to the zoo with Mum.",
+                "We went to the zoo with Mum.",
+                "Sam went to the zoo with Mum.",
+              ],
+              mustInclude: ["went", "zoo"],
+              minWords: 5,
+              errorChoices: ["Incomplete sentence (no who)", "Missing full stop", "Wrong spelling"],
+              errorIndex: 0,
+              guide: "The action is clear. Who went?",
+              explain: "Start with who: I went… / We went… A past verb still needs a subject.",
+            },
             {
               broken: "after lunch we runned to the oval.",
               parts: ["after", "lunch", "we", "runned", "to", "the", "oval."],
               brokenIndex: 0,
               answer: "After lunch we ran to the oval.",
-              errorChoices: ["Missing capital (and wrong tense)", "Missing full stop only", "Wrong adjective"],
+              errorChoices: ["Missing capital (and wrong tense)", "Incomplete sentence", "Wrong adjective"],
               errorIndex: 0,
+              guide: "This one has who + did, but the start and the verb need care.",
               explain: "After needs a capital, and the past of run is ran, not runned.",
+            },
+          ],
+          [
+            {
+              broken: "Eating lunch under the tree.",
+              parts: ["Eating lunch under the tree."],
+              brokenIndex: 0,
+              answer: "We were eating lunch under the tree.",
+              answers: [
+                "We were eating lunch under the tree.",
+                "I was eating lunch under the tree.",
+                "Mum was eating lunch under the tree.",
+              ],
+              mustInclude: ["eating", "lunch"],
+              minWords: 5,
+              errorChoices: ["Incomplete sentence (no who)", "Missing capital", "Wrong tense"],
+              errorIndex: 0,
+              guide: "Eating… is an -ing piece. Add who was eating.",
+              explain: "Turn the fragment into who + was/were + eating…",
             },
             {
               broken: "My friend say we can go",
               parts: ["My", "friend", "say", "we", "can", "go"],
               brokenIndex: 2,
               answer: "My friend said we can go.",
-              errorChoices: ["Wrong tense", "Missing capital", "Wrong spelling of friend"],
+              errorChoices: ["Wrong tense", "Incomplete sentence", "Missing capital"],
               errorIndex: 0,
+              guide: "Who and idea are here. Check the verb and the end stop.",
               explain: "If the talking already happened, use said. Add the full stop when you rewrite.",
             },
           ],
           [
             {
-              broken: "they was tired becos the walk was long.",
-              parts: ["they", "was", "tired", "becos", "the", "walk", "was", "long."],
+              broken: "Because the bus was full.",
+              parts: ["Because the bus was full."],
               brokenIndex: 0,
-              answer: "They were tired because the walk was long.",
-              errorChoices: ["Capital, were, and because", "Only a missing stop", "Wrong opener"],
+              answer: "We were late because the bus was full.",
+              answers: [
+                "We were late because the bus was full.",
+                "I was late because the bus was full.",
+                "They waited because the bus was full.",
+                "The bus was full.",
+              ],
+              mustInclude: ["bus"],
+              minWords: 3,
+              errorChoices: ["Incomplete sentence (hanging because)", "Missing capital", "Wrong spelling"],
               errorIndex: 0,
-              explain: "They needs a capital, were matches they, and because is the full spelling.",
-            },
-            {
-              broken: "When the bell ring we line up.",
-              parts: ["When", "the", "bell", "ring", "we", "line", "up."],
-              brokenIndex: 3,
-              answer: "When the bell rang we lined up.",
-              errorChoices: ["Wrong tense", "Missing capital", "Missing question mark"],
-              errorIndex: 0,
-              explain: "Keep the whole sentence in the past if the moment is over: rang, lined.",
-            },
-          ],
-          [
-            {
-              broken: "yesterday i go to see my frend",
-              parts: ["yesterday", "i", "go", "to", "see", "my", "frend"],
-              brokenIndex: 0,
-              answer: "Yesterday I went to see my friend.",
-              errorChoices: ["Capitals, tense, spelling, and stop", "Only spelling", "Only a missing stop"],
-              errorIndex: 0,
-              explain: "A full edit pass fixes Yesterday, I, went, friend, and the final full stop together.",
+              guide: "Because… gives a reason. What happened because of it?",
+              explain: "Add the main idea first, or drop because: The bus was full.",
             },
           ]
         ),
@@ -910,6 +1004,15 @@ const EXTRA_WEEKS = [
         layers: L(
           [
             {
+              question: "Which is a full, careful sentence?",
+              choices: [
+                "Went to the zoo with Mum.",
+                "I went to the zoo with Mum.",
+                "to the zoo with Mum",
+              ],
+              answerIndex: 1,
+            },
+            {
               question: "Which is right?",
               choices: [
                 "after lunch we runned outside",
@@ -918,43 +1021,34 @@ const EXTRA_WEEKS = [
               ],
               answerIndex: 1,
             },
+          ],
+          [
+            {
+              question: "Which is a full sentence?",
+              choices: [
+                "Eating lunch under the tree.",
+                "We were eating lunch under the tree.",
+                "under the tree eating",
+              ],
+              answerIndex: 1,
+            },
             {
               question: "Which is right?",
               choices: [
-                "My frend say we was late.",
-                "My friend said we were late.",
-                "my friend said we were late",
+                "Because the bus was full.",
+                "We were late because the bus was full.",
+                "because bus full",
               ],
               answerIndex: 1,
             },
           ],
           [
             {
-              question: "Which is right?",
-              choices: [
-                "I stopped because I was tired.",
-                "I stopped becos I were tired.",
-                "i stopped because I was tired",
-              ],
-              answerIndex: 0,
-            },
-            {
-              question: "Which is right?",
+              question: "Best edited line?",
               choices: [
                 "When the bell rang, we lined up.",
-                "When the bell ring, we line up yesterday.",
+                "When the bell rang.",
                 "when the bell rang we lined up",
-              ],
-              answerIndex: 0,
-            },
-          ],
-          [
-            {
-              question: "Best edited lines?",
-              choices: [
-                "Yesterday I went to see my friend. We were happy because the sun was out.",
-                "yesterday i go to see my frend we was happy becos the sun was out",
-                "Yesterday I go to see my friend. We was happy because the sun was out.",
               ],
               answerIndex: 0,
             },
@@ -968,19 +1062,19 @@ const EXTRA_WEEKS = [
         prompt: "Write, then do a full edit pass before I'm done.",
         rounds: [
           {
-            prompt: "Write three sentences about yesterday. Then edit capitals, stops, tense, and spelling.",
+            prompt: "Write three sentences about yesterday. Check each has who + did, then edit.",
             starters: ["Yesterday ", "First ", "We were "],
           },
           {
-            prompt: "Write three sentences about a friend. Edit friend, said, and because if you use them.",
-            starters: ["My friend ", "They said ", "I smiled because "],
+            prompt: "Turn this fragment into a full sentence, then write two more: Running to the gate.",
+            starters: ["I was running ", "Then ", "We "],
           },
           {
             prompt: "Write three sentences about school. Use one opener like When or After, then edit.",
             starters: ["When the bell rang, ", "After lunch, ", "I "],
           },
           {
-            prompt: "Write a short paragraph (4 sentences) about a trip. Full edit pass.",
+            prompt: "Write a short paragraph (4 sentences) about a trip. No unfinished thoughts.",
             starters: ["Yesterday we went ", "First ", "Then ", "I felt "],
           },
           {
