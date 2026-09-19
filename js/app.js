@@ -475,13 +475,16 @@ function renderWritingHome() {
 function renderMathHome() {
   const done = mathDone();
   const total = mathTotal();
-  const timesPacks = MATH.filter((pack) => pack.track !== "add");
+  const timesPacks = MATH.filter((pack) => pack.track === "times");
   const addPacks = MATH.filter((pack) => pack.track === "add");
+  const tutorPacks = MATH.filter((pack) => pack.track === "money" || pack.track === "balance");
   const next = MATH.find((pack) => questionsDoneFlat(pack) < roundsOf(pack).length) || MATH[0];
   const greeting = state.name ? `Hi ${escapeHtml(state.name)}.` : "Maths practice.";
   const percent = Math.round((done / total) * 100) || 0;
   const addDone = addPacks.reduce((sum, pack) => sum + questionsDoneFlat(pack), 0);
   const addTotal = addPacks.reduce((sum, pack) => sum + roundsOf(pack).length, 0);
+  const tutorDone = tutorPacks.reduce((sum, pack) => sum + questionsDoneFlat(pack), 0);
+  const tutorTotal = tutorPacks.reduce((sum, pack) => sum + roundsOf(pack).length, 0);
 
   function packCards(packs) {
     return packs
@@ -511,10 +514,10 @@ function renderMathHome() {
     </header>
     ${subjectTabs()}
     <section class="hero">
-      <p class="crumb">Maths · multiplication & addition</p>
+      <p class="crumb">Maths · multiplication, addition & tutor practice</p>
       <h1>${greeting}</h1>
       <p class="lede">
-        Short times-tables missions, plus a separate adding practice for 2- and 3-digit sums.
+        Short times-tables missions, adding practice, plus making change and balancing scales from tutoring.
         No timers — clear first, fast later.
       </p>
       <div class="name-row">
@@ -540,6 +543,16 @@ function renderMathHome() {
     </div>
     <div class="week-grid">
       ${packCards(addPacks)}
+    </div>
+    <div class="block-title">
+      <h2>Tutor practice</h2>
+      <p>
+        Making change and balancing scales — the kinds of drills from tutoring.
+        ${tutorDone} of ${tutorTotal} done.
+      </p>
+    </div>
+    <div class="week-grid">
+      ${packCards(tutorPacks)}
     </div>
   `;
 }
@@ -712,6 +725,8 @@ function renderActivity() {
     match: renderMatch,
     path: renderPath,
     sum: renderSum,
+    change: renderChange,
+    balance: renderBalance,
   }[activity.kind](round);
 
   let crumb;
@@ -1094,6 +1109,109 @@ function renderSum(round) {
   `;
 }
 
+function formatMoneyCents(cents) {
+  if (cents < 100) return `${cents}¢`;
+  const dollars = (cents / 100).toFixed(2);
+  return `$${dollars}`;
+}
+
+function parseMoneyToCents(raw) {
+  const text = String(raw || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "")
+    .replace(/,/g, "");
+  if (!text) return null;
+  if (/^\d+¢$/.test(text) || /^\d+c$/.test(text)) {
+    return Number(text.replace(/[¢c]/g, ""));
+  }
+  if (/^\$?\d+\.\d{1,2}$/.test(text)) {
+    const num = Number(text.replace("$", ""));
+    return Math.round(num * 100);
+  }
+  if (/^\$\d+$/.test(text)) {
+    return Number(text.slice(1)) * 100;
+  }
+  if (/^\d+$/.test(text)) {
+    const n = Number(text);
+    return n;
+  }
+  return null;
+}
+
+function renderChange(round) {
+  const costLabel = formatMoneyCents(round.costCents);
+  const paidLabel = formatMoneyCents(round.paidCents);
+  return `
+    <p class="hint">Buy something, pay with a round amount, and work out the change.</p>
+    <div class="change-card" aria-label="buy for ${costLabel}, pay ${paidLabel}">
+      <div class="change-row">
+        <span class="change-label">If you buy something for</span>
+        <strong class="change-amount">${escapeHtml(costLabel)}</strong>
+      </div>
+      <div class="change-row">
+        <span class="change-label">How much change from</span>
+        <strong class="change-amount">${escapeHtml(paidLabel)}?</strong>
+      </div>
+      <label class="sum-label" for="change-answer">Amount of change</label>
+      <input id="change-answer" class="sum-answer change-answer" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="?" aria-label="type the change" />
+      <p class="hint change-tip">You can type cents like 36 or 36¢, or dollars like $0.36.</p>
+    </div>
+  `;
+}
+
+function renderBalanceShape(item, index, side) {
+  const known = item.value !== null && item.value !== undefined;
+  const label = `${item.shape} on ${side}`;
+  const valueHtml = known
+    ? `<span class="balance-value">${item.value}</span>`
+    : `<input
+        class="balance-input"
+        type="text"
+        inputmode="numeric"
+        autocomplete="off"
+        spellcheck="false"
+        data-shape="${item.shape}"
+        data-side="${side}"
+        data-index="${index}"
+        placeholder="?"
+        aria-label="number for ${label}"
+      />`;
+  const outline =
+    item.shape === "triangle"
+      ? `<svg class="balance-outline" viewBox="0 0 64 54" aria-hidden="true"><polygon points="32,4 60,50 4,50" /></svg>`
+      : "";
+  return `
+    <div class="balance-shape ${item.shape}${known ? "" : " blank"}" data-side="${side}" data-index="${index}" aria-label="${label}${known ? ` ${item.value}` : ""}">
+      ${outline}
+      ${valueHtml}
+    </div>
+  `;
+}
+
+function renderBalanceStack(items, side) {
+  return `
+    <div class="balance-stack" data-side="${side}" aria-label="${side} side of the scale">
+      ${items.map((item, index) => renderBalanceShape(item, index, side)).join("")}
+    </div>
+  `;
+}
+
+function renderBalance(round) {
+  return `
+    <p class="hint">Each shape in this problem must be the same number. Fill the blanks so the scale stays in balance.</p>
+    <div class="balance-board" aria-label="balance scale">
+      <div class="balance-beam">
+        ${renderBalanceStack(round.left, "left")}
+        <div class="balance-fulcrum" aria-hidden="true"></div>
+        ${renderBalanceStack(round.right, "right")}
+      </div>
+      <div class="balance-base" aria-hidden="true"></div>
+    </div>
+    <p class="hint">Same shapes share a number. Left total = right total.</p>
+  `;
+}
+
 function renderWrite(round) {
   const starters = (round.starters || [])
     .map(
@@ -1446,6 +1564,101 @@ function checkSum(round) {
   return true;
 }
 
+function checkChange(round) {
+  const input = document.getElementById("change-answer");
+  const raw = input ? input.value.trim() : "";
+  if (!raw) {
+    setFeedback(false, "Type the change first.");
+    return false;
+  }
+  const value = parseMoneyToCents(raw);
+  if (value === null) {
+    setFeedback(false, "Try an amount like 36, 36¢, or $0.36.");
+    return false;
+  }
+  if (value !== round.answerCents) {
+    setFeedback(
+      false,
+      `Not yet. Change is what you paid minus what you spent (${formatMoneyCents(round.paidCents)} − ${formatMoneyCents(round.costCents)}).`
+    );
+    return false;
+  }
+  setFeedback(
+    true,
+    `Yes — ${formatMoneyCents(round.paidCents)} − ${formatMoneyCents(round.costCents)} = ${formatMoneyCents(round.answerCents)}.`
+  );
+  return true;
+}
+
+function readBalanceValues(round) {
+  const values = { left: [], right: [] };
+  ["left", "right"].forEach((side) => {
+    round[side].forEach((item, index) => {
+      if (item.value !== null && item.value !== undefined) {
+        values[side][index] = item.value;
+        return;
+      }
+      const input = document.querySelector(`.balance-input[data-side="${side}"][data-index="${index}"]`);
+      const raw = input ? input.value.trim() : "";
+      if (!raw) {
+        values[side][index] = null;
+        return;
+      }
+      if (!/^\d+$/.test(raw)) {
+        values[side][index] = NaN;
+        return;
+      }
+      values[side][index] = Number(raw);
+    });
+  });
+  return values;
+}
+
+function checkBalance(round) {
+  const values = readBalanceValues(round);
+  const all = [...values.left, ...values.right];
+  if (all.some((value) => value === null)) {
+    setFeedback(false, "Fill every blank shape first.");
+    return false;
+  }
+  if (all.some((value) => Number.isNaN(value))) {
+    setFeedback(false, "Use whole numbers in the shapes.");
+    return false;
+  }
+  if (all.some((value) => value < 1)) {
+    setFeedback(false, "Use numbers of 1 or more in the shapes.");
+    return false;
+  }
+
+  const byShape = {};
+  ["left", "right"].forEach((side) => {
+    round[side].forEach((item, index) => {
+      const num = values[side][index];
+      if (!byShape[item.shape]) byShape[item.shape] = [];
+      byShape[item.shape].push(num);
+    });
+  });
+
+  for (const [shapeName, nums] of Object.entries(byShape)) {
+    const first = nums[0];
+    if (nums.some((num) => num !== first)) {
+      setFeedback(false, `Every ${shapeName} must be the same number.`);
+      return false;
+    }
+  }
+
+  const leftTotal = values.left.reduce((sum, num) => sum + num, 0);
+  const rightTotal = values.right.reduce((sum, num) => sum + num, 0);
+  if (leftTotal !== rightTotal) {
+    setFeedback(false, `Not balanced yet. Left is ${leftTotal}, right is ${rightTotal}.`);
+    return false;
+  }
+
+  document.querySelectorAll(".balance-shape.blank").forEach((node) => node.classList.add("correct"));
+  setFeedback(true, `Balanced — both sides equal ${leftTotal}.`);
+  return true;
+}
+
 function coachChecks(value) {
   return [
     { id: "capital", label: "Starts with a capital letter", ok: /^[A-Z]/.test(value) },
@@ -1566,6 +1779,8 @@ function checkCurrent() {
     match: checkMatch,
     path: checkPath,
     sum: checkSum,
+    change: checkChange,
+    balance: checkBalance,
   };
   const ok = checkers[activity.kind](round);
   if (!ok) {
@@ -1831,6 +2046,37 @@ function bind() {
         checkCurrent();
       }
     };
+  }
+
+  const changeAnswer = document.getElementById("change-answer");
+  if (changeAnswer) {
+    changeAnswer.focus();
+    changeAnswer.onkeydown = (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        checkCurrent();
+      }
+    };
+  }
+
+  const balanceInputs = document.querySelectorAll(".balance-input");
+  if (balanceInputs.length) {
+    balanceInputs[0].focus();
+    balanceInputs.forEach((input) => {
+      input.oninput = () => {
+        const shapeName = input.dataset.shape;
+        const value = input.value;
+        document.querySelectorAll(`.balance-input[data-shape="${shapeName}"]`).forEach((peer) => {
+          if (peer !== input) peer.value = value;
+        });
+      };
+      input.onkeydown = (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          checkCurrent();
+        }
+      };
+    });
   }
 
   document.querySelectorAll(".story-chip").forEach((chip) => {

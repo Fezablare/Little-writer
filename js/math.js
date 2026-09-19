@@ -42,6 +42,26 @@ function storyChoose(question, a, b, distractors) {
   };
 }
 
+function changeRound(costCents, paidCents) {
+  return {
+    costCents,
+    paidCents,
+    answerCents: paidCents - costCents,
+  };
+}
+
+function thinkChoose(question, choices, answerIndex) {
+  return { question, choices, answerIndex };
+}
+
+function shape(kind, value) {
+  return { shape: kind, value };
+}
+
+function balanceRound(left, right) {
+  return { left, right };
+}
+
 const MATH = [
   packMath(
     "m-3-see",
@@ -410,5 +430,147 @@ const MATH = [
       sumRound(567, 189),
     ],
     "add"
+  ),
+  packMath(
+    "m-change-cent",
+    "Change from $1",
+    "Money",
+    "change",
+    "You buy something for less than a dollar. How much change from $1.00?",
+    [
+      changeRound(64, 100),
+      changeRound(45, 100),
+      changeRound(21, 100),
+      changeRound(39, 100),
+      changeRound(72, 100),
+      changeRound(18, 100),
+      changeRound(53, 100),
+      changeRound(87, 100),
+    ],
+    "money"
+  ),
+  packMath(
+    "m-change-dollar",
+    "Change from dollars",
+    "Money",
+    "change",
+    "You pay with a round dollar amount. Type how much change you get back.",
+    [
+      changeRound(588, 600),
+      changeRound(267, 300),
+      changeRound(453, 500),
+      changeRound(116, 200),
+      changeRound(375, 400),
+      changeRound(809, 900),
+      changeRound(142, 200),
+      changeRound(691, 700),
+    ],
+    "money"
+  ),
+  packMath(
+    "m-change-think",
+    "Change · think",
+    "Money",
+    "choose",
+    "Think about spending and change. Tap the idea that is true.",
+    [
+      thinkChoose(
+        "What is the relationship between the amount you spend and the amount of change you get back from a dollar?",
+        [
+          "The more you spend, the more change you get back from a dollar.",
+          "The more you spend, the less change you get back from a dollar.",
+        ],
+        1
+      ),
+      thinkChoose(
+        "You buy a sticker for 20¢ and another for 80¢. Both times you pay with $1.00. Which gives more change?",
+        ["The 20¢ sticker", "The 80¢ sticker", "They give the same change"],
+        0
+      ),
+      thinkChoose(
+        "A toy costs 55¢. You pay with $1.00. How much change should you get?",
+        ["55¢", "45¢", "$1.55"],
+        1
+      ),
+      thinkChoose(
+        "Something costs $3.40. You pay with $4.00. What is the change?",
+        ["60¢", "40¢", "$1.40"],
+        0
+      ),
+      thinkChoose(
+        "If you spend almost a whole dollar, the change from $1.00 is…",
+        ["almost a dollar too", "a small amount", "more than a dollar"],
+        1
+      ),
+    ],
+    "money"
+  ),
+  packMath(
+    "m-balance-find",
+    "Balance · find it",
+    "Balance",
+    "balance",
+    "Each shape in a problem is the same number. Fill the blank shapes so the scale stays in balance.",
+    [
+      balanceRound(
+        [shape("square", 5), shape("square", 5), shape("square", 5), shape("square", 5)],
+        [shape("triangle", 18), shape("circle", null)]
+      ),
+      balanceRound(
+        [shape("square", 6), shape("square", 6)],
+        [shape("triangle", 2), shape("circle", null), shape("circle", null)]
+      ),
+      balanceRound(
+        [shape("square", 9), shape("square", 9)],
+        [shape("triangle", 3), shape("circle", null), shape("circle", null), shape("circle", null)]
+      ),
+      balanceRound(
+        [shape("square", 4), shape("square", 4), shape("square", 4)],
+        [shape("triangle", 6), shape("circle", null), shape("circle", null)]
+      ),
+      balanceRound(
+        [shape("square", 8), shape("square", 8)],
+        [shape("triangle", 10), shape("circle", null), shape("circle", null)]
+      ),
+      balanceRound(
+        [shape("square", 7), shape("square", 7), shape("square", 7)],
+        [shape("triangle", 15), shape("circle", null), shape("circle", null)]
+      ),
+    ],
+    "balance"
+  ),
+  packMath(
+    "m-balance-fill",
+    "Balance · fill it",
+    "Balance",
+    "balance",
+    "Fill every blank shape. Same shapes share a number. Left total must equal right total.",
+    [
+      balanceRound(
+        [shape("square", null), shape("square", null), shape("square", null), shape("square", null)],
+        [shape("triangle", 16), shape("circle", 4)]
+      ),
+      balanceRound(
+        [shape("square", 5), shape("square", 5)],
+        [shape("triangle", null), shape("circle", 3), shape("circle", 3)]
+      ),
+      balanceRound(
+        [shape("square", null), shape("square", null)],
+        [shape("triangle", 4), shape("circle", 6), shape("circle", 6)]
+      ),
+      balanceRound(
+        [shape("square", 10), shape("square", 10)],
+        [shape("triangle", null), shape("circle", null), shape("circle", null)]
+      ),
+      balanceRound(
+        [shape("square", 3), shape("square", 3), shape("square", 3)],
+        [shape("triangle", null), shape("circle", 2), shape("circle", 2)]
+      ),
+      balanceRound(
+        [shape("square", null), shape("square", null), shape("square", null)],
+        [shape("triangle", 9), shape("circle", null), shape("circle", null)]
+      ),
+    ],
+    "balance"
   ),
 ];
