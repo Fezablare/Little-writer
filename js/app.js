@@ -1624,6 +1624,10 @@ function checkBalance(round) {
     setFeedback(false, "Use whole numbers in the shapes.");
     return false;
   }
+  if (all.some((value) => value < 1)) {
+    setFeedback(false, "Use numbers of 1 or more in the shapes.");
+    return false;
+  }
 
   const byShape = {};
   ["left", "right"].forEach((side) => {

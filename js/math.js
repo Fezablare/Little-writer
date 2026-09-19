@@ -526,7 +526,7 @@ const MATH = [
       ),
       balanceRound(
         [shape("square", 4), shape("square", 4), shape("square", 4)],
-        [shape("triangle", 7), shape("circle", null), shape("circle", null)]
+        [shape("triangle", 6), shape("circle", null), shape("circle", null)]
       ),
       balanceRound(
         [shape("square", 8), shape("square", 8)],
