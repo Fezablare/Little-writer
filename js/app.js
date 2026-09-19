@@ -1163,16 +1163,9 @@ function renderChange(round) {
 function renderBalanceShape(item, index, side) {
   const known = item.value !== null && item.value !== undefined;
   const label = `${item.shape} on ${side}`;
-  if (known) {
-    return `
-      <div class="balance-shape ${item.shape}" data-side="${side}" data-index="${index}" aria-label="${label} ${item.value}">
-        <span>${item.value}</span>
-      </div>
-    `;
-  }
-  return `
-    <div class="balance-shape ${item.shape} blank" data-side="${side}" data-index="${index}" aria-label="${label}">
-      <input
+  const valueHtml = known
+    ? `<span class="balance-value">${item.value}</span>`
+    : `<input
         class="balance-input"
         type="text"
         inputmode="numeric"
@@ -1183,7 +1176,15 @@ function renderBalanceShape(item, index, side) {
         data-index="${index}"
         placeholder="?"
         aria-label="number for ${label}"
-      />
+      />`;
+  const outline =
+    item.shape === "triangle"
+      ? `<svg class="balance-outline" viewBox="0 0 64 54" aria-hidden="true"><polygon points="32,4 60,50 4,50" /></svg>`
+      : "";
+  return `
+    <div class="balance-shape ${item.shape}${known ? "" : " blank"}" data-side="${side}" data-index="${index}" aria-label="${label}${known ? ` ${item.value}` : ""}">
+      ${outline}
+      ${valueHtml}
     </div>
   `;
 }

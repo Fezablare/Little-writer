@@ -1099,6 +1099,7 @@ p {
 }
 
 .balance-shape {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1131,9 +1132,40 @@ p {
   min-width: 64px;
   min-height: 54px;
   border: none;
-  border-radius: 0;
-  background: #ffe08a;
-  clip-path: polygon(50% 6%, 4% 96%, 96% 96%);
+  background: transparent;
+  padding: 0;
+}
+
+.balance-outline {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: #fff8dc;
+  stroke: var(--leaf);
+  stroke-width: 2.5;
+}
+
+.balance-shape.triangle.blank .balance-outline {
+  fill: var(--cream);
+  stroke-dasharray: 4 3;
+}
+
+.balance-shape.triangle.correct .balance-outline {
+  fill: #fff3c4;
+  stroke: var(--leaf);
+  stroke-dasharray: none;
+}
+
+.balance-shape .balance-value,
+.balance-shape .balance-input {
+  position: relative;
+  z-index: 1;
+}
+
+.balance-shape.triangle .balance-value,
+.balance-shape.triangle .balance-input {
+  margin-top: 10px;
 }
 
 .balance-shape.blank {
@@ -1142,7 +1174,7 @@ p {
 }
 
 .balance-shape.triangle.blank {
-  background: #fff3c4;
+  background: transparent;
 }
 
 .balance-shape.correct {
@@ -1152,7 +1184,7 @@ p {
 }
 
 .balance-shape.triangle.correct {
-  background: #f0c94d;
+  background: transparent;
 }
 
 .balance-input {
