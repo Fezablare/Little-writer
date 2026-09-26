@@ -865,6 +865,10 @@ p {
   color: var(--leaf-deep);
 }
 
+.sum-times {
+  font-size: 0.9em;
+}
+
 .sum-rule {
   height: 3px;
   background: var(--ink);

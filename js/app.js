@@ -231,12 +231,20 @@ function openScrambleLesson() {
   render();
 }
 
+function reshuffleMemoryPack(pack) {
+  if (!pack || pack.kind !== "product" || !pack.rounds) return;
+  pack.rounds = shuffleList(pack.rounds);
+}
+
 function openMath(id) {
   state.weekId = null;
   state.activityId = null;
   state.scrambleId = null;
   state.subject = "maths";
   state.mathId = id;
+  const pack = MATH.find((item) => item.id === id);
+  const startingFresh = Boolean(state.completed[id]) || !(state.progress[id]);
+  if (startingFresh) reshuffleMemoryPack(pack);
   state.view = "activity";
   startQuestion(id);
   render();
@@ -476,11 +484,14 @@ function renderMathHome() {
   const done = mathDone();
   const total = mathTotal();
   const timesPacks = MATH.filter((pack) => pack.track === "times");
+  const memoryPacks = MATH.filter((pack) => pack.track === "memory");
   const addPacks = MATH.filter((pack) => pack.track === "add");
   const tutorPacks = MATH.filter((pack) => pack.track === "money" || pack.track === "balance");
   const next = MATH.find((pack) => questionsDoneFlat(pack) < roundsOf(pack).length) || MATH[0];
   const greeting = state.name ? `Hi ${escapeHtml(state.name)}.` : "Maths practice.";
   const percent = Math.round((done / total) * 100) || 0;
+  const memoryDone = memoryPacks.reduce((sum, pack) => sum + questionsDoneFlat(pack), 0);
+  const memoryTotal = memoryPacks.reduce((sum, pack) => sum + roundsOf(pack).length, 0);
   const addDone = addPacks.reduce((sum, pack) => sum + questionsDoneFlat(pack), 0);
   const addTotal = addPacks.reduce((sum, pack) => sum + roundsOf(pack).length, 0);
   const tutorDone = tutorPacks.reduce((sum, pack) => sum + questionsDoneFlat(pack), 0);
@@ -517,7 +528,7 @@ function renderMathHome() {
       <p class="crumb">Maths · multiplication, addition & tutor practice</p>
       <h1>${greeting}</h1>
       <p class="lede">
-        Short times-tables missions, adding practice, plus making change and balancing scales from tutoring.
+        Short times-tables missions, memory facts for 2s–5s, adding practice, plus making change and balancing scales.
         No timers — clear first, fast later.
       </p>
       <div class="name-row">
@@ -533,6 +544,16 @@ function renderMathHome() {
     </div>
     <div class="week-grid">
       ${packCards(timesPacks)}
+    </div>
+    <div class="block-title">
+      <h2>Memory practice</h2>
+      <p>
+        Type the answer for ×2, ×3, ×4 and ×5 up to ×10. Facts are shuffled so counting on will not help.
+        ${memoryDone} of ${memoryTotal} done.
+      </p>
+    </div>
+    <div class="week-grid">
+      ${packCards(memoryPacks)}
     </div>
     <div class="block-title">
       <h2>Addition practice</h2>
@@ -725,6 +746,7 @@ function renderActivity() {
     match: renderMatch,
     path: renderPath,
     sum: renderSum,
+    product: renderProduct,
     change: renderChange,
     balance: renderBalance,
   }[activity.kind](round);
@@ -1105,6 +1127,19 @@ function renderSum(round) {
       <div class="sum-rule" aria-hidden="true"></div>
       <label class="sum-label" for="sum-answer">Total</label>
       <input id="sum-answer" class="sum-answer" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" placeholder="?" aria-label="type the total" />
+    </div>
+  `;
+}
+
+function renderProduct(round) {
+  return `
+    <p class="hint">Say the fact in your head. Type the answer — no counting on.</p>
+    <div class="sum-card product-card" aria-label="${round.a} times ${round.b}">
+      <div class="sum-line">${round.a}</div>
+      <div class="sum-line"><span class="sum-plus sum-times">×</span>${round.b}</div>
+      <div class="sum-rule" aria-hidden="true"></div>
+      <label class="sum-label" for="product-answer">Answer</label>
+      <input id="product-answer" class="sum-answer" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" placeholder="?" aria-label="type the product" />
     </div>
   `;
 }
@@ -1564,6 +1599,26 @@ function checkSum(round) {
   return true;
 }
 
+function checkProduct(round) {
+  const input = document.getElementById("product-answer");
+  const raw = input ? input.value.trim() : "";
+  if (!raw) {
+    setFeedback(false, "Type the answer first.");
+    return false;
+  }
+  if (!/^\d+$/.test(raw)) {
+    setFeedback(false, "Use digits only for the answer.");
+    return false;
+  }
+  const value = Number(raw);
+  if (value !== round.answer) {
+    setFeedback(false, `Not yet. Think ${round.a} groups of ${round.b}.`);
+    return false;
+  }
+  setFeedback(true, `Yes — ${round.a} × ${round.b} = ${round.answer}.`);
+  return true;
+}
+
 function checkChange(round) {
   const input = document.getElementById("change-answer");
   const raw = input ? input.value.trim() : "";
@@ -1779,6 +1834,7 @@ function checkCurrent() {
     match: checkMatch,
     path: checkPath,
     sum: checkSum,
+    product: checkProduct,
     change: checkChange,
     balance: checkBalance,
   };
@@ -2041,6 +2097,17 @@ function bind() {
   if (sumAnswer) {
     sumAnswer.focus();
     sumAnswer.onkeydown = (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        checkCurrent();
+      }
+    };
+  }
+
+  const productAnswer = document.getElementById("product-answer");
+  if (productAnswer) {
+    productAnswer.focus();
+    productAnswer.onkeydown = (event) => {
       if (event.key === "Enter") {
         event.preventDefault();
         checkCurrent();

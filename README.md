@@ -13,6 +13,6 @@ Topics, not a calendar. Stay in one until it feels easy. New drills follow [CONT
 
 ## Maths
 
-Times tables missions start with **3s and 4s** (see, match, hop, know), then 2s, 5s and 10s. A separate **Addition practice** section has about 40 typed sums with 2- and 3-digit numbers. No timers in this version.
+Times tables missions start with **3s and 4s** (see, match, hop, know), then 2s, 5s and 10s. **Memory practice** shuffles typed ×2–×5 facts up to ×10 so counting on will not help. A separate **Addition practice** section has about 40 typed sums with 2- and 3-digit numbers. No timers in this version.
 
 Progress for both tabs stays in the browser on this device.

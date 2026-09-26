@@ -60,7 +60,7 @@ Do not reuse the same cast across weeks. Sam, Mia, and "tiny frog" may appear on
 
 ## Maths
 
-Times-tables missions and addition stay separate. Addition is typed totals, 2-digit and 3-digit, about 20 questions a pack. No timers.
+Times-tables missions, memory facts, and addition stay separate. Memory packs shuffle typed ×2–×5 facts (other factor 1–10) so the child cannot count on. Addition is typed totals, 2-digit and 3-digit, about 20 questions a pack. No timers.
 
 ## Later
 
