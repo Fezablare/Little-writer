@@ -15,6 +15,30 @@ function sumRound(a, b) {
   return { a, b, answer: a + b };
 }
 
+function productRound(a, b) {
+  return { a, b, answer: a * b };
+}
+
+function timesMemoryRounds(factor, maxOther) {
+  const limit = maxOther || 10;
+  const rounds = [];
+  for (let other = 1; other <= limit; other += 1) {
+    rounds.push(productRound(factor, other));
+  }
+  return shuffleList(rounds);
+}
+
+function mixedTimesMemoryRounds(factors, maxOther) {
+  const limit = maxOther || 10;
+  const rounds = [];
+  factors.forEach((factor) => {
+    for (let other = 1; other <= limit; other += 1) {
+      rounds.push(productRound(factor, other));
+    }
+  });
+  return shuffleList(rounds);
+}
+
 function sceneRound(story, groups, size, item, wrongTotals) {
   const product = groups * size;
   const choices = shuffleList([String(product), ...wrongTotals.map(String)]);
@@ -370,6 +394,51 @@ const MATH = [
       storyChoose("6 trays of 10 muffins. How many muffins?", 6, 10, [16, 70]),
       storyChoose("7 trays of 10 muffins. How many muffins?", 7, 10, [17, 80]),
     ]
+  ),
+  packMath(
+    "m-mem-2",
+    "2s · remember",
+    "Memory",
+    "product",
+    "Type the answer. The facts are mixed up so you cannot just count on.",
+    timesMemoryRounds(2, 10),
+    "memory"
+  ),
+  packMath(
+    "m-mem-3",
+    "3s · remember",
+    "Memory",
+    "product",
+    "Type the answer. The facts are mixed up so you cannot just count on.",
+    timesMemoryRounds(3, 10),
+    "memory"
+  ),
+  packMath(
+    "m-mem-4",
+    "4s · remember",
+    "Memory",
+    "product",
+    "Type the answer. The facts are mixed up so you cannot just count on.",
+    timesMemoryRounds(4, 10),
+    "memory"
+  ),
+  packMath(
+    "m-mem-5",
+    "5s · remember",
+    "Memory",
+    "product",
+    "Type the answer. The facts are mixed up so you cannot just count on.",
+    timesMemoryRounds(5, 10),
+    "memory"
+  ),
+  packMath(
+    "m-mem-mix",
+    "2–5 · mix it",
+    "Memory",
+    "product",
+    "All the 2s, 3s, 4s and 5s up to ×10, in a fresh mixed order every time you start.",
+    mixedTimesMemoryRounds([2, 3, 4, 5], 10),
+    "memory"
   ),
   packMath(
     "m-add-two",
